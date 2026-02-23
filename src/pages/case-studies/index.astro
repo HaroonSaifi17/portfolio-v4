@@ -1,0 +1,106 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Navbar from '../../components/Navbar.svelte';
+import Footer from '../../components/Footer.svelte';
+import { getCollection } from 'astro:content';
+
+const studies = (await getCollection('case-studies')).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
+
+function formatDate(date: Date) {
+  return date.toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+  });
+}
+---
+
+<Layout title="Case Studies — Mohd Haroon" description="Deep dives into projects, decisions, and lessons learned.">
+  <Navbar client:load />
+
+  <main class="max-w-7xl mx-auto px-6 py-20 space-y-16">
+    <header class="space-y-4">
+      <h1 class="page-title text-5xl md:text-7xl font-black uppercase tracking-tighter">
+        Case Studies
+      </h1>
+      <p class="page-subtitle text-xl font-bold max-w-xl border-l-4 border-primary pl-6">
+        Deep dives into projects, decisions, and lessons learned.
+      </p>
+    </header>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+      {
+        studies.map((study) => (
+          <a
+            href={`/case-studies/${study.id}`}
+            class="listing-card group block border-4 border-foreground bg-card p-8 shadow-[var(--shadow-lg)] content-card"
+            data-astro-prefetch
+            transition:name={`case-study-card-${study.id}`}
+          >
+            <span
+              class="font-black uppercase tracking-widest bg-foreground text-background px-3 py-1 text-xs"
+              transition:name={`case-study-date-${study.id}`}
+            >
+              {formatDate(study.data.pubDate)}
+            </span>
+            <h2
+              class="text-2xl md:text-3xl font-black uppercase tracking-tight mt-4 mb-3"
+              transition:name={`case-study-title-${study.id}`}
+            >
+              {study.data.title}
+            </h2>
+            <p class="text-lg font-medium text-muted-foreground leading-relaxed mb-6">
+              {study.data.description}
+            </p>
+            <span class="inline-block border-b-4 border-foreground text-lg font-black uppercase">
+              Read Study &rarr;
+            </span>
+          </a>
+        ))
+      }
+    </div>
+  </main>
+
+  <Footer client:visible />
+</Layout>
+
+<script>
+  import { gsap } from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  gsap.set('.page-title', { y: 60, autoAlpha: 0 });
+  gsap.set('.page-subtitle', { x: -30, autoAlpha: 0 });
+  gsap.set('.listing-card', { y: 60, autoAlpha: 0 });
+
+  // Page header entrance
+  const tl = gsap.timeline({ defaults: { ease: 'power4.out' }, delay: 0.2 });
+
+  tl.to('.page-title', {
+    y: 0,
+    autoAlpha: 1,
+    duration: 0.7,
+  }).to('.page-subtitle', {
+    x: 0,
+    autoAlpha: 1,
+    duration: 0.5,
+  }, '-=0.3');
+
+  // Listing cards staggered entrance
+  ScrollTrigger.batch('.listing-card', {
+    onEnter: (batch) =>
+      gsap.to(batch, {
+        y: 0,
+        autoAlpha: 1,
+        duration: 0.5,
+        ease: 'power4.out',
+        stagger: 0.12,
+        clearProps: 'transform,opacity,visibility',
+      }),
+    start: 'top 88%',
+    once: true,
+  });
+</script>

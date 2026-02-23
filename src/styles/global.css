@@ -1,0 +1,247 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@plugin "@tailwindcss/typography";
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  --background: #f4f4f0;
+  --foreground: #1a1a1a;
+  --card: #ffffff;
+  --card-foreground: #1a1a1a;
+  --popover: #ffffff;
+  --popover-foreground: #1a1a1a;
+  --primary: #ff4d00;
+  --primary-foreground: #ffffff;
+  --secondary: #e8e8e3;
+  --secondary-foreground: #1a1a1a;
+  --muted: #e8e8e3;
+  --muted-foreground: #666666;
+  --accent: #fff0e6;
+  --accent-foreground: #1a1a1a;
+  --destructive: #ef4444;
+  --border: #1a1a1a;
+  --input: #d4d4d0;
+  --ring: #ff4d00;
+
+  --shadow-sm: 4px 4px 0px 0px rgba(0, 0, 0, 1);
+  --shadow-lg: 8px 8px 0px 0px rgba(0, 0, 0, 1);
+}
+
+.dark {
+  --background: #141414;
+  --foreground: #f4f4f0;
+  --card: #1e1e1e;
+  --card-foreground: #f4f4f0;
+  --popover: #1e1e1e;
+  --popover-foreground: #f4f4f0;
+  --primary: #ff6d33;
+  --primary-foreground: #ffffff;
+  --secondary: #2a2a2a;
+  --secondary-foreground: #f4f4f0;
+  --muted: #2a2a2a;
+  --muted-foreground: #a0a0a0;
+  --accent: #2d1a0d;
+  --accent-foreground: #f4f4f0;
+  --destructive: #ef4444;
+  --border: #f4f4f0;
+  --input: #333333;
+  --ring: #ff6d33;
+
+  --shadow-sm: 4px 4px 0px 0px rgba(244, 244, 240, 0.15);
+  --shadow-lg: 8px 8px 0px 0px rgba(244, 244, 240, 0.15);
+}
+
+@theme inline {
+  --radius-sm: 0px;
+  --radius-md: 0px;
+  --radius-lg: 0px;
+  --radius-xl: 0px;
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* ============================================
+   Neo-Brutalist Card Hover Effects
+   ============================================ */
+.card-hover {
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1),
+              box-shadow 0.25s ease;
+}
+
+.card-hover:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 10px 10px 0px 0px rgba(0, 0, 0, 1);
+}
+
+.dark .card-hover:hover {
+  box-shadow: 10px 10px 0px 0px rgba(244, 244, 240, 0.2);
+}
+
+/* ============================================
+   Nav Link Underline Animation
+   ============================================ */
+.nav-link-hover {
+  position: relative;
+}
+
+.nav-link-hover::after {
+  content: '';
+  position: absolute;
+  bottom: -3px;
+  left: 0;
+  width: 0;
+  height: 3px;
+  background: var(--primary);
+  transition: width 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.nav-link-hover:hover::after {
+  width: 100%;
+}
+
+/* ============================================
+   Blog/Case Study Card Hover
+   ============================================ */
+.content-card {
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1),
+              box-shadow 0.25s ease;
+}
+
+.content-card:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 10px 10px 0px 0px rgba(0, 0, 0, 1);
+}
+
+.dark .content-card:hover {
+  box-shadow: 10px 10px 0px 0px rgba(244, 244, 240, 0.2);
+}
+
+/* ============================================
+   Prose theming — follows CSS vars so dark mode works automatically
+   ============================================ */
+.prose {
+  --tw-prose-body: var(--foreground);
+  --tw-prose-headings: var(--foreground);
+  --tw-prose-lead: var(--muted-foreground);
+  --tw-prose-links: var(--primary);
+  --tw-prose-bold: var(--foreground);
+  --tw-prose-counters: var(--muted-foreground);
+  --tw-prose-bullets: var(--primary);
+  --tw-prose-hr: var(--border);
+  --tw-prose-quotes: var(--foreground);
+  --tw-prose-quote-borders: var(--primary);
+  --tw-prose-captions: var(--muted-foreground);
+  --tw-prose-kbd: var(--foreground);
+  --tw-prose-kbd-shadows: var(--foreground);
+  --tw-prose-code: var(--foreground);
+  --tw-prose-pre-code: #e4e4e7;
+  --tw-prose-pre-bg: #1e1e1e;
+  --tw-prose-th-borders: var(--border);
+  --tw-prose-td-borders: var(--border);
+}
+
+.prose a {
+  font-weight: 700;
+  text-decoration: none;
+  border-bottom: 2px solid var(--primary);
+}
+
+.prose a:hover {
+  color: var(--primary);
+}
+
+.prose blockquote {
+  border-left: 4px solid var(--primary);
+  font-style: normal;
+  font-weight: 600;
+}
+
+.prose img {
+  border: 4px solid var(--border);
+}
+
+/* rehype-pretty-code styles */
+[data-rehype-pretty-code-figure] pre {
+  border: 4px solid var(--border);
+  padding: 1.25rem;
+  overflow-x: auto;
+  font-size: 0.9rem;
+  line-height: 1.7;
+}
+
+[data-rehype-pretty-code-figure] code {
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
+    "Liberation Mono", monospace;
+}
+
+[data-rehype-pretty-code-figure] [data-line] {
+  padding: 0 1rem;
+  margin: 0 -1.25rem;
+}
+
+[data-rehype-pretty-code-figure] [data-highlighted-line] {
+  background-color: rgba(255, 77, 0, 0.1);
+  border-left: 3px solid var(--primary);
+  padding-left: calc(1rem - 3px);
+}
+
+[data-rehype-pretty-code-title] {
+  border: 4px solid var(--border);
+  border-bottom: none;
+  background: var(--card);
+  padding: 0.5rem 1.25rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
+    "Liberation Mono", monospace;
+  color: var(--muted-foreground);
+}
+
+code:not(pre code) {
+  background: var(--muted);
+  padding: 0.2em 0.4em;
+  font-size: 0.85em;
+  font-weight: 600;
+  border: 2px solid var(--border);
+}
+
+[data-line-numbers] {
+  counter-reset: line;
+}
+
+[data-line-numbers] > [data-line]::before {
+  counter-increment: line;
+  content: counter(line);
+  display: inline-block;
+  width: 1.5rem;
+  margin-right: 1.25rem;
+  text-align: right;
+  color: var(--muted-foreground);
+  opacity: 0.5;
+}

@@ -1,46 +1,39 @@
-# Astro Starter Kit: Basics
+# Mohd Haroon Portfolio (v4)
 
-```sh
-bun create astro@latest -- --template basics
-```
+Personal portfolio site built with Astro, Svelte, Tailwind CSS, and MDX. It showcases projects, experience, blog posts, and case studies with view transitions and GSAP-driven motion.
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+## Stack
 
-## 🚀 Project Structure
+- Astro for routing, layouts, and content collection
+- Svelte for interactive UI
+- Tailwind CSS for styling
+- MDX for blog posts and case studies
+- GSAP for animations
+- Bun for package management and scripts
 
-Inside of your Astro project, you'll see the following folders and files:
+## Content
 
-```text
-/
-├── public/
-│   └── favicon.svg
-├── src
-│   ├── assets
-│   │   └── astro.svg
-│   ├── components
-│   │   └── Welcome.astro
-│   ├── layouts
-│   │   └── Layout.astro
-│   └── pages
-│       └── index.astro
-└── package.json
-```
+- Blog posts live in `src/content/blog`
+- Case studies live in `src/content/case-studies`
+- Content schemas are defined in `src/content.config.ts`
 
-To learn more about the folder structure of an Astro project, refer to [our guide on project structure](https://docs.astro.build/en/basics/project-structure/).
+## View Transitions
 
-## 🧞 Commands
+Astro View Transitions are enabled globally in `src/layouts/Layout.astro` and linked between list cards and detail pages so titles, dates, and hero images animate smoothly across navigation.
 
-All commands are run from the root of the project, from a terminal:
+## Commands
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `bun install`             | Installs dependencies                            |
-| `bun dev`             | Starts local dev server at `localhost:4321`      |
-| `bun build`           | Build your production site to `./dist/`          |
-| `bun preview`         | Preview your build locally, before deploying     |
-| `bun astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `bun astro -- --help` | Get help using the Astro CLI                     |
+All commands run from the project root:
 
-## 👀 Want to learn more?
+| Command | Action |
+| --- | --- |
+| `bun install` | Install dependencies |
+| `bun dev` | Start local dev server at `localhost:4321` |
+| `bun build` | Build production site to `./dist/` |
+| `bun preview` | Preview the production build |
+| `bun astro ...` | Run Astro CLI commands |
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+## Notes
+
+- The layout and styles live in `src/layouts` and `src/styles/global.css`.
+- Interactive sections are in `src/components`.

@@ -1,0 +1,123 @@
+---
+import Layout from './Layout.astro';
+import Navbar from '../components/Navbar.svelte';
+import Footer from '../components/Footer.svelte';
+
+interface Props {
+  title: string;
+  description: string;
+  pubDate: Date;
+  updatedDate?: Date;
+  heroImage?: string;
+  slug?: string;
+}
+
+const { title, description, pubDate, updatedDate, heroImage, slug } = Astro.props;
+const transitionId = slug ?? `blog-${title.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`;
+
+function formatDate(date: Date) {
+  return date.toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
+}
+---
+
+<Layout title={`${title} — Mohd Haroon`} description={description}>
+  <Navbar client:load />
+
+  <article
+    class="max-w-4xl mx-auto px-6 py-20"
+    transition:name={`blog-card-${transitionId}`}
+  >
+    <header class="mb-16 space-y-6">
+      <a
+        href="/blog"
+        class="post-back inline-block font-black uppercase tracking-widest text-sm border-b-4 border-foreground nav-link-hover"
+      >
+        &larr; All Posts
+      </a>
+
+      <h1
+        class="post-title text-4xl md:text-6xl font-black uppercase tracking-tighter leading-tight"
+        transition:name={`blog-title-${transitionId}`}
+      >
+        {title}
+      </h1>
+
+      <div class="post-meta flex flex-wrap gap-4 items-center">
+        <span
+          class="font-black uppercase tracking-widest bg-foreground text-background px-3 py-1 text-sm"
+          transition:name={`blog-date-${transitionId}`}
+        >
+          {formatDate(pubDate)}
+        </span>
+        {
+          updatedDate && (
+            <span class="font-bold text-muted-foreground text-sm uppercase tracking-widest">
+              Updated {formatDate(updatedDate)}
+            </span>
+          )
+        }
+      </div>
+
+      {
+        heroImage && (
+          <img
+            src={heroImage}
+            alt={title}
+            class="post-hero w-full border-4 border-foreground shadow-[var(--shadow-lg)]"
+            transition:name={`blog-hero-${transitionId}`}
+          />
+        )
+      }
+    </header>
+
+    <div class="post-content prose prose-lg max-w-none">
+      <slot />
+    </div>
+  </article>
+
+  <Footer client:visible />
+</Layout>
+
+<script>
+  import { gsap } from 'gsap';
+
+  // Article header sequential reveal
+  const tl = gsap.timeline({ defaults: { ease: 'power4.out' }, delay: 0.2 });
+
+  gsap.set('.post-back', { x: -20, autoAlpha: 0 });
+  gsap.set('.post-title', { y: 50, autoAlpha: 0 });
+  gsap.set('.post-meta', { y: 20, autoAlpha: 0 });
+  gsap.set('.post-hero', { y: 30, autoAlpha: 0, scale: 0.98 });
+  gsap.set('.post-content', { y: 30, autoAlpha: 0 });
+
+  tl.to('.post-back', {
+    x: 0,
+    autoAlpha: 1,
+    duration: 0.4,
+  })
+    .to('.post-title', {
+      y: 0,
+      autoAlpha: 1,
+      duration: 0.7,
+    }, '-=0.2')
+    .to('.post-meta', {
+      y: 0,
+      autoAlpha: 1,
+      duration: 0.4,
+    }, '-=0.3')
+    .to('.post-hero', {
+      y: 0,
+      autoAlpha: 1,
+      scale: 1,
+      duration: 0.6,
+    }, '-=0.2')
+    .to('.post-content', {
+      y: 0,
+      autoAlpha: 1,
+      duration: 0.5,
+    }, '-=0.2');
+</script>
