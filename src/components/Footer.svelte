@@ -60,10 +60,17 @@ $effect(() => {
 <footer
   bind:this={footer}
   id="contact"
-  class="border-t-4 border-foreground bg-card mt-32"
+  class="border-t-4 border-foreground bg-card mt-32 relative overflow-hidden"
   data-cursor-exclude
 >
-  <div class="max-w-7xl mx-auto px-6 py-20 text-center space-y-8">
+  <div class="footer-surface" aria-hidden="true"></div>
+  <div class="footer-artifacts" aria-hidden="true">
+    <span class="artifact artifact--stamp"></span>
+    <span class="artifact artifact--ticket"></span>
+    <span class="artifact artifact--barcode"></span>
+  </div>
+
+  <div class="footer-inner max-w-7xl mx-auto px-6 py-20 text-center space-y-8">
     <h2
       class="footer-title text-5xl md:text-7xl font-black uppercase tracking-tighter"
     >
@@ -107,3 +114,112 @@ $effect(() => {
     </div>
   </div>
 </footer>
+
+<style>
+  .footer-inner {
+    position: relative;
+    z-index: 10;
+  }
+
+  .footer-surface {
+    position: absolute;
+    inset: 0;
+    background-image: repeating-linear-gradient(
+      135deg,
+      transparent 0 22px,
+      rgba(26, 26, 26, 0.06) 22px 24px
+    );
+    opacity: 0.5;
+    pointer-events: none;
+  }
+
+  :global(.dark) .footer-surface {
+    background-image: repeating-linear-gradient(
+      135deg,
+      transparent 0 22px,
+      rgba(244, 244, 240, 0.08) 22px 24px
+    );
+    opacity: 0.35;
+  }
+
+  .footer-artifacts {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  .artifact {
+    position: absolute;
+    border: 3px solid var(--border);
+    box-shadow: var(--shadow-sm);
+    background: var(--card);
+    opacity: 0.95;
+  }
+
+  .artifact--stamp {
+    width: 150px;
+    height: 100px;
+    top: 14%;
+    right: 8%;
+    transform: rotate(6deg);
+    background: var(--accent);
+    background-image: repeating-linear-gradient(
+      0deg,
+      transparent 0 10px,
+      rgba(26, 26, 26, 0.08) 10px 12px
+    );
+  }
+
+  :global(.dark) .artifact--stamp {
+    background-image: repeating-linear-gradient(
+      0deg,
+      transparent 0 10px,
+      rgba(244, 244, 240, 0.1) 10px 12px
+    );
+  }
+
+  .artifact--stamp::after {
+    content: '';
+    position: absolute;
+    inset: 10px;
+    border: 2px dashed var(--border);
+  }
+
+  .artifact--ticket {
+    width: 170px;
+    height: 70px;
+    bottom: 16%;
+    left: 6%;
+    transform: rotate(-5deg);
+    background: var(--secondary);
+  }
+
+  .artifact--ticket::before {
+    content: '';
+    position: absolute;
+    left: 12px;
+    right: 12px;
+    top: 50%;
+    border-top: 3px dashed var(--border);
+  }
+
+  .artifact--barcode {
+    width: 150px;
+    height: 38px;
+    bottom: 18%;
+    right: 10%;
+    transform: rotate(2deg);
+    background-image: repeating-linear-gradient(
+      90deg,
+      var(--foreground) 0 6px,
+      transparent 6px 10px
+    );
+    background-size: 12px 100%;
+  }
+
+  @media (max-width: 768px) {
+    .footer-artifacts {
+      display: none;
+    }
+  }
+</style>

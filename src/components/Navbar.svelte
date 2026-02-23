@@ -77,7 +77,6 @@ function toggleTheme() {
       <a href="/#experience" class="nav-link nav-link-hover" data-astro-prefetch>Experience</a>
       <a href="/blog" class="nav-link nav-link-hover" data-astro-prefetch>Blog</a>
       <a href="/case-studies" class="nav-link nav-link-hover" data-astro-prefetch>Case Studies</a>
-      <a href="/#contact" class="nav-link nav-link-hover" data-astro-prefetch>Contact</a>
       <button
         onclick={toggleTheme}
         class="nav-theme-btn p-2 border-2 border-foreground bg-card"
@@ -126,7 +125,6 @@ function toggleTheme() {
       <a href="/#experience" onclick={() => (open = false)} data-astro-prefetch>Experience</a>
       <a href="/blog" onclick={() => (open = false)} data-astro-prefetch>Blog</a>
       <a href="/case-studies" onclick={() => (open = false)} data-astro-prefetch>Case Studies</a>
-      <a href="/#contact" onclick={() => (open = false)} data-astro-prefetch>Contact</a>
     </div>
   {/if}
 </nav>

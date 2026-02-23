@@ -14,6 +14,11 @@ const {
   href: string;
   index: number;
 } = $props();
+
+const isExternal = href.startsWith('http');
+const cta = href.startsWith('/case-studies/')
+  ? 'Read Case Study'
+  : 'View Project';
 </script>
 
 <Card.Root
@@ -34,10 +39,10 @@ const {
   <p class="text-lg font-medium leading-relaxed mb-8">{description}</p>
   <a
     {href}
-    target="_blank"
-    rel="noopener noreferrer"
+    target={isExternal ? '_blank' : undefined}
+    rel={isExternal ? 'noopener noreferrer' : undefined}
     class="inline-block border-b-4 border-foreground text-xl font-black uppercase hover:border-primary transition-colors duration-300"
   >
-    View Project &rarr;
+    {cta} &rarr;
   </a>
 </Card.Root>
