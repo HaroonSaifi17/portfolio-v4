@@ -5,7 +5,7 @@ import Footer from '../../components/Footer.svelte';
 import { getCollection } from 'astro:content';
 
 const studies = (await getCollection('case-studies')).sort(
-  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
 );
 
 function formatDate(date: Date) {

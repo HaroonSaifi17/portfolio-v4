@@ -1,5 +1,5 @@
 <script lang="ts">
-  const { items }: { items: string[] } = $props();
+const { items }: { items: string[] } = $props();
 </script>
 
 <div

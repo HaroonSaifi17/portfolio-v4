@@ -6,7 +6,13 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "lint": "biome lint .",
+    "lint:fix": "biome lint --write .",
+    "format": "biome format --write .",
+    "format:check": "biome format .",
+    "check": "biome check --write .",
+    "check:ci": "biome ci ."
   },
   "dependencies": {
     "@astrojs/mdx": "^4.3.13",
@@ -22,6 +28,7 @@
     "typescript": "^5.9.3"
   },
   "devDependencies": {
+    "@biomejs/biome": "2.4.4",
     "@internationalized/date": "^3.10.0",
     "@lucide/svelte": "^0.561.0",
     "bits-ui": "^2.14.4",

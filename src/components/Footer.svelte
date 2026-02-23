@@ -1,52 +1,60 @@
 <script lang="ts">
-  import { gsap } from 'gsap';
-  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
-  gsap.registerPlugin(ScrollTrigger);
+gsap.registerPlugin(ScrollTrigger);
 
-  let footer: HTMLElement | undefined = $state();
+let footer: HTMLElement | undefined = $state();
 
-  $effect(() => {
-    if (!footer) return;
+$effect(() => {
+  if (!footer) return;
 
-    const ctx = gsap.context(() => {
-      gsap.set('.footer-title', { y: 60, autoAlpha: 0 });
-      gsap.set('.footer-email', { y: 40, autoAlpha: 0 });
-      gsap.set('.footer-link', { y: 20, autoAlpha: 0 });
+  const ctx = gsap.context(() => {
+    gsap.set('.footer-title', { y: 60, autoAlpha: 0 });
+    gsap.set('.footer-email', { y: 40, autoAlpha: 0 });
+    gsap.set('.footer-link', { y: 20, autoAlpha: 0 });
 
-      const tl = gsap.timeline({
-        defaults: { ease: 'power4.out' },
-        scrollTrigger: {
-          trigger: footer,
-          start: 'top 85%',
-          once: true,
-        },
-      });
+    const tl = gsap.timeline({
+      defaults: { ease: 'power4.out' },
+      scrollTrigger: {
+        trigger: footer,
+        start: 'top 85%',
+        once: true,
+      },
+    });
 
-      // "Ready to Build?" heading scales and slides up
-      tl.to('.footer-title', {
-        y: 0,
-        autoAlpha: 1,
-        duration: 0.7,
-      })
-        // Email slides up
-        .to('.footer-email', {
+    // "Ready to Build?" heading scales and slides up
+    tl.to('.footer-title', {
+      y: 0,
+      autoAlpha: 1,
+      duration: 0.7,
+    })
+      // Email slides up
+      .to(
+        '.footer-email',
+        {
           y: 0,
           autoAlpha: 1,
           duration: 0.5,
-        }, '-=0.3')
-        // Social links stagger in
-        .to('.footer-link', {
+        },
+        '-=0.3',
+      )
+      // Social links stagger in
+      .to(
+        '.footer-link',
+        {
           y: 0,
           autoAlpha: 1,
           duration: 0.4,
           stagger: 0.08,
           clearProps: 'transform,opacity,visibility',
-        }, '-=0.2');
-    }, footer);
+        },
+        '-=0.2',
+      );
+  }, footer);
 
-    return () => ctx.revert();
-  });
+  return () => ctx.revert();
+});
 </script>
 
 <footer

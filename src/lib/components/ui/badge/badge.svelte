@@ -1,5 +1,5 @@
 <script lang="ts" module>
-	export { badgeVariants, type BadgeVariant } from "./variants.js";
+export { badgeVariants, type BadgeVariant } from './variants.js';
 </script>
 
 <script lang="ts">

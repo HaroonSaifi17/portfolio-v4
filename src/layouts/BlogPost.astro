@@ -12,8 +12,10 @@ interface Props {
   slug?: string;
 }
 
-const { title, description, pubDate, updatedDate, heroImage, slug } = Astro.props;
-const transitionId = slug ?? `blog-${title.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`;
+const { title, description, pubDate, updatedDate, heroImage, slug } =
+  Astro.props;
+const transitionId =
+  slug ?? `blog-${title.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`;
 
 function formatDate(date: Date) {
   return date.toLocaleDateString('en-US', {

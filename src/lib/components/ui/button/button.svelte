@@ -1,10 +1,10 @@
 <script lang="ts" module>
-	export {
-		buttonVariants,
-		type ButtonVariant,
-		type ButtonSize,
-		type ButtonProps,
-	} from "./variants.js";
+export {
+  buttonVariants,
+  type ButtonVariant,
+  type ButtonSize,
+  type ButtonProps,
+} from './variants.js';
 </script>
 
 <script lang="ts">

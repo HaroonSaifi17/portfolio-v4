@@ -1,107 +1,147 @@
 <script lang="ts">
-  import { Button } from '$lib/components/ui/button';
-  import { Badge } from '$lib/components/ui/badge';
-  import { gsap } from 'gsap';
+import { Button } from '$lib/components/ui/button';
+import { Badge } from '$lib/components/ui/badge';
+import { gsap } from 'gsap';
 
-  let section: HTMLElement | undefined = $state();
+let section: HTMLElement | undefined = $state();
 
-  $effect(() => {
-    if (!section) return;
+$effect(() => {
+  if (!section) return;
 
-    const ctx = gsap.context(() => {
-      gsap.set('.hero-badge', { y: 20, autoAlpha: 0, scale: 0.8 });
-      gsap.set('.hero-title-line', { y: '100%' });
-      gsap.set('.hero-subtitle', { x: -40, autoAlpha: 0 });
-      gsap.set('.hero-cta > *', { y: 30, autoAlpha: 0 });
-      gsap.set('.hero-deco-bg', { xPercent: 10, yPercent: 10, autoAlpha: 0 });
-      gsap.set('.hero-deco-card', { autoAlpha: 0, scale: 0.9 });
-      gsap.set('.hero-artifact', { autoAlpha: 0, y: 20 });
-      gsap.set('.hero-artifact-chip', { autoAlpha: 0, y: 12 });
-      gsap.set('.hero-artifact-metric', { autoAlpha: 0, y: 12 });
-      gsap.set('.hero-artifact-log', { autoAlpha: 0, y: 12 });
-      gsap.set('.hero-watermark', { autoAlpha: 0, y: 40, scale: 0.85 });
+  const ctx = gsap.context(() => {
+    gsap.set('.hero-badge', { y: 20, autoAlpha: 0, scale: 0.8 });
+    gsap.set('.hero-title-line', { y: '100%' });
+    gsap.set('.hero-subtitle', { x: -40, autoAlpha: 0 });
+    gsap.set('.hero-cta > *', { y: 30, autoAlpha: 0 });
+    gsap.set('.hero-deco-bg', { xPercent: 10, yPercent: 10, autoAlpha: 0 });
+    gsap.set('.hero-deco-card', { autoAlpha: 0, scale: 0.9 });
+    gsap.set('.hero-artifact', { autoAlpha: 0, y: 20 });
+    gsap.set('.hero-artifact-chip', { autoAlpha: 0, y: 12 });
+    gsap.set('.hero-artifact-metric', { autoAlpha: 0, y: 12 });
+    gsap.set('.hero-artifact-log', { autoAlpha: 0, y: 12 });
+    gsap.set('.hero-watermark', { autoAlpha: 0, y: 40, scale: 0.85 });
 
-      const tl = gsap.timeline({
-        defaults: { ease: 'power4.out' },
-        delay: 0.3,
-      });
+    const tl = gsap.timeline({
+      defaults: { ease: 'power4.out' },
+      delay: 0.3,
+    });
 
-      // Badge pops in with bounce
-      tl.to('.hero-badge', {
-        y: 0,
-        autoAlpha: 1,
-        scale: 1,
-        duration: 0.5,
-        ease: 'back.out(1.7)',
-      })
-        // Title lines reveal upward from behind mask
-        .to('.hero-title-line', {
+    // Badge pops in with bounce
+    tl.to('.hero-badge', {
+      y: 0,
+      autoAlpha: 1,
+      scale: 1,
+      duration: 0.5,
+      ease: 'back.out(1.7)',
+    })
+      // Title lines reveal upward from behind mask
+      .to(
+        '.hero-title-line',
+        {
           y: 0,
           duration: 0.8,
           stagger: 0.15,
-        }, '-=0.2')
-        // Subtitle slides in from left
-        .to('.hero-subtitle', {
+        },
+        '-=0.2',
+      )
+      // Subtitle slides in from left
+      .to(
+        '.hero-subtitle',
+        {
           x: 0,
           autoAlpha: 1,
           duration: 0.6,
-        }, '-=0.4')
-        // CTA buttons stagger in with overshoot
-        .to('.hero-cta > *', {
+        },
+        '-=0.4',
+      )
+      // CTA buttons stagger in with overshoot
+      .to(
+        '.hero-cta > *',
+        {
           y: 0,
           autoAlpha: 1,
           duration: 0.5,
           stagger: 0.12,
           ease: 'back.out(1.4)',
-        }, '-=0.2')
-        // Orange background decorative box
-        .to('.hero-deco-bg', {
+        },
+        '-=0.2',
+      )
+      // Orange background decorative box
+      .to(
+        '.hero-deco-bg',
+        {
           xPercent: 0,
           yPercent: 0,
           autoAlpha: 1,
           duration: 0.7,
-        }, '-=0.7')
-        // Main hero card scales in
-        .to('.hero-deco-card', {
+        },
+        '-=0.7',
+      )
+      // Main hero card scales in
+      .to(
+        '.hero-deco-card',
+        {
           autoAlpha: 1,
           scale: 1,
           duration: 0.6,
-        }, '-=0.5')
-        // Artifact contents reveal
-        .to('.hero-artifact', {
+        },
+        '-=0.5',
+      )
+      // Artifact contents reveal
+      .to(
+        '.hero-artifact',
+        {
           autoAlpha: 1,
           y: 0,
           duration: 0.5,
-        }, '-=0.35')
-        .to('.hero-artifact-chip', {
+        },
+        '-=0.35',
+      )
+      .to(
+        '.hero-artifact-chip',
+        {
           autoAlpha: 1,
           y: 0,
           duration: 0.4,
           stagger: 0.05,
-        }, '-=0.3')
-        .to('.hero-artifact-metric', {
+        },
+        '-=0.3',
+      )
+      .to(
+        '.hero-artifact-metric',
+        {
           autoAlpha: 1,
           y: 0,
           duration: 0.4,
           stagger: 0.08,
-        }, '-=0.35')
-        .to('.hero-artifact-log', {
+        },
+        '-=0.35',
+      )
+      .to(
+        '.hero-artifact-log',
+        {
           autoAlpha: 1,
           y: 0,
           duration: 0.4,
-        }, '-=0.3')
-        // MH watermark drifts up
-        .to('.hero-watermark', {
+        },
+        '-=0.3',
+      )
+      // MH watermark drifts up
+      .to(
+        '.hero-watermark',
+        {
           autoAlpha: 1,
           y: 0,
           scale: 1,
           duration: 0.8,
           ease: 'power2.out',
-        }, '-=0.3');
-    }, section);
+        },
+        '-=0.3',
+      );
+  }, section);
 
-    return () => ctx.revert();
-  });
+  return () => ctx.revert();
+});
 </script>
 
 <section

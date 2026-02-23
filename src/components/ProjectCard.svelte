@@ -1,19 +1,19 @@
 <script lang="ts">
-  import * as Card from '$lib/components/ui/card';
+import * as Card from '$lib/components/ui/card';
 
-  const {
-    title,
-    tech,
-    description,
-    href,
-    index,
-  }: {
-    title: string;
-    tech: string;
-    description: string;
-    href: string;
-    index: number;
-  } = $props();
+const {
+  title,
+  tech,
+  description,
+  href,
+  index,
+}: {
+  title: string;
+  tech: string;
+  description: string;
+  href: string;
+  index: number;
+} = $props();
 </script>
 
 <Card.Root

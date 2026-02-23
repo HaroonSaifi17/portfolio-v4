@@ -1,52 +1,60 @@
 <script lang="ts">
-  import { Menu, X, Sun, Moon } from '@lucide/svelte';
-  import { gsap } from 'gsap';
+import { Menu, X, Sun, Moon } from '@lucide/svelte';
+import { gsap } from 'gsap';
 
-  let open = $state(false);
-  let dark = $state(false);
-  let nav: HTMLElement | undefined = $state();
+let open = $state(false);
+let dark = $state(false);
+let nav: HTMLElement | undefined = $state();
 
-  $effect(() => {
-    dark = document.documentElement.classList.contains('dark');
-  });
+$effect(() => {
+  dark = document.documentElement.classList.contains('dark');
+});
 
-  $effect(() => {
-    if (!nav) return;
+$effect(() => {
+  if (!nav) return;
 
-    const ctx = gsap.context(() => {
-      gsap.set('.nav-logo', { x: -20, autoAlpha: 0 });
-      gsap.set('.nav-link', { y: -15, autoAlpha: 0 });
-      gsap.set('.nav-theme-btn', { scale: 0, autoAlpha: 0 });
+  const ctx = gsap.context(() => {
+    gsap.set('.nav-logo', { x: -20, autoAlpha: 0 });
+    gsap.set('.nav-link', { y: -15, autoAlpha: 0 });
+    gsap.set('.nav-theme-btn', { scale: 0, autoAlpha: 0 });
 
-      const tl = gsap.timeline({ defaults: { ease: 'power4.out' } });
+    const tl = gsap.timeline({ defaults: { ease: 'power4.out' } });
 
-      tl.to('.nav-logo', {
-        x: 0,
-        autoAlpha: 1,
-        duration: 0.5,
-      })
-        .to('.nav-link', {
+    tl.to('.nav-logo', {
+      x: 0,
+      autoAlpha: 1,
+      duration: 0.5,
+    })
+      .to(
+        '.nav-link',
+        {
           y: 0,
           autoAlpha: 1,
           duration: 0.4,
           stagger: 0.05,
-        }, '-=0.3')
-        .to('.nav-theme-btn', {
+        },
+        '-=0.3',
+      )
+      .to(
+        '.nav-theme-btn',
+        {
           scale: 1,
           autoAlpha: 1,
           duration: 0.3,
           ease: 'back.out(2)',
-        }, '-=0.1');
-    }, nav);
+        },
+        '-=0.1',
+      );
+  }, nav);
 
-    return () => ctx.revert();
-  });
+  return () => ctx.revert();
+});
 
-  function toggleTheme() {
-    dark = !dark;
-    document.documentElement.classList.toggle('dark', dark);
-    localStorage.setItem('theme', dark ? 'dark' : 'light');
-  }
+function toggleTheme() {
+  dark = !dark;
+  document.documentElement.classList.toggle('dark', dark);
+  localStorage.setItem('theme', dark ? 'dark' : 'light');
+}
 </script>
 
 <nav

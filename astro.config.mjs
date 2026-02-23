@@ -1,9 +1,10 @@
 // @ts-check
-import { defineConfig } from 'astro/config';
+
+import mdx from '@astrojs/mdx';
 
 import svelte from '@astrojs/svelte';
-import mdx from '@astrojs/mdx';
 import tailwindcss from '@tailwindcss/vite';
+import { defineConfig } from 'astro/config';
 import rehypePrettyCode from 'rehype-pretty-code';
 
 /** @type {import('rehype-pretty-code').Options} */

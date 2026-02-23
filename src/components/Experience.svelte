@@ -1,86 +1,86 @@
 <script lang="ts">
-  import * as Card from "$lib/components/ui/card";
-  import { gsap } from "gsap";
-  import { ScrollTrigger } from "gsap/ScrollTrigger";
+import * as Card from '$lib/components/ui/card';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
-  gsap.registerPlugin(ScrollTrigger);
+gsap.registerPlugin(ScrollTrigger);
 
-  let section: HTMLElement | undefined = $state();
+let section: HTMLElement | undefined = $state();
 
-  $effect(() => {
-    if (!section) return;
+$effect(() => {
+  if (!section) return;
 
-    const root = section;
+  const root = section;
 
-    const ctx = gsap.context(() => {
-      const q = gsap.utils.selector(root);
+  const ctx = gsap.context(() => {
+    const q = gsap.utils.selector(root);
 
-      gsap.set(q(".exp-card"), { y: 80, autoAlpha: 0 });
-      gsap.set(q(".exp-bullet"), { x: -20, autoAlpha: 0 });
+    gsap.set(q('.exp-card'), { y: 80, autoAlpha: 0 });
+    gsap.set(q('.exp-bullet'), { x: -20, autoAlpha: 0 });
 
-      gsap.set(q(".exp-title"), { y: 60, autoAlpha: 0 });
-      gsap.set(q(".exp-subtitle"), { y: 30, autoAlpha: 0 });
+    gsap.set(q('.exp-title'), { y: 60, autoAlpha: 0 });
+    gsap.set(q('.exp-subtitle'), { y: 30, autoAlpha: 0 });
 
-      // Title slides up
-      gsap.to(q(".exp-title"), {
-        y: 0,
-        autoAlpha: 1,
-        duration: 0.7,
-        ease: "power4.out",
-        scrollTrigger: {
-          trigger: section,
-          start: "top 80%",
-          once: true,
-        },
-      });
-
-      // Subtitle follows
-      gsap.to(q(".exp-subtitle"), {
-        y: 0,
-        autoAlpha: 1,
-        duration: 0.6,
-        delay: 0.15,
-        ease: "power4.out",
-        scrollTrigger: {
-          trigger: section,
-          start: "top 80%",
-          once: true,
-        },
-      });
-
-      // Experience cards stagger in
-      ScrollTrigger.batch(q(".exp-card"), {
-        start: "top 88%",
+    // Title slides up
+    gsap.to(q('.exp-title'), {
+      y: 0,
+      autoAlpha: 1,
+      duration: 0.7,
+      ease: 'power4.out',
+      scrollTrigger: {
+        trigger: section,
+        start: 'top 80%',
         once: true,
-        onEnter: (batch) =>
-          gsap.to(batch, {
-            y: 0,
-            autoAlpha: 1,
-            duration: 0.7,
-            ease: "power4.out",
-            stagger: 0.18,
-            clearProps: "transform,opacity,visibility",
-          }),
-      });
+      },
+    });
 
-      // Bullet points stagger with slight delay
-      ScrollTrigger.batch(q(".exp-bullet"), {
-        start: "top 90%",
+    // Subtitle follows
+    gsap.to(q('.exp-subtitle'), {
+      y: 0,
+      autoAlpha: 1,
+      duration: 0.6,
+      delay: 0.15,
+      ease: 'power4.out',
+      scrollTrigger: {
+        trigger: section,
+        start: 'top 80%',
         once: true,
-        onEnter: (batch) =>
-          gsap.to(batch, {
-            x: 0,
-            autoAlpha: 1,
-            duration: 0.4,
-            stagger: 0.06,
-            ease: "power3.out",
-            clearProps: "transform,opacity,visibility",
-          }),
-      });
-    }, section);
+      },
+    });
 
-    return () => ctx.revert();
-  });
+    // Experience cards stagger in
+    ScrollTrigger.batch(q('.exp-card'), {
+      start: 'top 88%',
+      once: true,
+      onEnter: (batch) =>
+        gsap.to(batch, {
+          y: 0,
+          autoAlpha: 1,
+          duration: 0.7,
+          ease: 'power4.out',
+          stagger: 0.18,
+          clearProps: 'transform,opacity,visibility',
+        }),
+    });
+
+    // Bullet points stagger with slight delay
+    ScrollTrigger.batch(q('.exp-bullet'), {
+      start: 'top 90%',
+      once: true,
+      onEnter: (batch) =>
+        gsap.to(batch, {
+          x: 0,
+          autoAlpha: 1,
+          duration: 0.4,
+          stagger: 0.06,
+          ease: 'power3.out',
+          clearProps: 'transform,opacity,visibility',
+        }),
+    });
+  }, section);
+
+  return () => ctx.revert();
+});
 </script>
 
 <section

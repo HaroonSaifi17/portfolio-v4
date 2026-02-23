@@ -1,6 +1,6 @@
 ---
 import '../styles/global.css';
-import { ViewTransitions } from 'astro:transitions';
+import { ClientRouter } from 'astro:transitions';
 
 interface Props {
   title?: string;
@@ -23,18 +23,22 @@ const {
     <meta name="description" content={description} />
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
-    <ViewTransitions />
+    <ClientRouter />
     <script is:inline>
-      (function () {
-        const theme = localStorage.getItem('theme');
+      function applyTheme() {
+        var theme = localStorage.getItem('theme');
         if (
           theme === 'dark' ||
           (!theme &&
             window.matchMedia('(prefers-color-scheme: dark)').matches)
         ) {
           document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
         }
-      })();
+      }
+      applyTheme();
+      document.addEventListener('astro:after-swap', applyTheme);
     </script>
   </head>
   <body class="selection:bg-primary selection:text-primary-foreground">
