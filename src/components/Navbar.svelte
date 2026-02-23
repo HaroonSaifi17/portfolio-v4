@@ -57,10 +57,11 @@ function toggleTheme() {
 }
 </script>
 
-<nav
-  bind:this={nav}
-  class="border-b-4 border-foreground bg-background sticky top-0 z-50"
->
+  <nav
+    bind:this={nav}
+    class="border-b-4 border-foreground bg-background sticky top-0 z-50"
+    data-cursor-exclude
+  >
   <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
     <a
       href="/"

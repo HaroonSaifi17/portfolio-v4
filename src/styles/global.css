@@ -90,6 +90,29 @@
   }
 }
 
+.cursor-ready,
+.cursor-ready body,
+.cursor-ready a,
+.cursor-ready button,
+.cursor-ready input,
+.cursor-ready textarea,
+.cursor-ready select,
+.cursor-ready [role="button"] {
+  cursor: none;
+}
+
+#cursor,
+#cursor-ring {
+  opacity: 0;
+}
+
+@supports (mix-blend-mode: difference) {
+  #cursor,
+  #cursor-ring {
+    mix-blend-mode: difference;
+  }
+}
+
 /* ============================================
    Neo-Brutalist Card Hover Effects
    ============================================ */

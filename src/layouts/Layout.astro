@@ -49,5 +49,87 @@ const {
   </head>
   <body class="selection:bg-primary selection:text-primary-foreground">
     <slot />
+    <div
+      id="cursor"
+      aria-hidden="true"
+      class="pointer-events-none fixed left-0 top-0 z-[9999] h-4 w-4 rounded-full border-2 border-foreground bg-background transition-transform duration-150 ease-out"
+    ></div>
+    <div
+      id="cursor-ring"
+      aria-hidden="true"
+      class="pointer-events-none fixed left-0 top-0 z-[9998] h-10 w-10 rounded-full border-2 border-foreground/60 transition-transform duration-200 ease-out"
+    ></div>
+    <script is:inline>
+      (function () {
+        var cursor = document.getElementById('cursor');
+        var ring = document.getElementById('cursor-ring');
+        if (!cursor || !ring) return;
+
+        var isCoarse = window.matchMedia('(pointer: coarse)').matches;
+        var isHoverNone = window.matchMedia('(hover: none)').matches;
+        if (isCoarse || isHoverNone) {
+          cursor.style.display = 'none';
+          ring.style.display = 'none';
+          return;
+        }
+
+        var x = 0;
+        var y = 0;
+        var ringX = 0;
+        var ringY = 0;
+        var scale = 1;
+        var ringScale = 1;
+        var hoverScale = 1.6;
+        var ringHoverScale = 1.2;
+        var visible = false;
+
+        document.documentElement.classList.add('cursor-ready');
+
+        function show() {
+          if (visible) return;
+          visible = true;
+          cursor.style.opacity = '1';
+          ring.style.opacity = '1';
+        }
+
+        function onMove(e) {
+          x = e.clientX;
+          y = e.clientY;
+          cursor.style.transform =
+            'translate(' + (x - 8) + 'px,' + (y - 8) + 'px) scale(' + scale + ')';
+          show();
+        }
+
+        function render() {
+          ringX += (x - ringX) * 0.14;
+          ringY += (y - ringY) * 0.14;
+          ring.style.transform =
+            'translate(' + (ringX - 20) + 'px,' + (ringY - 20) + 'px) scale(' + ringScale + ')';
+          requestAnimationFrame(render);
+        }
+
+        function setHover(active) {
+          scale = active ? hoverScale : 1;
+          ringScale = active ? ringHoverScale : 1;
+        }
+
+        document.addEventListener('pointermove', onMove, { passive: true });
+        document.addEventListener('mouseover', function (e) {
+          var target = e.target;
+          if (!(target instanceof Element)) return;
+          if (target.closest('a, button, input, textarea, select, [role="button"], [data-cursor="pointer"]')) {
+            setHover(true);
+            return;
+          }
+          if (target.closest('[data-cursor-exclude]')) {
+            setHover(false);
+            return;
+          }
+          setHover(false);
+        });
+
+        render();
+      })();
+    </script>
   </body>
 </html>

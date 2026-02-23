@@ -61,6 +61,7 @@ $effect(() => {
   bind:this={footer}
   id="contact"
   class="border-t-4 border-foreground bg-card mt-32"
+  data-cursor-exclude
 >
   <div class="max-w-7xl mx-auto px-6 py-20 text-center space-y-8">
     <h2
