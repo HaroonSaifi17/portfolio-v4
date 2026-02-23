@@ -143,6 +143,16 @@
 }
 
 /* ============================================
+   Justified text utility
+   ============================================ */
+.text-justify-fill {
+  text-align: justify;
+  text-justify: inter-word;
+  text-align-last: justify;
+  hyphens: auto;
+}
+
+/* ============================================
    Prose theming — follows CSS vars so dark mode works automatically
    ============================================ */
 .prose {
