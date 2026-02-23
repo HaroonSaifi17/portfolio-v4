@@ -27,18 +27,24 @@ const {
     <script is:inline>
       function applyTheme() {
         var theme = localStorage.getItem('theme');
-        if (
-          theme === 'dark' ||
-          (!theme &&
-            window.matchMedia('(prefers-color-scheme: dark)').matches)
-        ) {
-          document.documentElement.classList.add('dark');
-        } else {
-          document.documentElement.classList.remove('dark');
-        }
+        var isDark = theme === 'dark';
+        document.documentElement.classList.toggle('dark', isDark);
       }
+
+      function scrollToHash() {
+        var hash = window.location.hash;
+        if (!hash) return;
+        var el = document.querySelector(hash);
+        if (!el) return;
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+
       applyTheme();
-      document.addEventListener('astro:after-swap', applyTheme);
+      window.addEventListener('load', scrollToHash);
+      document.addEventListener('astro:after-swap', () => {
+        applyTheme();
+        requestAnimationFrame(scrollToHash);
+      });
     </script>
   </head>
   <body class="selection:bg-primary selection:text-primary-foreground">
