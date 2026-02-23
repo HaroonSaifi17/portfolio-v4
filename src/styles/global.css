@@ -52,6 +52,78 @@
   --shadow-lg: 8px 8px 0px 0px rgba(244, 244, 240, 0.15);
 }
 
+/* ============================================
+   Alternative Color Palettes (hidden seeds)
+   ============================================ */
+:root[data-theme="cobalt"] {
+  --background: #f2f3f7;
+  --foreground: #101419;
+  --card: #ffffff;
+  --card-foreground: #101419;
+  --popover: #ffffff;
+  --popover-foreground: #101419;
+  --primary: #2b54ff;
+  --primary-foreground: #ffffff;
+  --secondary: #e4e7f2;
+  --secondary-foreground: #101419;
+  --muted: #e4e7f2;
+  --muted-foreground: #5a6470;
+  --accent: #e6ebff;
+  --accent-foreground: #101419;
+  --destructive: #ef4444;
+  --border: #101419;
+  --input: #cbd2e1;
+  --ring: #2b54ff;
+  --shadow-sm: 4px 4px 0px 0px rgba(16, 20, 25, 1);
+  --shadow-lg: 8px 8px 0px 0px rgba(16, 20, 25, 1);
+}
+
+:root[data-theme="forest"] {
+  --background: #f2f5ef;
+  --foreground: #1c2a1d;
+  --card: #ffffff;
+  --card-foreground: #1c2a1d;
+  --popover: #ffffff;
+  --popover-foreground: #1c2a1d;
+  --primary: #1e7a4e;
+  --primary-foreground: #f4f8f3;
+  --secondary: #dfe6da;
+  --secondary-foreground: #1c2a1d;
+  --muted: #dfe6da;
+  --muted-foreground: #536158;
+  --accent: #e3efe6;
+  --accent-foreground: #1c2a1d;
+  --destructive: #ef4444;
+  --border: #1c2a1d;
+  --input: #c8d3c5;
+  --ring: #1e7a4e;
+  --shadow-sm: 4px 4px 0px 0px rgba(28, 42, 29, 1);
+  --shadow-lg: 8px 8px 0px 0px rgba(28, 42, 29, 1);
+}
+
+:root[data-theme="amber"] {
+  --background: #f6f0e6;
+  --foreground: #2a1f13;
+  --card: #ffffff;
+  --card-foreground: #2a1f13;
+  --popover: #ffffff;
+  --popover-foreground: #2a1f13;
+  --primary: #f4a100;
+  --primary-foreground: #2a1f13;
+  --secondary: #eadfcc;
+  --secondary-foreground: #2a1f13;
+  --muted: #eadfcc;
+  --muted-foreground: #6b5844;
+  --accent: #f2e3cc;
+  --accent-foreground: #2a1f13;
+  --destructive: #ef4444;
+  --border: #2a1f13;
+  --input: #d9c8ad;
+  --ring: #f4a100;
+  --shadow-sm: 4px 4px 0px 0px rgba(42, 31, 19, 1);
+  --shadow-lg: 8px 8px 0px 0px rgba(42, 31, 19, 1);
+}
+
 @theme inline {
   --radius-sm: 0px;
   --radius-md: 0px;

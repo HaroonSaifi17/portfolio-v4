@@ -1,6 +1,7 @@
 <script lang="ts">
-import { Menu, X, Sun, Moon } from '@lucide/svelte';
+import { Sun, Moon } from '@lucide/svelte';
 import { gsap } from 'gsap';
+import { slide } from 'svelte/transition';
 
 let open = $state(false);
 let dark = $state(false);
@@ -52,31 +53,42 @@ $effect(() => {
 
 function toggleTheme() {
   dark = !dark;
+  if (dark) {
+    document.documentElement.removeAttribute('data-theme');
+    localStorage.removeItem('palette');
+  }
   document.documentElement.classList.toggle('dark', dark);
   localStorage.setItem('theme', dark ? 'dark' : 'light');
 }
 </script>
 
-  <nav
-    bind:this={nav}
-    class="border-b-4 border-foreground bg-background sticky top-0 z-50"
-    data-cursor-exclude
-  >
+<nav
+  bind:this={nav}
+  class="border-b-4 border-foreground bg-background"
+  data-cursor-exclude
+>
   <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-    <a
-      href="/"
-      class="nav-logo text-3xl font-black uppercase tracking-tighter"
-    >
-      Haroon<span class="text-primary">_</span>
+    <a href="/" class="nav-logo text-3xl font-black uppercase tracking-tighter">
+      MH<span class="text-primary">_</span>
     </a>
 
     <div
       class="hidden md:flex items-center gap-8 font-bold uppercase tracking-wider text-sm"
     >
-      <a href="/#work" class="nav-link nav-link-hover" data-astro-prefetch>Work</a>
-      <a href="/#experience" class="nav-link nav-link-hover" data-astro-prefetch>Experience</a>
-      <a href="/blog" class="nav-link nav-link-hover" data-astro-prefetch>Blog</a>
-      <a href="/case-studies" class="nav-link nav-link-hover" data-astro-prefetch>Case Studies</a>
+      <a href="/#work" class="nav-link nav-link-hover" data-astro-prefetch
+        >Work</a
+      >
+      <a href="/#experience" class="nav-link nav-link-hover" data-astro-prefetch
+        >Experience</a
+      >
+      <a href="/blog" class="nav-link nav-link-hover" data-astro-prefetch
+        >Blog</a
+      >
+      <a
+        href="/case-studies"
+        class="nav-link nav-link-hover"
+        data-astro-prefetch>Case Studies</a
+      >
       <button
         onclick={toggleTheme}
         class="nav-theme-btn p-2 border-2 border-foreground bg-card"
@@ -103,16 +115,17 @@ function toggleTheme() {
         {/if}
       </button>
       <button
-        class="p-2"
+        class="hamburger p-2 text-foreground"
+        class:is-open={open}
         onclick={() => (open = !open)}
         aria-label="Toggle menu"
         aria-expanded={open}
       >
-        {#if open}
-          <X size={28} strokeWidth={3} />
-        {:else}
-          <Menu size={28} strokeWidth={3} />
-        {/if}
+        <span class="hamburger-box" aria-hidden="true">
+          <span class="hamburger-line"></span>
+          <span class="hamburger-line"></span>
+          <span class="hamburger-line"></span>
+        </span>
       </button>
     </div>
   </div>
@@ -120,11 +133,65 @@ function toggleTheme() {
   {#if open}
     <div
       class="md:hidden border-t-4 border-foreground bg-background px-6 py-6 flex flex-col gap-4 font-bold uppercase tracking-wider text-lg"
+      transition:slide={{ duration: 240 }}
     >
-      <a href="/#work" onclick={() => (open = false)} data-astro-prefetch>Work</a>
-      <a href="/#experience" onclick={() => (open = false)} data-astro-prefetch>Experience</a>
-      <a href="/blog" onclick={() => (open = false)} data-astro-prefetch>Blog</a>
-      <a href="/case-studies" onclick={() => (open = false)} data-astro-prefetch>Case Studies</a>
+      <a href="/#work" onclick={() => (open = false)} data-astro-prefetch
+        >Work</a
+      >
+      <a href="/#experience" onclick={() => (open = false)} data-astro-prefetch
+        >Experience</a
+      >
+      <a href="/blog" onclick={() => (open = false)} data-astro-prefetch>Blog</a
+      >
+      <a href="/case-studies" onclick={() => (open = false)} data-astro-prefetch
+        >Case Studies</a
+      >
     </div>
   {/if}
 </nav>
+
+<style>
+  .hamburger {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .hamburger-box {
+    width: 26px;
+    height: 18px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .hamburger-line {
+    height: 3px;
+    width: 100%;
+    background-color: currentColor;
+    border-radius: 999px;
+    transform-origin: center;
+    transition:
+      transform 0.22s cubic-bezier(0.22, 1, 0.36, 1),
+      opacity 0.18s ease;
+  }
+
+  .hamburger.is-open .hamburger-line:nth-child(1) {
+    transform: translateY(7.5px) rotate(45deg);
+  }
+
+  .hamburger.is-open .hamburger-line:nth-child(2) {
+    opacity: 0;
+    transform: scaleX(0.4);
+  }
+
+  .hamburger.is-open .hamburger-line:nth-child(3) {
+    transform: translateY(-7.5px) rotate(-45deg);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hamburger-line {
+      transition: none;
+    }
+  }
+</style>

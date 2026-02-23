@@ -27,8 +27,30 @@ const {
     <script is:inline>
       function applyTheme() {
         var theme = localStorage.getItem('theme');
+        var palette = localStorage.getItem('palette');
         var isDark = theme === 'dark';
-        document.documentElement.classList.toggle('dark', isDark);
+        var root = document.documentElement;
+        root.classList.toggle('dark', isDark);
+        if (palette && !isDark) {
+          root.setAttribute('data-theme', palette);
+        } else {
+          root.removeAttribute('data-theme');
+        }
+      }
+
+      function setPalette(palette) {
+        var root = document.documentElement;
+        var isDark = root.classList.contains('dark');
+        if (isDark) return;
+
+        if (!palette || palette === 'default') {
+          root.removeAttribute('data-theme');
+          localStorage.removeItem('palette');
+          return;
+        }
+
+        root.setAttribute('data-theme', palette);
+        localStorage.setItem('palette', palette);
       }
 
       function scrollToHash() {
@@ -44,6 +66,15 @@ const {
       document.addEventListener('astro:after-swap', () => {
         applyTheme();
         requestAnimationFrame(scrollToHash);
+      });
+
+      document.addEventListener('click', function (e) {
+        var target = e.target;
+        if (!(target instanceof Element)) return;
+        var seed = target.closest('[data-palette]');
+        if (!seed) return;
+        var palette = seed.getAttribute('data-palette');
+        setPalette(palette);
       });
     </script>
   </head>

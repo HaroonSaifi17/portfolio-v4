@@ -2,12 +2,13 @@
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
-gsap.registerPlugin(ScrollTrigger);
-
+let { animate = false } = $props();
 let footer: HTMLElement | undefined = $state();
 
 $effect(() => {
-  if (!footer) return;
+  if (!footer || !animate) return;
+
+  gsap.registerPlugin(ScrollTrigger);
 
   const ctx = gsap.context(() => {
     gsap.set('.footer-title', { y: 60, autoAlpha: 0 });

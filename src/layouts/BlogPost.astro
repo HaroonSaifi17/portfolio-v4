@@ -2,6 +2,7 @@
 import Layout from './Layout.astro';
 import Navbar from '../components/Navbar.svelte';
 import Footer from '../components/Footer.svelte';
+import { getCollection } from 'astro:content';
 
 interface Props {
   title: string;
@@ -17,6 +18,13 @@ const { title, description, pubDate, updatedDate, heroImage, slug } =
 const transitionId =
   slug ?? `blog-${title.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`;
 
+const posts = (await getCollection('blog')).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+);
+const currentIndex = posts.findIndex((post) => post.id === slug);
+const prevPost = currentIndex >= 0 ? posts[currentIndex + 1] : undefined;
+const nextPost = currentIndex > 0 ? posts[currentIndex - 1] : undefined;
+
 function formatDate(date: Date) {
   return date.toLocaleDateString('en-US', {
     year: 'numeric',
@@ -30,6 +38,7 @@ function formatDate(date: Date) {
   <Navbar client:load />
 
   <article
+    id="top"
     class="max-w-3xl mx-auto px-6 py-20"
     transition:name={`blog-card-${transitionId}`}
   >
@@ -79,7 +88,136 @@ function formatDate(date: Date) {
     <div class="post-content prose prose-lg max-w-none">
       <slot />
     </div>
+
+    <nav class="post-pagination mt-16 border-t-4 border-foreground pt-8">
+      {prevPost ? (
+        <a
+          href={`/blog/${prevPost.id}`}
+          class="post-nav-link"
+          data-astro-prefetch
+        >
+          <span class="post-nav-label">Previous</span>
+          <span class="post-nav-title">{prevPost.data.title}</span>
+        </a>
+      ) : (
+        <span class="post-nav-link post-nav-link--disabled" aria-hidden="true">
+          <span class="post-nav-label">Previous</span>
+          <span class="post-nav-title">—</span>
+        </span>
+      )}
+
+      {nextPost ? (
+        <a
+          href={`/blog/${nextPost.id}`}
+          class="post-nav-link post-nav-link--next"
+          data-astro-prefetch
+        >
+          <span class="post-nav-label">Next</span>
+          <span class="post-nav-title">{nextPost.data.title}</span>
+        </a>
+      ) : (
+        <span class="post-nav-link post-nav-link--disabled" aria-hidden="true">
+          <span class="post-nav-label">Next</span>
+          <span class="post-nav-title">—</span>
+        </span>
+      )}
+    </nav>
   </article>
 
-  <Footer client:visible />
+  <a
+    href="#top"
+    class="back-to-top"
+    aria-label="Back to top"
+    title="Back to top"
+  >
+    &uarr;
+  </a>
+
+  <Footer />
 </Layout>
+
+<style>
+  .post-pagination {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  .post-nav-link {
+    border: 4px solid var(--border);
+    background: var(--card);
+    padding: 16px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    box-shadow: var(--shadow-sm);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  }
+
+  .post-nav-link:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0px 0px rgba(0, 0, 0, 1);
+    border-color: var(--primary);
+  }
+
+  .post-nav-link--next {
+    text-align: right;
+  }
+
+  .post-nav-label {
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted-foreground);
+  }
+
+  .post-nav-title {
+    font-size: 1.05rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+  }
+
+  .post-nav-link--disabled {
+    opacity: 0.5;
+    box-shadow: none;
+  }
+
+  .back-to-top {
+    position: fixed;
+    right: 20px;
+    bottom: 24px;
+    width: 44px;
+    height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 3px solid var(--border);
+    background: var(--card);
+    font-size: 20px;
+    font-weight: 900;
+    box-shadow: var(--shadow-sm);
+    z-index: 40;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  }
+
+  .back-to-top:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0px 0px rgba(0, 0, 0, 1);
+    border-color: var(--primary);
+  }
+
+  @media (max-width: 640px) {
+    .post-pagination {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .post-nav-link,
+    .back-to-top {
+      transition: none;
+    }
+  }
+</style>

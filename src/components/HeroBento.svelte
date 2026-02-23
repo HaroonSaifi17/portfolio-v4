@@ -276,10 +276,10 @@ function handleMouseLeave() {
       class="grid h-[420px] sm:h-[520px] lg:h-[600px] gap-[3px] bg-foreground/10 p-[3px]"
       style="grid-template-columns: 1.6fr 1fr; grid-template-rows: 1fr 1fr 0.6fr 42px;"
     >
-      <!-- 1) TERMINAL — spans 2 rows -->
-      <div
-        class="bento-cell col-start-1 row-start-1 row-span-2 bg-foreground text-background p-4 flex flex-col gap-2 overflow-hidden"
-      >
+       <!-- 1) TERMINAL — spans 2 rows -->
+       <div
+         class="bento-cell col-start-1 row-start-1 row-span-2 bg-foreground text-background p-4 flex flex-col gap-2 overflow-hidden"
+       >
         <!-- Window chrome -->
         <div class="flex items-center gap-2 mb-1">
           <span class="w-2.5 h-2.5 bg-primary"></span>
@@ -289,8 +289,8 @@ function handleMouseLeave() {
             dev.ts
           </span>
         </div>
-        <!-- Code block -->
-        <div class="font-mono text-sm leading-relaxed flex-1">
+         <!-- Code block -->
+         <div class="font-mono text-sm leading-relaxed flex-1">
           {#each codeLines as line, i}
             <div
               class="transition-opacity duration-200"
@@ -315,7 +315,42 @@ function handleMouseLeave() {
               {/if}
             </div>
           {/each}
-        </div>
+         </div>
+
+         <div class="bento-theme-row mt-auto pt-3">
+           <button
+             class="bento-theme-dot"
+             style="--dot-color: #f4f4f0; --dot-border: rgba(244, 244, 240, 0.7);"
+             data-palette="default"
+             aria-label="Set default theme"
+             title="Theme: Default"
+             data-cursor="pointer"
+           ></button>
+           <button
+             class="bento-theme-dot"
+             style="--dot-color: #2b54ff; --dot-border: rgba(244, 244, 240, 0.7);"
+             data-palette="cobalt"
+             aria-label="Set cobalt theme"
+             title="Theme: Cobalt"
+             data-cursor="pointer"
+           ></button>
+           <button
+             class="bento-theme-dot"
+             style="--dot-color: #1e7a4e; --dot-border: rgba(244, 244, 240, 0.7);"
+             data-palette="forest"
+             aria-label="Set forest theme"
+             title="Theme: Forest"
+             data-cursor="pointer"
+           ></button>
+           <button
+             class="bento-theme-dot"
+             style="--dot-color: #f4a100; --dot-border: rgba(244, 244, 240, 0.7);"
+             data-palette="amber"
+             aria-label="Set amber theme"
+             title="Theme: Amber"
+             data-cursor="pointer"
+           ></button>
+         </div>
       </div>
 
       <!-- 2) STATUS -->
@@ -422,6 +457,32 @@ function handleMouseLeave() {
     }
     50% {
       opacity: 0.3;
+    }
+  }
+
+  .bento-theme-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 999px;
+    border: 2px solid var(--dot-border, currentColor);
+    background: var(--dot-color, currentColor);
+    box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.25);
+    transition: transform 0.18s ease, box-shadow 0.18s ease;
+    cursor: pointer;
+  }
+
+  .bento-theme-dot:hover {
+    transform: translateY(-1px);
+  }
+
+  .bento-theme-dot:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .bento-theme-dot {
+      transition: none;
     }
   }
 </style>
