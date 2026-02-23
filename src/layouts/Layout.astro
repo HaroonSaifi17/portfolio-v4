@@ -31,7 +31,7 @@ const {
         var isDark = theme === 'dark';
         var root = document.documentElement;
         root.classList.toggle('dark', isDark);
-        if (palette && !isDark) {
+        if (palette) {
           root.setAttribute('data-theme', palette);
         } else {
           root.removeAttribute('data-theme');
@@ -40,8 +40,6 @@ const {
 
       function setPalette(palette) {
         var root = document.documentElement;
-        var isDark = root.classList.contains('dark');
-        if (isDark) return;
 
         if (!palette || palette === 'default') {
           root.removeAttribute('data-theme');

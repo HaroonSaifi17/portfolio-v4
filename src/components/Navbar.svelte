@@ -53,10 +53,6 @@ $effect(() => {
 
 function toggleTheme() {
   dark = !dark;
-  if (dark) {
-    document.documentElement.removeAttribute('data-theme');
-    localStorage.removeItem('palette');
-  }
   document.documentElement.classList.toggle('dark', dark);
   localStorage.setItem('theme', dark ? 'dark' : 'light');
 }
