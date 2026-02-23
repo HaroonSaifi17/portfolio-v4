@@ -15,10 +15,10 @@ const {
   index: number;
 } = $props();
 
-const isExternal = href.startsWith('http');
-const cta = href.startsWith('/case-studies/')
-  ? 'Read Case Study'
-  : 'View Project';
+const isExternal = $derived(href.startsWith('http'));
+const cta = $derived(
+  href.startsWith('/case-studies/') ? 'Read Case Study' : 'View Project',
+);
 </script>
 
 <Card.Root

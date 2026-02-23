@@ -1,61 +1,77 @@
 ---
 title: 'Angular 19 Zoneless Change Detection Guide'
-description: 'How to set up a zoneless Angular project and use Signals for efficient change detection.'
+description: 'How to set up a zoneless Angular project and use Signals for efficient change detection — with practical examples.'
 pubDate: '2024-12-15'
 updatedDate: '2024-12-15'
 heroImage: '/images/angular-19-thumbnail.webp'
 ---
 
-## Why Should You Care About Zoneless Angular?
+import Callout from '../../components/mdx/Callout.astro';
+import Divider from '../../components/mdx/Divider.astro';
+import StepList from '../../components/mdx/StepList.astro';
 
-Angular 19 makes your apps faster - much faster. By removing Zone.js, your app can run up to 40% quicker. Think of Zone.js as a watchdog that constantly checks for changes in your app. Now, we can tell Angular exactly when to check for updates, making everything smoother.
+## Why Zoneless Matters
 
-## Quick Setup Guide (5 Minutes)
+Angular 19 lets you drop **Zone.js** entirely. That's a big deal.
 
-Want better performance? Let's set up a zoneless Angular project:
+Zone.js is Angular's change detection watchdog — it monkey-patches every async API (`setTimeout`, `Promise`, DOM events) to know when something _might_ have changed, then checks the entire component tree. It works, but it's expensive.
 
-1. Create a Fresh Project
+Going zoneless means Angular only re-renders when you **explicitly tell it** something changed. The result: up to **40% faster** rendering in real-world apps.
+
+<Callout type="tip">
+Zoneless change detection is still marked as experimental in Angular 19, but it's stable enough for new projects. The API is unlikely to change significantly.
+</Callout>
+
+<Divider variant="arrow" />
+
+## Setup
+
+Three steps. Five minutes.
+
+### 1. Create a new project
 
 ```bash {1}
 ng new my-fast-app
 # Choose your preferred options when prompted
 ```
 
-2. Power Up Your App  
-Open `app.config.ts` and add the zoneless magic:
+### 2. Enable zoneless change detection
 
 ```ts {5} showLineNumbers title="src/app/app.config.ts"
 import { provideExperimentalZonelessChangeDetection } from "@angular/core";
 
 export const appConfig = {
   providers: [
-    provideExperimentalZonelessChangeDetection(), // This is the secret sauce!
+    provideExperimentalZonelessChangeDetection(),
     provideRouter(routes),
     provideClientHydration(),
   ],
 };
 ```
 
-3. Remove the Training Wheels  
-Update your `angular.json` - find the "polyfills" section and remove Zone.js:
+### 3. Remove Zone.js from polyfills
 
 ```json {2} showLineNumbers title="angular.json"
 {
   "polyfills": [
-    // "zone.js" is now commented out
+    // "zone.js" — remove or comment this out
   ]
 }
 ```
 
-## How to Know It Worked?
+### Verify it worked
 
-Open your browser's console (press F12) and type `window.Zone`. If you see "undefined", congratulations! You're now running Zone-free!
+Open your browser console and type `window.Zone`. If it returns `undefined`, Zone.js is gone.
 
-## Making Things Change with Signals
+<Divider variant="dots" />
 
-Signals are Angular's new way of handling updates. They're like smart variables that tell Angular when something changes. Here's a simple example:
+## Signals: The Replacement
 
-```ts {11-15} showLineNumbers title="src/app/counter.component.ts"
+Without Zone.js, Angular needs another way to know when data changes. That's **Signals** — reactive primitives that notify Angular exactly which values changed and which components need updating.
+
+### Basic signal
+
+```ts {9-13} showLineNumbers title="src/app/counter.component.ts"
 import { Component, signal } from "@angular/core";
 
 @Component({
@@ -74,27 +90,11 @@ export class CounterComponent {
 }
 ```
 
-## Signals Quick Start
+Call `count()` to read, `.set()` to replace, `.update()` to transform. Angular tracks which templates read which signals and only re-renders those.
 
-### Basic Signal Usage
+### Computed values
 
-```ts {9-11} showLineNumbers title="src/app/counter.component.ts"
-@Component({
-  selector: "app-counter",
-  template: `
-    <h2>Count: {{ count() }}</h2>
-    <button (click)="increment()">+1</button>
-  `,
-})
-export class CounterComponent {
-  count = signal(0);
-  increment() {
-    this.count.update((n) => n + 1);
-  }
-}
-```
-
-### Computed Values
+Derived state that automatically stays in sync:
 
 ```ts {6} showLineNumbers title="src/app/price.component.ts"
 @Component({
@@ -107,7 +107,11 @@ export class PriceComponent {
 }
 ```
 
-### Effects for Side Effects
+`total` recalculates only when `price` or `quantity` change. No manual subscription management.
+
+### Effects
+
+For side effects — things that should happen _because_ a signal changed:
 
 ```ts {5-7} showLineNumbers title="src/app/theme.component.ts"
 export class ThemeComponent {
@@ -121,7 +125,13 @@ export class ThemeComponent {
 }
 ```
 
-### RxJS Integration
+<Callout type="warn">
+Use `effect()` sparingly. It's for side effects like DOM manipulation, logging, or syncing with external systems. If you're computing derived data, use `computed()` instead.
+</Callout>
+
+### RxJS interop
+
+Already using Observables? Convert them to signals with `toSignal`:
 
 ```ts {4} showLineNumbers title="src/app/clock.component.ts"
 @Component({
@@ -132,14 +142,19 @@ export class ClockComponent {
 }
 ```
 
-## Tips for Success
+<Divider variant="wave" />
 
-- Use signals for values that change over time  
-- Prefer `computed()` for derived values  
-- Use `effect()` sparingly, mainly for side effects  
-- Remember: signals are synchronous  
+## Quick Reference
 
-## Want to Learn More?
+<StepList items={[
+  "Use signal() for values that change over time",
+  "Use computed() for derived values — never recalculate manually",
+  "Use effect() only for side effects (DOM, logging, external sync)",
+  "Signals are synchronous — no async pipe needed in templates",
+  "Use toSignal() to bridge existing RxJS observables"
+]} />
 
-- Check out the [official Angular Signals guide](https://angular.dev/guide/signals)  
-- Join the [Angular Discord community](https://discord.gg/angular)  
+## Further Reading
+
+- [Official Angular Signals guide](https://angular.dev/guide/signals)
+- [Angular Discord community](https://discord.gg/angular)

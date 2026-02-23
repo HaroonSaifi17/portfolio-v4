@@ -3,24 +3,54 @@ title: 'MeowFi DApp'
 description: 'Full-stack DeFi application featuring Liquidity Pools, Bribe Vaults, and token swaps via Balancer V3 protocols. Built with end-to-end type safety across the entire stack.'
 pubDate: '2025-02-10'
 updatedDate: '2025-02-10'
+role: 'Full Stack Developer'
+timeline: 'Dec 2024 — Feb 2025'
+category: 'Web3 / DeFi'
+stack:
+  - React
+  - TypeScript
+  - Node.js
+  - tRPC
+  - Balancer V3
+  - Web3
+  - Wagmi
+  - PostgreSQL
+liveUrl: 'https://app.meowfi.xyz'
 ---
 
 ## Overview
 
-MeowFi DApp is a full-stack DeFi application featuring Liquidity Pools, Bribe Vaults, and token swaps via Balancer V3 protocols, built with end-to-end type safety across the stack.
+MeowFi is a full-stack DeFi application built for the Balancer V3 ecosystem. It provides a complete suite of decentralized finance tools — from token swaps and liquidity pools to bribe vaults — all connected through a type-safe API layer.
 
-## Stack
+The application was designed to make DeFi interactions feel as smooth as traditional web apps while preserving the trustless, permissionless nature of blockchain.
 
-- React
-- Node.js
-- tRPC
-- Web3
+## The Problem
+
+DeFi interfaces are often fragmented, confusing, and riddled with poor developer experience behind the scenes. The goal was to build a unified platform that:
+
+- Consolidates multiple DeFi primitives into one coherent interface
+- Maintains end-to-end type safety from smart contract ABIs to the frontend
+- Handles the complexity of on-chain data without sacrificing UX
+
+## Architecture
+
+The stack revolves around **tRPC** bridging the React frontend and Node.js backend. Contract interactions flow through **Wagmi** and **Viem**, with ABI types propagated all the way to the UI layer.
+
+Key architectural decisions:
+
+- **tRPC** for fully typed API routes — zero runtime overhead for validation
+- **Wagmi hooks** for wallet connection, transaction signing, and contract reads
+- **Balancer V3 SDK** integration for swap routing and liquidity math
+- **PostgreSQL** for indexing off-chain data like bribe vault state and user positions
 
 ## Highlights
 
-- Integrated Balancer V3 protocols for swaps and liquidity features.
-- Maintained end-to-end type safety across frontend and backend flows.
+- Integrated Balancer V3 protocols for swaps, weighted pools, and liquidity features
+- Maintained **end-to-end type safety** across frontend, API layer, and contract interactions
+- Built real-time pool analytics with on-chain data aggregation
+- Implemented optimistic UI updates for pending transactions
+- Designed responsive layouts that work across desktop and mobile wallets
 
-## Links
+## What I Learned
 
-- Live App: https://app.meowfi.xyz
+Working with on-chain data is fundamentally different from traditional backends. Block confirmations, gas estimation, and transaction reverts all need graceful handling. The biggest takeaway was that **type safety pays off exponentially** in Web3 — catching ABI mismatches at compile time saves hours of debugging failed transactions.

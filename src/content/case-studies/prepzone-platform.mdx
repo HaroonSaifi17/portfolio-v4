@@ -3,24 +3,54 @@ title: 'PrepZone Platform'
 description: 'EdTech assessment platform featuring secure Google OAuth, managing a repository of 700+ questions for adaptive mock tests and real-time performance analytics.'
 pubDate: '2025-02-12'
 updatedDate: '2025-02-12'
+role: 'Full Stack Developer'
+timeline: 'Oct 2024 — Jan 2025'
+category: 'EdTech'
+stack:
+  - Angular
+  - TypeScript
+  - Node.js
+  - Express
+  - MongoDB
+  - Google OAuth
+  - Chart.js
+liveUrl: 'https://prepzone.tech'
 ---
 
 ## Overview
 
-PrepZone is an EdTech assessment platform featuring secure Google OAuth, a large question repository for adaptive mock tests, and real-time performance analytics.
+PrepZone is an adaptive assessment platform built for students preparing for competitive exams. It manages a repository of 700+ curated questions, delivers timed mock tests, and provides real-time analytics to track performance over time.
 
-## Stack
+The platform was designed with two priorities: **security** (handling student data and authentication) and **speed** (instant feedback on test submissions with no waiting).
 
-- Angular
-- Node.js
-- Express
-- MongoDB
+## The Problem
+
+Most existing quiz/assessment tools are either too generic or too rigid. Students needed:
+
+- Adaptive difficulty that adjusts based on past performance
+- Detailed analytics beyond just "you scored X%"
+- A fast, distraction-free test-taking experience
+- Secure authentication that doesn't require yet another password
+
+## Architecture
+
+The application follows a classic **Angular + Express + MongoDB** stack, but with careful attention to performance at the data layer.
+
+Key decisions:
+
+- **Angular** with lazy-loaded modules for fast initial load — the test-taking module only loads when needed
+- **MongoDB aggregation pipelines** for computing analytics in real-time without a separate analytics service
+- **Google OAuth 2.0** as the sole auth provider — eliminates password management entirely
+- **Express middleware** for rate limiting and request validation on all API routes
 
 ## Highlights
 
-- Implemented secure Google OAuth sign-in for student accounts.
-- Built analytics dashboards with real-time performance insights.
+- Implemented secure **Google OAuth sign-in** for student accounts with JWT session management
+- Built analytics dashboards with **real-time performance insights** — topic-wise breakdown, time-per-question, accuracy trends
+- Curated and structured **700+ questions** with difficulty tags, topic categorization, and explanation fields
+- Designed an **adaptive test engine** that selects questions based on historical weak areas
+- Optimized MongoDB queries to deliver test results in under 200ms for datasets of 10K+ attempts
 
-## Links
+## What I Learned
 
-- Live App: https://prepzone.tech
+The biggest challenge was designing the adaptive question selection algorithm. Pure randomization led to uneven coverage, and strict sequential ordering felt repetitive. The solution was a **weighted random selection** based on topic accuracy scores — topics where the student struggles get higher selection probability, creating a naturally adaptive experience without complex ML.

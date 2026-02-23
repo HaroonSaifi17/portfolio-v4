@@ -1,46 +1,61 @@
 ---
 title: 'Hosting My Portfolio on Azure: The Ups and Downs'
-description: 'My experience of hosting my portfolio on Azure App Service, the challenges I faced, and what I learned along the way.'
+description: 'My experience hosting a portfolio on Azure App Service — the deployment that silently broke while I was sending it to recruiters, and the obscure fix.'
 pubDate: '2022-07-08'
 updatedDate: '2024-07-08'
 heroImage: '/images/azure-thumbnail.webp'
 ---
 
-Recently, I decided to host my portfolio site on Azure. I had been using Vercel for a while, and while it was great, I wanted to explore Azure's offerings. In this blog post, I'll share my experience with Azure App Service, the challenges I faced, and what I learned along the way.
+import Callout from '../../components/mdx/Callout.astro';
+import Divider from '../../components/mdx/Divider.astro';
+import StepList from '../../components/mdx/StepList.astro';
 
-### Why I Made the Shift to Azure
+I moved my portfolio from Vercel to Azure. It seemed like a good idea at the time. Here's what happened.
 
-I recently decided to move my portfolio site from Vercel's free hosting to Azure, and I had a few good reasons for doing so:
+## Why Azure
 
-1. **Azure's Student Credits**: As a student, I received $100 in free Azure credits, which gave me more flexibility to experiment.
-2. **Avoiding Cold Starts**: Vercel's serverless functions occasionally have cold starts, which I wanted to eliminate.
-3. **Learning Infrastructure**: I wanted to deepen my understanding of deployment and infrastructure.
+Three reasons:
 
-### Setting Up with Azure
+<StepList items={[
+  "Azure Student Credits — $100 free to experiment with",
+  "No cold starts — Vercel's serverless functions had occasional delays",
+  "Learning infrastructure — I wanted to understand deployment beyond 'git push and pray'"
+]} />
 
-The best and easiest way to host a web app on Azure is to use an **App Service**. For deployment, I used **Docker**, creating an App Service that was continuously integrated with Azure Container Registry (ACR). I also set up a GitHub workflow for an automatic deployment pipeline.
+## The Setup
 
-### The Unexpected Issue
+The deployment pipeline was straightforward: **Docker** image pushed to **Azure Container Registry (ACR)**, continuously deployed to an **App Service**, triggered by a GitHub Actions workflow on push.
 
-Everything was running smoothly until one day, after pushing changes to my GitHub repo, my deployment failed. Unfortunately, I wasn't aware of this for a whole day because I didn't check the live URL; my Docker image had built and run fine locally, and previous deployments had gone off without a hitch.
+It worked. Builds passed, container ran, site loaded. I moved the DNS and called it done.
 
-That same day, I had applied to multiple internship openings and included my site URL. Little did I know that my site was down! When I finally checked and saw the issue, I was frustrated, realizing that many recruiters may have seen a broken website.
+<Divider variant="dots" />
 
-### Troubleshooting
+## The Silent Failure
 
-When I saw the Azure deployment error, I tried several things to troubleshoot:
+Then one day, after pushing changes, the deployment broke. I didn't notice for **an entire day** — the Docker image built and ran fine locally, and previous deployments had always worked.
+
+<Callout type="warn" title="The worst part">
+That same day, I had applied to multiple internships and included my portfolio URL in every application. Recruiters were clicking through to a broken site.
+</Callout>
+
+When I finally checked the live URL, the site was down. No email notification from Azure. No alert. Just a silent failure.
+
+## Troubleshooting
+
+I tried the obvious things:
 
 - Rebuilt and re-pushed the image to ACR
-- Tested the image on a virtual machine
-- Reached out to my college society for help
+- Tested the container on a separate VM — **it worked fine**
+- Asked my college tech society for help
+- Read through Azure's documentation
 
-Unfortunately, nothing seemed to work. I was lost—the error seemed vague, and my code itself had no issues. In the end, I temporarily reverted the DNS back to Vercel just to have a live site.
+Nothing worked. The error messages were vague and unhelpful. I temporarily pointed the DNS back to Vercel just to have a live site.
 
-### The Real Cause
+<Divider variant="zigzag" />
 
-After digging through my Git history, I noticed that I had removed a wildcard route in my app, which redirected requests to an error page. Out of frustration, I re-added the wildcard route and, surprisingly, the deployment worked!
+## The Actual Cause
 
-It turned out that Azure's deployment check involves pinging a specific route to verify that the app is running. When that route failed to respond (likely because it wasn't the home route), the deployment was marked as failed. This was confusing—why not consider the app running as long as the container is live?
+After digging through my Git history, I found it: I had removed a **wildcard route** that redirected unmatched paths to an error page.
 
 ```ts
 {
@@ -49,8 +64,21 @@ It turned out that Azure's deployment check involves pinging a specific route to
 }
 ```
 
-### Final Thoughts
+Azure's deployment health check pings a specific route to verify the app is running. When that route returned nothing (because the wildcard was gone), Azure marked the entire deployment as **failed** — even though the container was running and the home page was fine.
 
-This experience was frustrating. I spent an entire day debugging a deployment issue caused by Azure's verification process, which was not clearly documented. To make things worse, Azure's error messages were off-topic and vague, and support is limited for the student plan. I also didn't receive any notification about the deployment failure.
+<Callout type="note">
+Azure doesn't just check if the container is alive. It checks if a specific HTTP route responds. If that route 404s, the deployment is marked as failed. This behavior wasn't clearly documented anywhere I could find at the time.
+</Callout>
 
-This is my experience with Azure so far. I'm still learning, so if I've made mistakes or you have suggestions, feel free to reach out via email. I'd be happy to respond and update this blog with new insights.
+Re-adding the wildcard route fixed everything instantly.
+
+<Divider variant="wave" />
+
+## Takeaways
+
+- **Set up deployment alerts.** Don't rely on manually checking the live URL.
+- **Azure's health checks are opinionated.** Your container running is not enough — specific routes need to respond.
+- **Error messages lie.** The Azure error pointed to something completely unrelated to the actual cause.
+- **Always have a rollback plan.** Keeping the Vercel deployment ready saved me from extended downtime.
+
+This was frustrating, but it taught me more about deployment infrastructure than any tutorial could. Sometimes the best learning comes from things breaking at the worst possible time.

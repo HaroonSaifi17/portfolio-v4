@@ -1,34 +1,67 @@
 ---
 title: "Cursor is Cool, But I'm Sticking With Neovim"
-description: "My unlikely journey with Neovim, from an Android phone to the age of AI, and why I still choose it over modern AI-powered IDEs."
+description: "Why I still choose Neovim over AI-powered IDEs — and what 3+ years of terminal-first development taught me about learning."
 pubDate: "2025-07-07"
 updatedDate: "2025-07-07"
 ---
 
-It seems like every developer I know is talking about **Cursor**. It's the new, AI-powered IDE that's getting a ton of buzz, and for good reason! I totally get the appeal and its benefits, but I have to be honest: I'm happily sticking with my trusty old friend, **Neovim**.
+import Callout from '../../components/mdx/Callout.astro';
+import Divider from '../../components/mdx/Divider.astro';
 
-> **You might be thinking:** "Wait, Neovim? The text-based editor in the terminal? Isn't that what beginners run away from, not towards?"
+Every developer I know is talking about **Cursor**. It's an AI-powered IDE that's getting a ton of buzz — and for good reason. I get the appeal. But I'm sticking with **Neovim**.
 
-Well, my journey was a bit different. Neovim was my very first editor when I started learning to code. I didn't choose it to be a "power user" who never touched a mouse; I chose it out of pure necessity.
+> "Neovim? The terminal text editor? Isn't that what beginners run away from?"
 
-### My Unlikely Origin Story
+My story went the other way around. Neovim was my **first** editor. I didn't choose it to be a power user. I chose it because I had no other option.
 
-When I first got interested in development, I didn't have a PC. My only tool was my Android phone. I tried every HTML editor in the app store, but they were all clunky and lacked basic functionality. Then, I discovered a game-changing combination: **Termux** (a terminal for Android) and **Neovim**.
+## Why Neovim in the First Place
 
-Suddenly, I had a real development environment in my pocket. I started using it constantly, always trying to improve my config files. By the time I finally got my first laptop, the habit was already formed. I never even installed VS Code.
+When I started coding, I didn't have a laptop — just an Android phone. Every HTML editor on the app store was clunky and half-broken. Then I found **Termux** and Neovim, and suddenly I had a real development environment in my pocket.
 
-### A Journey of Constant Learning (and Struggle)
+By the time I got my first laptop, the muscle memory was already locked in. I never installed VS Code.
 
-My Neovim journey wasn't smooth. When I started, many essential plugins were still underdeveloped. Getting things like **Treesitter** and **LSP** set up was incredibly difficult.
+<Callout type="story">
+I wrote my first portfolio, my first backend API, and my first Git commits — all on a phone screen, in a terminal, using Vim motions. That kind of constraint shapes how you think about tools forever.
+</Callout>
 
-Inspired by other developers on GitHub, I started maintaining my own config. It grew slowly over time until, at one point, I had over **150 plugins** working flawlessly together! But after 2-3 years of constant maintenance, I was tired. That's when I switched to **LazyVim**, a pre-configured Neovim setup that took away the maintenance burden. Even now, I still haven't mastered all the Vim motions, but I'm grasping them little by little.
+<Divider variant="zigzag" />
 
-### Neovim in the Age of AI
+## The Maintenance Arc
 
-Now, let's talk about the AI era. I started using GitHub Copilot in 2023, and from my point of view, it is a great auto-suggestion tool. Yes, nothing more.
+My Neovim journey wasn't smooth. Early on, essential plugins were still underdeveloped. Getting **Treesitter** and **LSP** working was genuinely difficult — hours of debugging config files for something that "just works" in VS Code.
 
-I understand that Cursor takes this to the next level with a built-in AI chatbot and agents. That's a good thing if your only goal is to solve a problem as quickly as possible. But it's different from truly learning and enjoying the process.
+I started maintaining my own config, inspired by dotfile repos on GitHub. It grew over time until I had **150+ plugins** working together. It was beautiful. It was also exhausting.
 
-> My point is that we shouldn't become deeply dependent on AI, especially when we are learning. Cursor provides tools that make development "easy," but in doing so, it can take away all the fun of learning. It shortcuts the struggle, but the struggle is often where the real understanding is built.
+After 3 years of constant maintenance, I switched to **LazyVim** — a pre-configured Neovim distribution that handled the boring parts. Best decision I made. Same editing model, fraction of the upkeep.
 
-For me, the joy is in the journey—the tinkering, the problem-solving, and the slow, steady process of becoming a better developer. And for that journey, Neovim is the perfect companion.
+<Callout type="tip">
+If you're interested in Neovim but don't want the config burden, start with LazyVim or AstroNvim. You can always eject later once you understand what each piece does.
+</Callout>
+
+<Divider variant="dots" />
+
+## Neovim in the Age of AI
+
+I've been using **GitHub Copilot** since 2023. It's a good auto-suggestion tool — helpful for boilerplate, great for tests. But that's where I draw the line.
+
+Cursor takes it further with built-in AI chat, agents, and inline editing. If your goal is solving problems as fast as possible, it's objectively powerful.
+
+But speed isn't always the point.
+
+<Callout type="warn" title="Hot take">
+When you're still learning, tools that make development "easy" can quietly remove the parts where real understanding is built. The struggle isn't a bug — it's the learning itself.
+</Callout>
+
+I'm not anti-AI. I use Copilot daily. But I don't want an editor that thinks for me by default. I want an editor that stays out of the way and lets me think — and then offers help when I ask for it.
+
+<Divider variant="stars" />
+
+## Why I Stay
+
+It's not about productivity metrics or being contrarian. Neovim fits how I like to work:
+
+- **Terminal-first** — everything lives in one context. Editor, git, build tools, file management. No context switching.
+- **Composable** — Vim motions are a language. Once you learn the grammar (`d2w`, `ci"`, `vip`), you can express any edit as a sentence.
+- **Mine** — my config reflects my workflow. Nothing extra, nothing missing. Every keybind exists because I put it there.
+
+The joy is in the tinkering, the problem-solving, and the slow process of getting better at your craft. For that journey, Neovim is the right companion.

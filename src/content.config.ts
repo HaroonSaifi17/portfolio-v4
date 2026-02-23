@@ -23,6 +23,12 @@ const caseStudies = defineCollection({
     pubDate: z.coerce.date(),
     updatedDate: z.coerce.date().optional(),
     heroImage: z.string().optional(),
+    role: z.string().optional(),
+    timeline: z.string().optional(),
+    stack: z.array(z.string()).optional(),
+    liveUrl: z.string().url().optional(),
+    repoUrl: z.string().url().optional(),
+    category: z.string().optional(),
   }),
 });
 

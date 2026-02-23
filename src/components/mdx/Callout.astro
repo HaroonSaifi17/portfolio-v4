@@ -1,0 +1,47 @@
+---
+interface Props {
+  type?: 'note' | 'warn' | 'tip' | 'story';
+  title?: string;
+}
+
+const { type = 'note', title } = Astro.props;
+
+const config: Record<string, { label: string; border: string; bg: string; icon: string }> = {
+  note: {
+    label: title || 'Note',
+    border: 'border-foreground',
+    bg: 'bg-secondary',
+    icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="square"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>`,
+  },
+  warn: {
+    label: title || 'Warning',
+    border: 'border-destructive',
+    bg: 'bg-destructive/10',
+    icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="square"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>`,
+  },
+  tip: {
+    label: title || 'Tip',
+    border: 'border-primary',
+    bg: 'bg-accent',
+    icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="square"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7V17h8v-2.3A7 7 0 0 0 12 2z"/></svg>`,
+  },
+  story: {
+    label: title || 'Story Time',
+    border: 'border-foreground',
+    bg: 'bg-card',
+    icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="square"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>`,
+  },
+};
+
+const c = config[type];
+---
+
+<aside class={`not-prose my-8 border-4 ${c.border} ${c.bg} p-5`}>
+  <div class="flex items-center gap-2.5 mb-3">
+    <span class="shrink-0" set:html={c.icon} />
+    <span class="text-xs font-black uppercase tracking-[0.2em]">{c.label}</span>
+  </div>
+  <div class="text-[0.95rem] font-medium leading-relaxed [&>p]:mb-2 [&>p:last-child]:mb-0">
+    <slot />
+  </div>
+</aside>

@@ -2,6 +2,7 @@
 import Layout from './Layout.astro';
 import Navbar from '../components/Navbar.svelte';
 import Footer from '../components/Footer.svelte';
+import { getCollection } from 'astro:content';
 
 interface Props {
   title: string;
@@ -10,12 +11,38 @@ interface Props {
   updatedDate?: Date;
   heroImage?: string;
   slug?: string;
+  role?: string;
+  timeline?: string;
+  stack?: string[];
+  liveUrl?: string;
+  repoUrl?: string;
+  category?: string;
 }
 
-const { title, description, pubDate, updatedDate, heroImage, slug } =
-  Astro.props;
+const {
+  title,
+  description,
+  pubDate,
+  updatedDate,
+  heroImage,
+  slug,
+  role,
+  timeline,
+  stack,
+  liveUrl,
+  repoUrl,
+  category,
+} = Astro.props;
+
 const transitionId =
   slug ?? `case-study-${title.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`;
+
+const studies = (await getCollection('case-studies')).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+);
+const currentIndex = studies.findIndex((s) => s.id === slug);
+const prevStudy = currentIndex >= 0 ? studies[currentIndex + 1] : undefined;
+const nextStudy = currentIndex > 0 ? studies[currentIndex - 1] : undefined;
 
 function formatDate(date: Date) {
   return date.toLocaleDateString('en-US', {
@@ -24,62 +51,221 @@ function formatDate(date: Date) {
     day: 'numeric',
   });
 }
+
+const hasMetadata = role || timeline || stack?.length || liveUrl || repoUrl;
 ---
 
 <Layout title={`${title} — Case Study`} description={description}>
   <Navbar client:load />
 
-  <article
-    class="max-w-3xl mx-auto px-6 py-20"
-    transition:name={`case-study-card-${transitionId}`}
-  >
-    <header class="mb-16 space-y-6">
-      <a
-        href="/#work"
-        class="post-back inline-block font-black uppercase tracking-widest text-sm border-b-4 border-foreground nav-link-hover"
-      >
-        &larr; Back to Work
-      </a>
+  <article id="top" class="w-full" transition:name={`case-study-card-${transitionId}`}>
 
-      <h1
-        class="post-title text-4xl md:text-6xl font-black uppercase tracking-tighter leading-tight"
-        transition:name={`case-study-title-${transitionId}`}
-      >
-        {title}
-      </h1>
-
-      <div class="post-meta flex flex-wrap gap-4 items-center">
-        <span
-          class="font-black uppercase tracking-widest bg-foreground text-background px-3 py-1 text-sm"
-          transition:name={`case-study-date-${transitionId}`}
+    <!-- Hero Banner -->
+    <div class="border-b-4 border-foreground bg-card pt-24 pb-16 px-6">
+      <div class="max-w-6xl mx-auto flex flex-col gap-5">
+        <a
+          href="/case-studies"
+          class="self-start mb-2 inline-block font-black uppercase tracking-widest text-sm border-b-4 border-foreground nav-link-hover"
         >
-          {formatDate(pubDate)}
-        </span>
+          &larr; All Case Studies
+        </a>
+
         {
-          updatedDate && (
-            <span class="font-bold text-muted-foreground text-sm uppercase tracking-widest">
-              Updated {formatDate(updatedDate)}
+          category && (
+            <span class="self-start inline-block text-[0.7rem] font-black uppercase tracking-[0.25em] px-3 py-1 bg-primary text-primary-foreground border-[3px] border-foreground">
+              {category}
             </span>
           )
         }
-      </div>
 
-      {
-        heroImage && (
+        <h1
+          class="text-[clamp(2.5rem,6vw,5rem)] font-black uppercase tracking-tighter leading-none max-w-4xl"
+          transition:name={`case-study-title-${transitionId}`}
+        >
+          {title}
+        </h1>
+
+        <p class="text-lg font-medium leading-relaxed max-w-2xl text-muted-foreground">
+          {description}
+        </p>
+
+        <div class="flex flex-wrap gap-3 items-center">
+          <span
+            class="font-black uppercase tracking-widest bg-foreground text-background px-3 py-1 text-sm"
+            transition:name={`case-study-date-${transitionId}`}
+          >
+            {formatDate(pubDate)}
+          </span>
+          {
+            updatedDate && (
+              <span class="font-bold text-muted-foreground text-sm uppercase tracking-wider">
+                Updated {formatDate(updatedDate)}
+              </span>
+            )
+          }
+        </div>
+
+        {
+          (liveUrl || repoUrl) && (
+            <div class="flex flex-wrap gap-3 mt-2">
+              {liveUrl && (
+                <a
+                  href={liveUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-black uppercase tracking-wider border-4 border-foreground bg-foreground text-background shadow-[var(--shadow-sm)] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:border-primary hover:bg-primary hover:text-primary-foreground transition-all duration-200"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="square"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                  Live Project
+                </a>
+              )}
+              {repoUrl && (
+                <a
+                  href={repoUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-black uppercase tracking-wider border-4 border-foreground bg-background shadow-[var(--shadow-sm)] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:border-primary transition-all duration-200"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="square"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+                  Source Code
+                </a>
+              )}
+            </div>
+          )
+        }
+      </div>
+    </div>
+
+    <!-- Hero Image -->
+    {
+      heroImage && (
+        <div class="max-w-6xl mx-auto px-6 -mt-8 relative z-10">
           <img
             src={heroImage}
             alt={title}
-            class="post-hero w-full border-4 border-foreground shadow-[var(--shadow-lg)]"
+            class="w-full border-4 border-foreground shadow-[var(--shadow-lg)] block"
             transition:name={`case-study-hero-${transitionId}`}
           />
+        </div>
+      )
+    }
+
+    <!-- Body: Sidebar + Content -->
+    <div class={`max-w-6xl mx-auto px-6 py-12 grid gap-12 ${hasMetadata ? 'md:grid-cols-[14rem_1fr]' : ''}`}>
+
+      {/* Metadata Sidebar */}
+      {
+        hasMetadata && (
+          <aside class="md:border-r-4 border-b-4 md:border-b-0 border-foreground md:pr-8 pb-8 md:pb-0">
+            <div class="sticky top-24 flex flex-col gap-7 max-md:grid max-md:grid-cols-[repeat(auto-fit,minmax(8rem,1fr))] max-md:gap-5 max-md:static">
+              {role && (
+                <div class="flex flex-col gap-1">
+                  <span class="text-[0.65rem] font-black uppercase tracking-[0.25em] text-muted-foreground">Role</span>
+                  <span class="text-sm font-bold">{role}</span>
+                </div>
+              )}
+              {timeline && (
+                <div class="flex flex-col gap-1">
+                  <span class="text-[0.65rem] font-black uppercase tracking-[0.25em] text-muted-foreground">Timeline</span>
+                  <span class="text-sm font-bold">{timeline}</span>
+                </div>
+              )}
+              {stack && stack.length > 0 && (
+                <div class="flex flex-col gap-1.5">
+                  <span class="text-[0.65rem] font-black uppercase tracking-[0.25em] text-muted-foreground">Stack</span>
+                  <div class="flex flex-wrap gap-1.5">
+                    {stack.map((tech) => (
+                      <span class="text-[0.7rem] font-extrabold uppercase tracking-wider px-2 py-0.5 border-2 border-foreground bg-secondary">
+                        {tech}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+              {liveUrl && (
+                <div class="flex flex-col gap-1">
+                  <span class="text-[0.65rem] font-black uppercase tracking-[0.25em] text-muted-foreground">Live</span>
+                  <a href={liveUrl} target="_blank" rel="noopener noreferrer" class="text-sm font-extrabold border-b-2 border-primary hover:text-primary transition-colors">
+                    {new URL(liveUrl).hostname} &nearr;
+                  </a>
+                </div>
+              )}
+              {repoUrl && (
+                <div class="flex flex-col gap-1">
+                  <span class="text-[0.65rem] font-black uppercase tracking-[0.25em] text-muted-foreground">Source</span>
+                  <a href={repoUrl} target="_blank" rel="noopener noreferrer" class="text-sm font-extrabold border-b-2 border-primary hover:text-primary transition-colors">
+                    GitHub &nearr;
+                  </a>
+                </div>
+              )}
+            </div>
+          </aside>
         )
       }
-    </header>
 
-    <div class="post-content prose prose-lg max-w-none">
-      <slot />
+      {/* Content */}
+      <div class={`prose prose-lg max-w-none min-w-0 ${!hasMetadata ? 'max-w-4xl' : ''}`}>
+        <slot />
+      </div>
     </div>
+
+    <!-- Prev/Next Navigation -->
+    <nav class="max-w-6xl mx-auto px-6 pb-16 border-t-4 border-foreground pt-8 grid grid-cols-1 sm:grid-cols-2 gap-4">
+      {prevStudy ? (
+        <a
+          href={`/case-studies/${prevStudy.id}`}
+          class="flex items-center gap-4 p-5 border-4 border-foreground bg-card shadow-[var(--shadow-sm)] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:border-primary transition-all duration-200"
+          data-astro-prefetch
+        >
+          <span class="text-2xl font-black shrink-0">&larr;</span>
+          <span class="flex flex-col gap-1">
+            <span class="text-xs font-black tracking-widest uppercase text-muted-foreground">Previous Study</span>
+            <span class="text-base font-black uppercase tracking-tight">{prevStudy.data.title}</span>
+          </span>
+        </a>
+      ) : (
+        <span class="flex items-center gap-4 p-5 border-4 border-foreground bg-card opacity-40 pointer-events-none" aria-hidden="true">
+          <span class="text-2xl font-black shrink-0">&larr;</span>
+          <span class="flex flex-col gap-1">
+            <span class="text-xs font-black tracking-widest uppercase text-muted-foreground">Previous</span>
+            <span class="text-base font-black uppercase tracking-tight">&mdash;</span>
+          </span>
+        </span>
+      )}
+
+      {nextStudy ? (
+        <a
+          href={`/case-studies/${nextStudy.id}`}
+          class="flex items-center gap-4 p-5 border-4 border-foreground bg-card shadow-[var(--shadow-sm)] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:border-primary transition-all duration-200 text-right justify-end"
+          data-astro-prefetch
+        >
+          <span class="flex flex-col gap-1">
+            <span class="text-xs font-black tracking-widest uppercase text-muted-foreground">Next Study</span>
+            <span class="text-base font-black uppercase tracking-tight">{nextStudy.data.title}</span>
+          </span>
+          <span class="text-2xl font-black shrink-0">&rarr;</span>
+        </a>
+      ) : (
+        <span class="flex items-center gap-4 p-5 border-4 border-foreground bg-card opacity-40 pointer-events-none text-right justify-end" aria-hidden="true">
+          <span class="flex flex-col gap-1">
+            <span class="text-xs font-black tracking-widest uppercase text-muted-foreground">Next</span>
+            <span class="text-base font-black uppercase tracking-tight">&mdash;</span>
+          </span>
+          <span class="text-2xl font-black shrink-0">&rarr;</span>
+        </span>
+      )}
+    </nav>
   </article>
+
+  <!-- Back to top -->
+  <a
+    href="#top"
+    class="fixed right-5 bottom-6 w-11 h-11 inline-flex items-center justify-center border-[3px] border-foreground bg-card text-xl font-black shadow-[var(--shadow-sm)] z-40 hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:border-primary transition-all duration-200"
+    aria-label="Back to top"
+    title="Back to top"
+  >
+    &uarr;
+  </a>
 
   <Footer client:visible />
 </Layout>

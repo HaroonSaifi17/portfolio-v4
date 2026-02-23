@@ -1,0 +1,66 @@
+---
+/**
+ * Static SVG section divider for blog posts.
+ * Pure decorative — no animations.
+ *
+ * Variants:
+ *   dots    — three dots
+ *   zigzag  — zigzag line
+ *   wave    — sine wave
+ *   arrow   — downward arrow
+ *   stars   — three stars
+ */
+interface Props {
+  variant?: 'dots' | 'zigzag' | 'wave' | 'arrow' | 'stars';
+}
+
+const { variant = 'dots' } = Astro.props;
+---
+
+<div class="not-prose my-12 flex items-center justify-center select-none" aria-hidden="true">
+  {variant === 'dots' && (
+    <svg width="60" height="20" viewBox="0 0 60 20">
+      <circle cx="10" cy="10" r="4" fill="currentColor" opacity="0.5" />
+      <circle cx="30" cy="10" r="4" fill="currentColor" />
+      <circle cx="50" cy="10" r="4" fill="currentColor" opacity="0.5" />
+    </svg>
+  )}
+
+  {variant === 'zigzag' && (
+    <svg width="120" height="24" viewBox="0 0 120 24" fill="none" class="text-primary">
+      <polyline
+        points="0,18 20,6 40,18 60,6 80,18 100,6 120,18"
+        stroke="currentColor"
+        stroke-width="3"
+        stroke-linecap="square"
+      />
+    </svg>
+  )}
+
+  {variant === 'wave' && (
+    <svg width="140" height="28" viewBox="0 0 140 28" fill="none" class="text-foreground">
+      <path
+        d="M0 14 Q17.5 0 35 14 Q52.5 28 70 14 Q87.5 0 105 14 Q122.5 28 140 14"
+        stroke="currentColor"
+        stroke-width="3"
+        fill="none"
+        stroke-linecap="round"
+      />
+    </svg>
+  )}
+
+  {variant === 'arrow' && (
+    <svg width="24" height="40" viewBox="0 0 24 40" fill="none" class="text-primary">
+      <line x1="12" y1="0" x2="12" y2="30" stroke="currentColor" stroke-width="3" stroke-linecap="square" />
+      <polyline points="4,22 12,32 20,22" stroke="currentColor" stroke-width="3" fill="none" stroke-linecap="square" />
+    </svg>
+  )}
+
+  {variant === 'stars' && (
+    <svg width="110" height="28" viewBox="-2 -1 114 26" class="text-primary overflow-visible">
+      <polygon points="16,2 19,9 27,9 21,14 23,22 16,17 9,22 11,14 5,9 13,9" fill="currentColor" />
+      <polygon points="50,2 53,9 61,9 55,14 57,22 50,17 43,22 45,14 39,9 47,9" fill="currentColor" opacity="0.6" />
+      <polygon points="84,2 87,9 95,9 89,14 91,22 84,17 77,22 79,14 73,9 81,9" fill="currentColor" />
+    </svg>
+  )}
+</div>
