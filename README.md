@@ -1,13 +1,22 @@
-# Portfolio V4 — Astro + Svelte Template
+# Portfolio V4
 
-Bold, editorial-style portfolio template built with Astro, Svelte, Tailwind CSS, and MDX. Includes case studies, blog posts, and GSAP-driven motion.
+Bold, editorial-style portfolio template built with Astro + Svelte. Designed to showcase projects, experience, blog posts, and case studies with crisp motion and high-contrast typography.
+
+![Preview](public/images/preview.png)
+
+![Astro](https://img.shields.io/badge/Astro-Framework-ff5d01?logo=astro&logoColor=fff)
+![Svelte](https://img.shields.io/badge/Svelte-UI-ff3e00?logo=svelte&logoColor=fff)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind-CSS-38bdf8?logo=tailwindcss&logoColor=fff)
+![MDX](https://img.shields.io/badge/MDX-Content-000000?logo=mdx&logoColor=fff)
+![Bun](https://img.shields.io/badge/Bun-Tooling-000000?logo=bun&logoColor=fff)
+![License](https://img.shields.io/badge/License-MIT-22c55e)
 
 ## Features
 
-- Astro pages and content collections
+- Editorial typography and strong hierarchy
+- Astro content collections with MDX for blog posts and case studies
 - Svelte components for interactive sections
-- Tailwind CSS with custom theme tokens
-- MDX for blog posts and case studies
+- Tailwind CSS theme tokens and global styling
 - GSAP scroll-triggered reveals
 - View Transitions between list and detail pages
 
@@ -20,34 +29,60 @@ Bold, editorial-style portfolio template built with Astro, Svelte, Tailwind CSS,
 - GSAP
 - Bun
 
-## Getting Started
+## Requirements
+
+- Bun (recommended for scripts below)
+
+## Quick Start
 
 ```bash
 bun install
 bun dev
 ```
 
-## Build
+Open `http://localhost:4321`.
+
+## Build and Preview
 
 ```bash
 bun build
 bun preview
 ```
 
+## Scripts
+
+| Command | Description |
+| --- | --- |
+| `bun dev` | Start the dev server |
+| `bun build` | Build the production site |
+| `bun preview` | Preview the production build |
+| `bun lint` | Run Biome lint |
+| `bun format` | Format with Biome |
+
 ## Project Structure
 
-- `src/pages/index.astro` — home page content and sections
-- `src/components` — Svelte components
-- `src/content/blog` — blog posts (MDX)
-- `src/content/case-studies` — case studies (MDX)
-- `src/styles/global.css` — global styles and theme tokens
-- `src/layouts` — site layouts
+```text
+src/
+  components/         Svelte components
+  content/
+    blog/             Blog posts (MDX)
+    case-studies/     Case studies (MDX)
+  layouts/            Page layouts
+  pages/              Astro routes
+  styles/             Global styles and tokens
+```
 
 ## Customize
 
-- Update project data in `src/pages/index.astro`
-- Edit copy for hero/experience sections in `src/components`
-- Add posts in `src/content/blog` and `src/content/case-studies`
+- Update the homepage sections in `src/pages/index.astro`
+- Edit component copy in `src/components`
+- Add or edit posts in `src/content/blog`
+- Add or edit case studies in `src/content/case-studies`
+- Adjust theme tokens in `src/styles/global.css`
+
+## Deployment
+
+This is a static Astro build. After `bun build`, deploy the `dist/` directory to your host of choice.
 
 ## License
 
