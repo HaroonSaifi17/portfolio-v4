@@ -24,13 +24,14 @@ const cta = $derived(
 <Card.Root
   class="project-card group relative p-8 gap-0 border-4 border-foreground shadow-[var(--shadow-lg)] card-hover"
 >
-  <div
-    class="card-index absolute -top-5 -right-5 w-12 h-12 bg-primary border-4 border-foreground rounded-full shadow-[var(--shadow-sm)] flex items-center justify-center z-10"
-  >
-    <span class="text-primary-foreground font-black">{index}</span>
-  </div>
-
-  <h3 class="text-3xl font-black uppercase mb-2 tracking-tight">{title}</h3>
+  <h3 class="text-3xl font-black uppercase mb-2 tracking-tight flex items-start gap-3">
+    <span
+      class="card-index mt-1 w-6 h-6 bg-primary border-2 border-foreground text-primary-foreground font-black text-xs leading-none flex items-center justify-center shrink-0"
+    >
+      {index}
+    </span>
+    <span>{title}</span>
+  </h3>
   <p
     class="font-bold text-muted-foreground uppercase tracking-widest text-sm mb-6"
   >

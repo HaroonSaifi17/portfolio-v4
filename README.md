@@ -1,39 +1,54 @@
-# Mohd Haroon Portfolio (v4)
+# Portfolio V4 — Astro + Svelte Template
 
-Personal portfolio site built with Astro, Svelte, Tailwind CSS, and MDX. It showcases projects, experience, blog posts, and case studies with view transitions and GSAP-driven motion.
+Bold, editorial-style portfolio template built with Astro, Svelte, Tailwind CSS, and MDX. Includes case studies, blog posts, and GSAP-driven motion.
 
-## Stack
+## Features
 
-- Astro for routing, layouts, and content collection
-- Svelte for interactive UI
-- Tailwind CSS for styling
+- Astro pages and content collections
+- Svelte components for interactive sections
+- Tailwind CSS with custom theme tokens
 - MDX for blog posts and case studies
-- GSAP for animations
-- Bun for package management and scripts
+- GSAP scroll-triggered reveals
+- View Transitions between list and detail pages
 
-## Content
+## Tech Stack
 
-- Blog posts live in `src/content/blog`
-- Case studies live in `src/content/case-studies`
-- Content schemas are defined in `src/content.config.ts`
+- Astro
+- Svelte
+- Tailwind CSS
+- MDX
+- GSAP
+- Bun
 
-## View Transitions
+## Getting Started
 
-Astro View Transitions are enabled globally in `src/layouts/Layout.astro` and linked between list cards and detail pages so titles, dates, and hero images animate smoothly across navigation.
+```bash
+bun install
+bun dev
+```
 
-## Commands
+## Build
 
-All commands run from the project root:
+```bash
+bun build
+bun preview
+```
 
-| Command | Action |
-| --- | --- |
-| `bun install` | Install dependencies |
-| `bun dev` | Start local dev server at `localhost:4321` |
-| `bun build` | Build production site to `./dist/` |
-| `bun preview` | Preview the production build |
-| `bun astro ...` | Run Astro CLI commands |
+## Project Structure
 
-## Notes
+- `src/pages/index.astro` — home page content and sections
+- `src/components` — Svelte components
+- `src/content/blog` — blog posts (MDX)
+- `src/content/case-studies` — case studies (MDX)
+- `src/styles/global.css` — global styles and theme tokens
+- `src/layouts` — site layouts
 
-- The layout and styles live in `src/layouts` and `src/styles/global.css`.
-- Interactive sections are in `src/components`.
+## Customize
+
+- Update project data in `src/pages/index.astro`
+- Edit copy for hero/experience sections in `src/components`
+- Add posts in `src/content/blog` and `src/content/case-studies`
+
+## License
+
+MIT. See `LICENSE`.
