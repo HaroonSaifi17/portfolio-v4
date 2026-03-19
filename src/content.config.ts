@@ -23,6 +23,8 @@ const caseStudies = defineCollection({
     pubDate: z.coerce.date(),
     updatedDate: z.coerce.date().optional(),
     heroImage: z.string().optional(),
+    heroImageCrop: z.boolean().optional(),
+    heroImagePosition: z.enum(['top', 'center']).optional(),
     role: z.string().optional(),
     timeline: z.string().optional(),
     stack: z.array(z.string()).optional(),

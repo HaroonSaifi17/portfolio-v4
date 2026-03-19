@@ -1,56 +1,119 @@
 ---
-title: 'PrepZone Platform'
-description: 'EdTech assessment platform featuring secure Google OAuth, managing a repository of 700+ questions for adaptive mock tests and real-time performance analytics.'
+title: 'PrepZone: My First Full-Scale Angular Platform'
+description: 'Built a complete EdTech platform with Angular and Express, including Google OAuth, timed mock tests, result analytics, and an admin system for question and paper operations.'
 pubDate: '2025-02-12'
-updatedDate: '2025-02-12'
-role: 'Full Stack Developer'
-timeline: 'Oct 2024 — Jan 2025'
+updatedDate: '2026-03-19'
+role: 'Full-Stack Developer (Solo)'
+timeline: 'Jun 2023 — Dec 2024'
 category: 'EdTech'
 stack:
   - Angular
   - TypeScript
+  - RxJS
   - Node.js
   - Express
   - MongoDB
-  - Google OAuth
+  - Passport.js
+  - JWT
+  - Multer
   - Chart.js
-liveUrl: 'https://prepzone.tech'
+  - Tailwind CSS
+  - MathJax
+liveUrl: 'https://prep-zone.vercel.app/'
 ---
 
-## Overview
+## Project Overview
 
-PrepZone is an adaptive assessment platform built for students preparing for competitive exams. It manages a repository of 700+ curated questions, delivers timed mock tests, and provides real-time analytics to track performance over time.
+PrepZone is a full-stack assessment platform for JEE/NEET preparation. It includes student authentication, test-taking flows, result analysis, notes distribution, and a full admin panel for question and paper management.
 
-The platform was designed with two priorities: **security** (handling student data and authentication) and **speed** (instant feedback on test submissions with no waiting).
+This was my first large Angular project and my first end-to-end product where I owned both frontend and backend architecture.
 
-## The Problem
+## Product Walkthrough
 
-Most existing quiz/assessment tools are either too generic or too rigid. Students needed:
+<video controls playsinline preload="metadata" class="w-full rounded-xl border-4 border-foreground bg-black">
+  <source src="/images/prepzone-h264.mp4" type="video/mp4" />
+  <source src="/images/prepzone.webm" type="video/webm" />
+  Your browser does not support this video format.
+</video>
 
-- Adaptive difficulty that adjusts based on past performance
-- Detailed analytics beyond just "you scored X%"
-- A fast, distraction-free test-taking experience
-- Secure authentication that doesn't require yet another password
+## Links
 
-## Architecture
+- Live product: [prep-zone.vercel.app](https://prep-zone.vercel.app/)
+- Frontend repository: [github.com/HaroonSaifi17/PrepZone](https://github.com/HaroonSaifi17/PrepZone)
+- Backend repository: [github.com/HaroonSaifi17/PrepZoneApi](https://github.com/HaroonSaifi17/PrepZoneApi)
 
-The application follows a classic **Angular + Express + MongoDB** stack, but with careful attention to performance at the data layer.
+## What I Built
 
-Key decisions:
+- Student app with protected routes for dashboard, tests, results, notes, and profile/settings.
+- Admin app with protected routes for adding questions, generating papers, reviewing attempts, uploading PDFs, and viewing platform stats.
+- API service layer for auth, exam/test lifecycle, scoring, result retrieval, notes, and dashboard analytics.
+- Authentication system using Google OAuth for students and JWT-protected admin access.
 
-- **Angular** with lazy-loaded modules for fast initial load — the test-taking module only loads when needed
-- **MongoDB aggregation pipelines** for computing analytics in real-time without a separate analytics service
-- **Google OAuth 2.0** as the sole auth provider — eliminates password management entirely
-- **Express middleware** for rate limiting and request validation on all API routes
+## Core Engineering Challenges
 
-## Highlights
+1. **Multi-exam data modeling:** JEE and NEET have different subject combinations and question patterns.
+2. **Test generation at scale:** Each paper needed difficulty-filtered randomization while keeping subject structure intact.
+3. **Result correctness and analytics:** Scores, accuracy, time metrics, and per-subject performance had to be computed consistently for both student and admin views.
+4. **Operational tooling:** Non-technical admins needed reliable workflows for uploading questions, creating tests, and managing notes.
 
-- Implemented secure **Google OAuth sign-in** for student accounts with JWT session management
-- Built analytics dashboards with **real-time performance insights** — topic-wise breakdown, time-per-question, accuracy trends
-- Curated and structured **700+ questions** with difficulty tags, topic categorization, and explanation fields
-- Designed an **adaptive test engine** that selects questions based on historical weak areas
-- Optimized MongoDB queries to deliver test results in under 200ms for datasets of 10K+ attempts
+## Engineering Solutions
 
-## What I Learned
+### 1) Full-Stack Module Architecture
 
-The biggest challenge was designing the adaptive question selection algorithm. Pure randomization led to uneven coverage, and strict sequential ordering felt repetitive. The solution was a **weighted random selection** based on topic accuracy scores — topics where the student struggles get higher selection probability, creating a naturally adaptive experience without complex ML.
+On the frontend, I used Angular lazy-loaded modules for major areas (`student` and `admin`) and route guards for both user roles. On the backend, I split concerns by router (`/login`, `/student`, `/admin`, `/notes`) with dedicated models for tests, students, questions, and documents.
+
+### 2) Exam-Aware Test Generation Engine
+
+The admin `GeneratePaper` flow builds papers from subject-specific collections using MongoDB aggregation sampling by difficulty.
+
+- Separate models support both multiple-choice and numerical formats.
+- JEE papers can include mixed question types (MCQ + numerical).
+- Metadata such as subject arrays, question IDs, correct answers, and test format are persisted for deterministic evaluation.
+
+### 3) Deterministic Scoring and Feedback
+
+The student result pipeline computes:
+
+- correct/wrong/unanswered counts,
+- negative-marking based score (`+4/-1`),
+- subject-level stats,
+- time-per-test tracking,
+- historical aggregates for top and average marks.
+
+Frontend result pages reconstruct each attempt question-by-question and visualize outcomes using Chart.js donut charts and subject breakdowns.
+
+### 4) Authentication and Access Control
+
+- Students authenticate with Google OAuth (Passport strategy), receive JWT tokens, and are redirected back into the Angular app through a callback route.
+- Admin flows use separate local auth + admin JWT strategy.
+- Route guards in Angular and JWT middleware in Express enforce role-specific access boundaries.
+
+### 5) Content and Operations Layer
+
+- Admins can upload question images and PDF notes via Multer-based file handling.
+- Notes are searchable and paginated for students.
+- Admin dashboards aggregate question-bank coverage and student ranking/attempt summaries.
+
+### 6) Rendering and UX for Technical Content
+
+For exam questions containing formulas and symbols, the frontend uses MathJax integration to render expressions cleanly in test and result views.
+
+## Build Timeline (From Git History)
+
+- **Jun-Aug 2023:** Core platform foundation, auth, student test engine, result flows, and admin basics.
+- **Oct-Dec 2023:** Major UI redesigns, home page overhaul, contact flow, notes tooling, admin dashboard, and project completion milestone.
+- **Jan-May 2024:** Validation, route-guard improvements, image optimization, SEO/performance passes, and test-generation bug fixes.
+- **Sep-Dec 2024:** Deployment updates, URL fixes, backend TypeScript migration, and Vercel hardening.
+
+Across both repositories, I shipped **175 commits** (`107` frontend + `68` backend), which captures the full evolution from early prototype to production deployment.
+
+## Results and Impact
+
+- Built a complete dual-surface product (student + admin) with one shared backend.
+- Established a maintainable domain model for multi-exam question banks and mixed test formats.
+- Delivered robust authentication and role-based route protection without adding external auth providers beyond Google OAuth.
+- Created reusable test/result logic that powers both student self-review and admin oversight views.
+
+## What This Project Taught Me
+
+PrepZone was the project where I learned how to think in systems, not just screens. I had to connect UX, exam logic, data models, auth, and operations into one coherent architecture. That experience directly shaped how I approach larger production systems now.

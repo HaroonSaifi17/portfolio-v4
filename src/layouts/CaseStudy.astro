@@ -10,6 +10,8 @@ interface Props {
   pubDate: Date;
   updatedDate?: Date;
   heroImage?: string;
+  heroImageCrop?: boolean;
+  heroImagePosition?: 'top' | 'center';
   slug?: string;
   role?: string;
   timeline?: string;
@@ -25,6 +27,8 @@ const {
   pubDate,
   updatedDate,
   heroImage,
+  heroImageCrop = false,
+  heroImagePosition = 'center',
   slug,
   role,
   timeline,
@@ -140,12 +144,23 @@ const hasMetadata = role || timeline || stack?.length || liveUrl || repoUrl;
     {
       heroImage && (
         <div class="max-w-6xl mx-auto px-6 -mt-8 relative z-10">
-          <img
-            src={heroImage}
-            alt={title}
-            class="w-full border-4 border-foreground shadow-[var(--shadow-lg)] block"
-            transition:name={`case-study-hero-${transitionId}`}
-          />
+          {heroImageCrop ? (
+            <div class="w-full h-[280px] sm:h-[360px] lg:h-[440px] border-4 border-foreground shadow-[var(--shadow-lg)] overflow-hidden bg-card">
+              <img
+                src={heroImage}
+                alt={title}
+                class={`w-full h-full object-cover ${heroImagePosition === 'top' ? 'object-top' : 'object-center'}`}
+                transition:name={`case-study-hero-${transitionId}`}
+              />
+            </div>
+          ) : (
+            <img
+              src={heroImage}
+              alt={title}
+              class="w-full border-4 border-foreground shadow-[var(--shadow-lg)] block"
+              transition:name={`case-study-hero-${transitionId}`}
+            />
+          )}
         </div>
       )
     }

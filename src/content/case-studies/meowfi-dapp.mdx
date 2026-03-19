@@ -1,56 +1,128 @@
 ---
-title: 'MeowFi DApp'
-description: 'Full-stack DeFi application featuring Liquidity Pools, Bribe Vaults, and token swaps via Balancer V3 protocols. Built with end-to-end type safety across the entire stack.'
+title: 'MeowFi DeFi Monorepo'
+description: 'Scaled MeowFi from a frontend build into a full-stack DeFi monorepo with typed APIs, multicall-backed data pipelines, and resilient transaction UX.'
 pubDate: '2025-02-10'
-updatedDate: '2025-02-10'
-role: 'Full Stack Developer'
+updatedDate: '2026-03-19'
+heroImage: '/images/meowfi-screenshot.webp'
+heroImageCrop: true
+heroImagePosition: 'top'
+role: 'Full-Stack Engineering Intern'
 timeline: 'Dec 2024 — Feb 2025'
 category: 'Web3 / DeFi'
 stack:
   - React
   - TypeScript
-  - Node.js
   - tRPC
-  - Balancer V3
-  - Web3
+  - Viem
   - Wagmi
-  - PostgreSQL
+  - Ethers
+  - Express
+  - MongoDB
+  - neverthrow
+  - Shadcn/ui
 liveUrl: 'https://app.meowfi.xyz'
 ---
 
-## Overview
+## Project Overview
 
-MeowFi is a full-stack DeFi application built for the Balancer V3 ecosystem. It provides a complete suite of decentralized finance tools — from token swaps and liquidity pools to bribe vaults — all connected through a type-safe API layer.
+MeowFi is a DeFi application on Monad that combines yield vaults, liquidity pools, token swaps, referral mechanics, and NFT-gated role verification.
 
-The application was designed to make DeFi interactions feel as smooth as traditional web apps while preserving the trustless, permissionless nature of blockchain.
+I joined to build frontend product surfaces, then expanded ownership into backend architecture and protocol data flows. The project evolved into a full-stack monorepo with shared type contracts and production-focused transaction handling.
 
-## The Problem
+## Scope and Ownership
 
-DeFi interfaces are often fragmented, confusing, and riddled with poor developer experience behind the scenes. The goal was to build a unified platform that:
+- Designed and shipped a feature-based React frontend covering vaults, pools, swaps, dashboard, and verification flows.
+- Architected the backend API surface with Express + tRPC routers for vaults, assets, tokens, referrals, and role assignment.
+- Built and maintained on-chain data pipelines using Viem multicall and server-side aggregation.
+- Implemented transaction orchestration patterns with `neverthrow` for safer multi-step wallet interactions.
 
-- Consolidates multiple DeFi primitives into one coherent interface
-- Maintains end-to-end type safety from smart contract ABIs to the frontend
-- Handles the complexity of on-chain data without sacrificing UX
+## Core Engineering Challenges
 
-## Architecture
+1. **RPC fan-out and latency:** Vault UIs required many independent contract reads. Naive per-field calls introduced high latency and brittle client logic.
+2. **Unstable first render:** Vault card metadata and live vault stats arrived at different times, causing inconsistent initial render behavior.
+3. **Error-prone transaction flows:** Approval, Permit2 setup, swaps, and deposits are multi-step processes where partial failures are common.
+4. **Cross-system identity complexity:** Wallet ownership, Discord identity, JWT auth, and NFT role eligibility had to stay consistent across systems.
 
-The stack revolves around **tRPC** bridging the React frontend and Node.js backend. Contract interactions flow through **Wagmi** and **Viem**, with ABI types propagated all the way to the UI layer.
+## Engineering Solutions
 
-Key architectural decisions:
+### 1) Monorepo and Typed API Contracts
 
-- **tRPC** for fully typed API routes — zero runtime overhead for validation
-- **Wagmi hooks** for wallet connection, transaction signing, and contract reads
-- **Balancer V3 SDK** integration for swap routing and liquidity math
-- **PostgreSQL** for indexing off-chain data like bribe vault state and user positions
+I moved the project to an NPM workspaces monorepo (`apps/frontend`, `apps/backend`) and standardized communication through tRPC.
 
-## Highlights
+- **Implementation:** Frontend tRPC hooks are generated from backend `AppRouter` types, giving compile-time guarantees across request/response boundaries.
+- **Outcome:** Backend schema changes surfaced immediately in frontend compile errors instead of runtime breakage.
 
-- Integrated Balancer V3 protocols for swaps, weighted pools, and liquidity features
-- Maintained **end-to-end type safety** across frontend, API layer, and contract interactions
-- Built real-time pool analytics with on-chain data aggregation
-- Implemented optimistic UI updates for pending transactions
-- Designed responsive layouts that work across desktop and mobile wallets
+### 2) High-Throughput On-Chain Reads with Multicall
 
-## What I Learned
+I centralized blockchain reads in backend procedures and replaced scattered reads with batched calls.
 
-Working with on-chain data is fundamentally different from traditional backends. Block confirmations, gas estimation, and transaction reverts all need graceful handling. The biggest takeaway was that **type safety pays off exponentially** in Web3 — catching ABI mismatches at compile time saves hours of debugging failed transactions.
+- `vault.bribe.liveStats` batches 16 vault getters per vault into one multicall request.
+- `asset.userAssets` composes large batched reads for vault positions, bribes, pool balances, and BPT rates in a single execution path.
+- `token.userBalance`, `token.prices`, and `asset.homePage` also use multicall patterns to keep frontend queries lean.
+
+This removed RPC fan-out from the client and made dashboards materially faster and more consistent under load.
+
+### 3) Stable Rendering via Static Metadata + Live Hydration
+
+I separated static vault metadata from volatile on-chain stats.
+
+- **Static layer:** Vault definitions (title, images, NFT info, addresses) are declared in local feature data files.
+- **Dynamic layer:** APY, periods, balances, and live protocol stats are hydrated asynchronously through tRPC queries.
+
+This preserved deterministic layout while still delivering real-time protocol data.
+
+### 4) Result-Based Transaction Pipeline with neverthrow
+
+I replaced nested `try/catch` flows with `ResultAsync` pipelines for wallet interactions.
+
+- **Shared utility layer:** Approval checks, Permit2 approval, spender approval, tx submission, and receipt confirmation were wrapped into composable result functions.
+- **UI behavior:** Components chain these steps with `.andThen(...)` and emit explicit toast stages (approval, execution, confirmation, success/failure).
+
+This made transaction behavior easier to reason about and significantly improved failure visibility for users.
+
+### 5) Hybrid Analytics Pipeline for Liquidity Pools
+
+I built a backend job that computes and persists pool analytics consumed by the frontend.
+
+- A scheduled process computes TVL, volume, fees, APR/APY, and daily series using on-chain reads plus indexed swap/liquidity events.
+- Results are stored in MongoDB and served via `vault.liquidityPool.stats` for fast dashboard rendering.
+
+### 6) Auth and Role Verification Across Wallet + Discord
+
+I implemented verification flows that bridge Web3 ownership with community permissions.
+
+- Discord OAuth callback issues JWTs for authenticated API access.
+- Protected role assignment verifies signed wallet messages, checks ERC721 ownership on-chain, binds wallet addresses, and assigns mapped Discord roles.
+- A scheduled reconciliation process removes roles when NFT ownership is no longer valid.
+
+## Results and Impact
+
+- **Type-safe delivery:** Frontend and backend development moved faster with fewer integration regressions.
+- **Performance:** Core DeFi views shifted from many client-side RPC calls to batched server-side reads.
+- **Reliability:** Multi-step transactions became explicit, traceable, and user-friendly under failure conditions.
+- **Scalability:** Feature-first modules and domain routers supported growth across vaults, pools, referrals, and verification without architectural rewrites.
+
+## Architecture Snapshot
+
+```text
+apps/
+  frontend/
+    src/
+      app/                 # Routing, providers, app wiring
+      features/
+        bribeVault/
+        meowPools/
+        userDashboard/
+        verifyRole/
+      shared/              # Reusable UI, data, utilities
+  backend/
+    src/
+      routers/
+        vaults/            # bribe, autoCompound, liquidityPool
+        asset/
+        token/
+        referral/
+        role/
+      setup/               # viem client, discord, analytics jobs
+      models/              # MongoDB schemas
+```
