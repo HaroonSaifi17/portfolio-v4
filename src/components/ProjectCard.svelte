@@ -19,12 +19,21 @@ const isExternal = $derived(href.startsWith('http'));
 const cta = $derived(
   href.startsWith('/case-studies/') ? 'Read Case Study' : 'View Project',
 );
+const transitionId = $derived(
+  href.startsWith('/case-studies/')
+    ? href.split('/').filter(Boolean).at(-1)
+    : undefined,
+);
 </script>
 
 <Card.Root
+  style={transitionId ? `view-transition-name: case-study-card-${transitionId};` : undefined}
   class="project-card group relative p-8 gap-0 border-4 border-foreground shadow-[var(--shadow-lg)] card-hover"
 >
-  <h3 class="text-3xl font-black uppercase mb-2 tracking-tight flex items-start gap-3">
+  <h3
+    style={transitionId ? `view-transition-name: case-study-title-${transitionId};` : undefined}
+    class="text-3xl font-black uppercase mb-2 tracking-tight flex items-start gap-3"
+  >
     <span
       class="card-index mt-1 w-6 h-6 bg-primary border-2 border-foreground text-primary-foreground font-black text-xs leading-none flex items-center justify-center shrink-0"
     >

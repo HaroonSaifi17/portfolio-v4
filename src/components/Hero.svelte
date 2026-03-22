@@ -136,7 +136,7 @@ $effect(() => {
       applications from the ground up.
     </p>
 
-    <div class="hero-cta flex flex-wrap gap-6 pt-4">
+    <div class="hero-cta flex flex-wrap gap-3 pt-4">
       <Button
         href="mailto:haroondev2@gmail.com"
         class="px-8 py-4 h-auto border-4 border-foreground font-black uppercase tracking-widest text-base shadow-[var(--shadow-sm)]"
