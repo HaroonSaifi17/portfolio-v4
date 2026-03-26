@@ -19,6 +19,7 @@ interface Props {
   liveUrl?: string;
   repoUrl?: string;
   category?: string;
+  tags?: string[];
 }
 
 const {
@@ -36,6 +37,7 @@ const {
   liveUrl,
   repoUrl,
   category,
+  tags = [],
 } = Astro.props;
 
 const transitionId =
@@ -59,7 +61,24 @@ function formatDate(date: Date) {
 const hasMetadata = role || timeline || stack?.length || liveUrl || repoUrl;
 ---
 
-<Layout title={`${title} — Case Study`} description={description}>
+<Layout
+  title={`${title} | Case Study by Mohd Haroon`}
+  description={description}
+  image={heroImage ?? '/images/preview.png'}
+  imageAlt={title}
+  type="article"
+  schemaType="TechArticle"
+  publishDate={pubDate}
+  modifiedDate={updatedDate ?? pubDate}
+  section="Case Study"
+  tags={tags}
+  keywords={['software case study', 'engineering architecture', 'full stack project']}
+  breadcrumbs={[
+    { name: 'Home', item: '/' },
+    { name: 'Case Studies', item: '/case-studies' },
+    { name: title, item: `/case-studies/${slug ?? ''}` },
+  ]}
+>
   <Navbar client:load />
 
   <article id="top" class="w-full" transition:name={`case-study-card-${transitionId}`}>

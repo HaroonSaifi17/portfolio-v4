@@ -17,7 +17,21 @@ function formatDate(date: Date) {
 }
 ---
 
-<Layout title="Case Studies — Mohd Haroon" description="Deep dives into projects, decisions, and lessons learned.">
+<Layout
+  title="Software Case Studies | Mohd Haroon"
+  description="Explore software case studies by Mohd Haroon covering architecture decisions, product outcomes, and full-stack engineering tradeoffs."
+  image="/images/preview.png"
+  imageAlt="Mohd Haroon software case studies"
+  keywords={[
+    'software case studies',
+    'full stack project architecture',
+    'engineering case study',
+  ]}
+  breadcrumbs={[
+    { name: 'Home', item: '/' },
+    { name: 'Case Studies', item: '/case-studies' },
+  ]}
+>
   <Navbar client:load />
 
   <main class="max-w-7xl mx-auto px-6 py-20 space-y-16">

@@ -1,6 +1,7 @@
 // @ts-check
 
 import mdx from '@astrojs/mdx';
+import sitemap from '@astrojs/sitemap';
 
 import svelte from '@astrojs/svelte';
 import tailwindcss from '@tailwindcss/vite';
@@ -13,6 +14,7 @@ const prettyCodeOptions = {
 };
 
 export default defineConfig({
+  site: 'https://portfolio-v4-roan.vercel.app',
   prefetch: true,
   markdown: {
     syntaxHighlight: false,
@@ -20,6 +22,7 @@ export default defineConfig({
 
   integrations: [
     svelte(),
+    sitemap(),
     mdx({
       rehypePlugins: [[rehypePrettyCode, prettyCodeOptions]],
     }),

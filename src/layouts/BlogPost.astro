@@ -11,10 +11,18 @@ interface Props {
   updatedDate?: Date;
   heroImage?: string;
   slug?: string;
+  tags?: string[];
 }
 
-const { title, description, pubDate, updatedDate, heroImage, slug } =
-  Astro.props;
+const {
+  title,
+  description,
+  pubDate,
+  updatedDate,
+  heroImage,
+  slug,
+  tags = [],
+} = Astro.props;
 const transitionId =
   slug ?? `blog-${title.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`;
 
@@ -34,7 +42,24 @@ function formatDate(date: Date) {
 }
 ---
 
-<Layout title={`${title} — Mohd Haroon`} description={description}>
+<Layout
+  title={`${title} | Mohd Haroon Blog`}
+  description={description}
+  image={heroImage ?? '/images/preview.png'}
+  imageAlt={title}
+  type="article"
+  schemaType="BlogPosting"
+  publishDate={pubDate}
+  modifiedDate={updatedDate ?? pubDate}
+  section="Blog"
+  tags={tags}
+  keywords={['software engineering blog', 'web development', 'typescript']}
+  breadcrumbs={[
+    { name: 'Home', item: '/' },
+    { name: 'Blog', item: '/blog' },
+    { name: title, item: `/blog/${slug ?? ''}` },
+  ]}
+>
   <Navbar client:load />
 
   <article

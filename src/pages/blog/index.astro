@@ -17,7 +17,22 @@ function formatDate(date: Date) {
 }
 ---
 
-<Layout title="Blog — Mohd Haroon" description="Thoughts on web development, tooling, and the developer experience.">
+<Layout
+  title="Engineering Blog | Mohd Haroon"
+  description="Read Mohd Haroon's engineering blog on web development, TypeScript, Angular, deployment lessons, and modern developer tooling."
+  image="/images/preview.png"
+  imageAlt="Mohd Haroon engineering blog"
+  keywords={[
+    'engineering blog',
+    'web development articles',
+    'typescript blog',
+    'angular blog',
+  ]}
+  breadcrumbs={[
+    { name: 'Home', item: '/' },
+    { name: 'Blog', item: '/blog' },
+  ]}
+>
   <Navbar client:load />
 
   <main class="max-w-7xl mx-auto px-6 py-20 space-y-16">

@@ -65,7 +65,19 @@ function formatDate(date: Date) {
 }
 ---
 
-<Layout>
+<Layout
+  title="Mohd Haroon | Full Stack Developer Portfolio"
+  description="Explore Mohd Haroon's full stack developer portfolio featuring production case studies, engineering blogs, React/TypeScript work, and web3 projects."
+  image="/images/preview.png"
+  imageAlt="Mohd Haroon full stack portfolio"
+  keywords={[
+    'mohd haroon portfolio',
+    'full stack developer india',
+    'react typescript developer',
+    'web3 developer portfolio',
+  ]}
+  breadcrumbs={[{ name: 'Home', item: '/' }]}
+>
   <Navbar client:load />
 
   <main class="space-y-12 overflow-hidden">
