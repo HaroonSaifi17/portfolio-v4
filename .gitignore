@@ -3,6 +3,9 @@ dist/
 
 # generated types
 .astro/
+.agents
+Mohd-Haroon-Resume.pdf
+skills-lock.json
 
 # dependencies
 node_modules/
