@@ -1,6 +1,7 @@
 ---
 import '../styles/global.css';
 import { ClientRouter } from 'astro:transitions';
+import Analytics from '@vercel/analytics/astro';
 
 interface Props {
   title?: string;
@@ -325,5 +326,6 @@ const schemaJSON = JSON.stringify(schemaGraph).replace(/</g, '\\u003c');
         render();
       })();
     </script>
+    <Analytics />
   </body>
 </html>
