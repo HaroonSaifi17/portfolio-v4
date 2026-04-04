@@ -5,7 +5,7 @@ import sitemap from '@astrojs/sitemap';
 
 import svelte from '@astrojs/svelte';
 import tailwindcss from '@tailwindcss/vite';
-import { defineConfig, fontProviders } from 'astro/config';
+import { defineConfig } from 'astro/config';
 import rehypePrettyCode from 'rehype-pretty-code';
 
 /** @type {import('rehype-pretty-code').Options} */
@@ -18,26 +18,6 @@ const enableCsp = process.env.ASTRO_ENABLE_CSP === 'true';
 export default defineConfig({
   site: 'https://portfolio-v4-roan.vercel.app',
   prefetch: true,
-  fonts: [
-    {
-      provider: fontProviders.google(),
-      name: 'Space Grotesk',
-      cssVariable: '--font-space-grotesk',
-      weights: [400, 500, 700],
-      styles: ['normal'],
-      subsets: ['latin'],
-      fallbacks: ['system-ui', 'sans-serif'],
-    },
-    {
-      provider: fontProviders.google(),
-      name: 'JetBrains Mono',
-      cssVariable: '--font-jetbrains-mono',
-      weights: [500, 700],
-      styles: ['normal'],
-      subsets: ['latin'],
-      fallbacks: ['monospace'],
-    },
-  ],
   security: enableCsp
     ? {
         csp: {

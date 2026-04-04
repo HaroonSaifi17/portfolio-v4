@@ -19,7 +19,6 @@ Bold, editorial-style portfolio template built with Astro + Svelte. Designed to 
 - Tailwind CSS theme tokens and global styling
 - GSAP scroll-triggered reveals
 - View Transitions between list and detail pages
-- Astro 6 Fonts API (self-hosted Google fonts via `astro:assets`)
 - Optional Astro 6 CSP support (enabled via env flag)
 
 ## Tech Stack
@@ -53,15 +52,6 @@ bun preview
 ```
 
 ## Astro 6 Features
-
-### Fonts API
-
-The project uses Astro's built-in Fonts API to register and self-host:
-
-- `Space Grotesk` (`--font-space-grotesk`) for UI/body text
-- `JetBrains Mono` (`--font-jetbrains-mono`) for code blocks
-
-Fonts are configured in `astro.config.mjs` and applied in `src/layouts/Layout.astro` using `<Font />` from `astro:assets`.
 
 ### CSP (optional)
 
