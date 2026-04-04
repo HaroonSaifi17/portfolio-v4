@@ -15,6 +15,13 @@ $effect(() => {
   const ctx = gsap.context(() => {
     const q = gsap.utils.selector(root);
 
+    gsap.set(
+      [q('.exp-card'), q('.exp-bullet'), q('.exp-title'), q('.exp-subtitle')],
+      {
+        autoAlpha: 1,
+      },
+    );
+
     gsap.set(q('.exp-card'), { y: 80, autoAlpha: 0 });
     gsap.set(q('.exp-bullet'), { x: -20, autoAlpha: 0 });
 
@@ -59,7 +66,7 @@ $effect(() => {
           duration: 0.7,
           ease: 'power4.out',
           stagger: 0.18,
-          clearProps: 'transform,opacity,visibility',
+          clearProps: 'transform,opacity',
         }),
     });
 
@@ -74,7 +81,7 @@ $effect(() => {
           duration: 0.4,
           stagger: 0.06,
           ease: 'power3.out',
-          clearProps: 'transform,opacity,visibility',
+          clearProps: 'transform,opacity',
         }),
     });
   }, section);

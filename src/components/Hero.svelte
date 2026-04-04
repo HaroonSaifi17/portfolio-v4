@@ -10,6 +10,19 @@ $effect(() => {
   if (!section) return;
 
   const ctx = gsap.context(() => {
+    gsap.set(
+      [
+        '.hero-badge',
+        '.hero-title-line',
+        '.hero-subtitle',
+        '.hero-cta > *',
+        '.hero-deco-bg',
+        '.hero-deco-card',
+        '.hero-watermark',
+      ],
+      { autoAlpha: 1 },
+    );
+
     gsap.set('.hero-badge', { y: 20, autoAlpha: 0, scale: 0.8 });
     gsap.set('.hero-title-line', { y: '100%' });
     gsap.set('.hero-subtitle', { x: -40, autoAlpha: 0 });

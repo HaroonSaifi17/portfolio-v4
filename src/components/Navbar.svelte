@@ -15,6 +15,8 @@ $effect(() => {
   if (!nav) return;
 
   const ctx = gsap.context(() => {
+    gsap.set(['.nav-logo', '.nav-link', '.nav-theme-btn'], { autoAlpha: 1 });
+
     gsap.set('.nav-logo', { x: -20, autoAlpha: 0 });
     gsap.set('.nav-link', { y: -15, autoAlpha: 0 });
     gsap.set('.nav-theme-btn', { scale: 0, autoAlpha: 0 });

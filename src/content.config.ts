@@ -1,5 +1,6 @@
-import { defineCollection, z } from 'astro:content';
+import { defineCollection } from 'astro:content';
 import { glob } from 'astro/loaders';
+import { z } from 'astro/zod';
 
 const blog = defineCollection({
   loader: glob({ pattern: '**/*.mdx', base: './src/content/blog' }),
@@ -29,8 +30,8 @@ const caseStudies = defineCollection({
     role: z.string().optional(),
     timeline: z.string().optional(),
     stack: z.array(z.string()).optional(),
-    liveUrl: z.string().url().optional(),
-    repoUrl: z.string().url().optional(),
+    liveUrl: z.url().optional(),
+    repoUrl: z.url().optional(),
     category: z.string().optional(),
     tags: z.array(z.string()).optional(),
   }),

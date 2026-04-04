@@ -19,6 +19,8 @@ Bold, editorial-style portfolio template built with Astro + Svelte. Designed to 
 - Tailwind CSS theme tokens and global styling
 - GSAP scroll-triggered reveals
 - View Transitions between list and detail pages
+- Astro 6 Fonts API (self-hosted Google fonts via `astro:assets`)
+- Optional Astro 6 CSP support (enabled via env flag)
 
 ## Tech Stack
 
@@ -32,6 +34,7 @@ Bold, editorial-style portfolio template built with Astro + Svelte. Designed to 
 ## Requirements
 
 - Bun (recommended for scripts below)
+- Node.js `>= 22.12.0` (see `.nvmrc`)
 
 ## Quick Start
 
@@ -48,6 +51,29 @@ Open `http://localhost:4321`.
 bun build
 bun preview
 ```
+
+## Astro 6 Features
+
+### Fonts API
+
+The project uses Astro's built-in Fonts API to register and self-host:
+
+- `Space Grotesk` (`--font-space-grotesk`) for UI/body text
+- `JetBrains Mono` (`--font-jetbrains-mono`) for code blocks
+
+Fonts are configured in `astro.config.mjs` and applied in `src/layouts/Layout.astro` using `<Font />` from `astro:assets`.
+
+### CSP (optional)
+
+Astro CSP is available behind an env toggle because this site currently uses View Transitions (`<ClientRouter />`) and Shiki-powered syntax highlighting, which are limited with CSP mode.
+
+Enable it only when testing CSP behavior:
+
+```bash
+ASTRO_ENABLE_CSP=true bun build
+```
+
+When the variable is not set, CSP remains disabled.
 
 ## Scripts
 

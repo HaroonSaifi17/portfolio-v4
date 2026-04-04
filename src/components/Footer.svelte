@@ -11,6 +11,10 @@ $effect(() => {
   gsap.registerPlugin(ScrollTrigger);
 
   const ctx = gsap.context(() => {
+    gsap.set(['.footer-title', '.footer-email', '.footer-link'], {
+      autoAlpha: 1,
+    });
+
     gsap.set('.footer-title', { y: 60, autoAlpha: 0 });
     gsap.set('.footer-email', { y: 40, autoAlpha: 0 });
     gsap.set('.footer-link', { y: 20, autoAlpha: 0 });
@@ -48,7 +52,7 @@ $effect(() => {
           autoAlpha: 1,
           duration: 0.4,
           stagger: 0.08,
-          clearProps: 'transform,opacity,visibility',
+          clearProps: 'transform,opacity',
         },
         '-=0.2',
       );

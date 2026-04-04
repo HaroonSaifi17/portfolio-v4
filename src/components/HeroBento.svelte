@@ -99,6 +99,8 @@ $effect(() => {
   const intervals: ReturnType<typeof setInterval>[] = [];
 
   const ctx = gsap.context(() => {
+    gsap.set('.bento-cell', { autoAlpha: 1 });
+
     // Entry: stagger cells
     gsap.set('.bento-cell', { autoAlpha: 0, y: 24, scale: 0.92 });
 

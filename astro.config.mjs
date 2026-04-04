@@ -5,7 +5,7 @@ import sitemap from '@astrojs/sitemap';
 
 import svelte from '@astrojs/svelte';
 import tailwindcss from '@tailwindcss/vite';
-import { defineConfig } from 'astro/config';
+import { defineConfig, fontProviders } from 'astro/config';
 import rehypePrettyCode from 'rehype-pretty-code';
 
 /** @type {import('rehype-pretty-code').Options} */
@@ -13,9 +13,43 @@ const prettyCodeOptions = {
   theme: 'github-dark-default',
 };
 
+const enableCsp = process.env.ASTRO_ENABLE_CSP === 'true';
+
 export default defineConfig({
   site: 'https://portfolio-v4-roan.vercel.app',
   prefetch: true,
+  fonts: [
+    {
+      provider: fontProviders.google(),
+      name: 'Space Grotesk',
+      cssVariable: '--font-space-grotesk',
+      weights: [400, 500, 700],
+      styles: ['normal'],
+      subsets: ['latin'],
+      fallbacks: ['system-ui', 'sans-serif'],
+    },
+    {
+      provider: fontProviders.google(),
+      name: 'JetBrains Mono',
+      cssVariable: '--font-jetbrains-mono',
+      weights: [500, 700],
+      styles: ['normal'],
+      subsets: ['latin'],
+      fallbacks: ['monospace'],
+    },
+  ],
+  security: enableCsp
+    ? {
+        csp: {
+          directives: [
+            "default-src 'self'",
+            "base-uri 'self'",
+            "object-src 'none'",
+            "frame-ancestors 'none'",
+          ],
+        },
+      }
+    : undefined,
   markdown: {
     syntaxHighlight: false,
   },
@@ -29,6 +63,20 @@ export default defineConfig({
   ],
 
   vite: {
-    plugins: [tailwindcss()],
+    plugins: [
+      tailwindcss(),
+      {
+        name: 'watcher-max-listeners',
+        configureServer(server) {
+          server.watcher.setMaxListeners(50);
+        },
+      },
+    ],
+    resolve: {
+      noExternal: ['@lucide/svelte', /^@lucide\/svelte/],
+    },
+    ssr: {
+      noExternal: ['@lucide/svelte', /^@lucide\/svelte/],
+    },
   },
 });

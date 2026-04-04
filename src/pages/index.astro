@@ -171,6 +171,11 @@ function formatDate(date: Date) {
 
   gsap.registerPlugin(ScrollTrigger);
 
+  gsap.set(
+    ['.marquee-wrapper', '.section-heading', '.project-card', '.card-index', '.blog-card'],
+    { autoAlpha: 1 },
+  );
+
   gsap.set('.marquee-wrapper', { autoAlpha: 0, y: 20 });
   gsap.set('.section-heading', { autoAlpha: 0, y: 50 });
   gsap.set('.project-card', { autoAlpha: 0, y: 80 });
@@ -214,7 +219,7 @@ function formatDate(date: Date) {
         duration: 0.6,
         ease: 'power4.out',
         stagger: 0.15,
-        clearProps: 'transform,opacity,visibility',
+        clearProps: 'transform,opacity',
       }),
     start: 'top 88%',
     once: true,
@@ -230,7 +235,7 @@ function formatDate(date: Date) {
         ease: 'back.out(2)',
         stagger: 0.1,
         delay: 0.3,
-        clearProps: 'transform,opacity,visibility',
+        clearProps: 'transform,opacity',
       }),
     start: 'top 88%',
     once: true,
@@ -245,7 +250,7 @@ function formatDate(date: Date) {
         duration: 0.5,
         ease: 'power4.out',
         stagger: 0.1,
-        clearProps: 'transform,opacity,visibility',
+        clearProps: 'transform,opacity',
       }),
     start: 'top 88%',
     once: true,
