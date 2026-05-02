@@ -28,7 +28,7 @@ const transitionId = $derived(
 
 <Card.Root
   style={transitionId ? `view-transition-name: case-study-card-${transitionId};` : undefined}
-  class="project-card group relative p-8 gap-0 border-4 border-foreground shadow-[var(--shadow-lg)] card-hover"
+  class="project-card group relative flex flex-col items-start p-8 gap-0 border-4 border-foreground shadow-[var(--shadow-lg)] card-hover"
 >
   <h3
     style={transitionId ? `view-transition-name: case-study-title-${transitionId};` : undefined}
@@ -51,7 +51,7 @@ const transitionId = $derived(
     {href}
     target={isExternal ? '_blank' : undefined}
     rel={isExternal ? 'noopener noreferrer' : undefined}
-    class="inline-block border-b-4 border-foreground text-xl font-black uppercase hover:border-primary transition-colors duration-300"
+    class="inline-block mt-auto border-b-4 border-foreground text-xl font-black uppercase hover:border-primary transition-colors duration-300"
   >
     {cta} &rarr;
   </a>

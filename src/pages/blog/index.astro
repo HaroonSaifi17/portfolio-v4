@@ -50,7 +50,7 @@ function formatDate(date: Date) {
         posts.map((post) => (
           <a
             href={`/blog/${post.id}`}
-            class="listing-card group block border-4 border-foreground bg-card p-8 shadow-[var(--shadow-lg)] content-card"
+            class="listing-card group flex flex-col items-start border-4 border-foreground bg-card p-8 shadow-[var(--shadow-lg)] content-card"
             data-astro-prefetch
             transition:name={`blog-card-${post.id}`}
           >
@@ -69,7 +69,7 @@ function formatDate(date: Date) {
             <p class="text-lg font-medium text-muted-foreground leading-relaxed mb-6 text-justify-fill">
               {post.data.description}
             </p>
-            <span class="inline-block border-b-4 border-foreground text-lg font-black uppercase">
+            <span class="inline-block mt-auto border-b-4 border-foreground text-lg font-black uppercase">
               Read Post &rarr;
             </span>
           </a>

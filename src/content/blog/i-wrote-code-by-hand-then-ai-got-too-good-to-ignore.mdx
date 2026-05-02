@@ -1,0 +1,122 @@
+---
+title: "I Wrote Code by Hand. Then AI Got Too Good to Ignore."
+description: "How my coding workflow evolved from Neovim to an agentic AI setup."
+pubDate: "2026-05-02"
+tags: ["ai", "workflow", "dev"]
+---
+
+import VideoEmbed from '../../components/mdx/VideoEmbed.astro';
+
+I started in 2021, when AI was just background noise. I built things by hand, learned through Google and documentation, and took pride in knowing exactly what every line did. Then the models jumped, and I had to rethink everything.
+
+## The early days
+
+Back then there was no shortcut that actually worked. I wrote most of my code by hand, dug through official docs, and figured things out the slow way. I took that seriously. I built a custom Neovim setup with multiple LSPs and inlay hints, tuned my workflow until it felt fast, and got my typing speed to 80 WPM because the keyboard was my primary tool and I wanted to use it well.
+
+None of that felt like extra work at the time. It felt like actually knowing what you were doing.
+
+## Vibe coding arrived
+
+By 2025 everyone was talking about vibe coding. Describe what you want, let the model write it, keep prompting until it works. I tried it. It handled obvious, repetitive stuff well enough. But it consistently fell apart on two things: design and anything with real complexity under the hood. The code it produced for non-trivial problems looked like it had been written by several junior developers who had never spoken to each other.
+
+I even wrote a post around that time about why Cursor was cool but I was sticking with Neovim. I meant it.
+
+> I was wrong.
+
+## The leap happened
+
+In the first quarter of 2026, the models made a real jump. I tried Opus 4.5 and GPT-5.3 Codex and they were doing things that earlier models simply could not. Decent UI output. Actual architectural reasoning. Complex multi-file tasks that held together. The argument for staying on Neovim as a point of principle stopped making sense.
+
+So I changed. I built an agentic workflow around OpenCode, custom context, MCPs, and model-specific prompting for different kinds of tasks. Today I write most of my code with AI assistance, not because I cannot write it myself, but because AI can do it faster and I would rather spend that time on problems that still need me to actually think.
+
+## The cost nobody talks about
+
+When you see someone on X claiming they built 10 products using open-source models and implying you can do the same, the math does not hold up. A single complex debugging session with Opus can cost $15 or more in one sitting on API pricing. Subscription plans that matter start at $20 and the ceiling is $200 a month for setups where the tools actually stop interrupting you.
+
+I am still in college. I cannot afford to burn tokens the way people with company cards or VC backing can. The people building the most impressive things with AI right now are often the people with the budget to do so, and the content they produce almost never acknowledges that gap. Free tiers exist and some are usable, but there is a ceiling on what you can build with them, and hitting that ceiling mid-project is not a minor inconvenience.
+
+## Skill alone does not stand out anymore
+
+Here is the part that genuinely bothers me. A few years ago there was a clear difference between a profile that showed real technical depth and one that did not. That gap is compressing fast. A developer with decent product sense and a few polished side projects can now produce a profile that reads very similarly to someone who spent years building foundational knowledge. The surface looks the same.
+
+And the job market increasingly runs on referrals, not cold applications. Network matters more than it ever did. For someone like me, a final-year ECE student with real project depth and a strong GitHub history, the path to standing out is no longer just about being technically better. It requires being visible to the right people, which is a different skill set entirely, and one the industry is not being upfront about.
+
+The tools have changed. Access to them is still unequal. And the hiring market has not caught up to the narrative that skill alone moves the needle.
+
+## My workflow
+
+Here is a walkthrough of how I actually work day to day.
+
+<VideoEmbed src="/videos/workflow.mp4" title="My dev workflow walkthrough" />
+
+I run Omarchy on Hyprland with two workspaces. Workspace 1 is Kitty with everything terminal-based inside it. Workspace 2 is the Zen browser for docs and previews. Switching between them is instant and the separation means I never lose context.
+
+Inside Kitty, every project gets its own tmux session with three panes:
+
+- **Left** — OpenCode running the agentic workflow, full project context loaded, MCPs active
+- **Top right** — Neovim for reviewing what the AI produced and making precise edits
+- **Bottom right** — the dev server so I can see the result running immediately
+
+The part that ties it all together is a sessionizer script bound to `Ctrl + F` inside Kitty. It opens fzf over my home, config, and Work directories. I pick a project, and tmux either attaches to an existing session or creates a new one. I can have multiple projects open at the same time and hop between them in under a second.
+
+```bash
+# ~/tmux-sessionizer
+
+#!/usr/bin/env bash
+if [[ $# -eq 1 ]]; then
+  selected=$1
+else
+  selected=$(
+    {
+      echo ~
+      find ~/.config ~/Work ~/ -mindepth 1 -maxdepth 1 -type d ! -name '.*'
+    } | fzf
+  )
+fi
+
+[[ -z $selected ]] && exit 0
+
+selected_name=$(basename "$selected" | tr . _)
+tmux_running=$(pgrep tmux)
+
+if [[ -z $TMUX ]] && [[ -z $tmux_running ]]; then
+  tmux new-session -s "$selected_name" -c "$selected"
+  exit 0
+fi
+
+if ! tmux has-session -t="$selected_name" 2>/dev/null; then
+  tmux new-session -ds "$selected_name" -c "$selected"
+fi
+
+if [[ -n $TMUX ]]; then
+  tmux switch-client -t "$selected_name"
+else
+  tmux attach-session -t "$selected_name"
+fi
+```
+
+The logic is simple. Pass a path directly and it uses that. Otherwise fzf opens and you pick. It checks if a session already exists for that project, creates one if not, then switches into it. Every project name becomes a clean session name with dots converted to underscores.
+
+Kitty launches the sessionizer as an overlay so it appears on top of whatever pane you are in, you pick the project, and it disappears.
+
+```bash
+# Relevant lines from ~/.config/kitty/kitty.conf
+
+map ctrl+f launch --cwd=current --type=overlay ~/tmux-sessionizer
+
+font_family           JetBrainsMono Nerd Font
+font_size             13
+background            #13111d
+window_padding_width  14
+hide_window_decorations yes
+
+tab_bar_edge          bottom
+tab_bar_style         powerline
+tab_powerline_style   slanted
+```
+
+## Where I am now
+
+The workflow is faster than anything I had before. OpenCode handles the bulk of implementation, Neovim is where I review and make precise edits, and the sessionizer means I never lose context when jumping between projects. The keyboard-first setup I built in 2021 is still there underneath it, just augmented.
+
+I am still in college, still figuring out the job market, and still building with whatever budget I have available. The tools have changed significantly. My understanding of why things work has not, and I think that is the part that is hardest to shortcut.
