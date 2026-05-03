@@ -1,15 +1,15 @@
 ---
-title: 'Azure App Service Failure: Portfolio Deployment Postmortem'
-description: 'Learn how an Azure App Service deployment failed silently and how I fixed it. Covers health checks, wildcard routes, debugging steps, and rollback strategy.'
-pubDate: '2022-07-08'
-updatedDate: '2024-07-08'
-heroImage: '/images/azure-thumbnail.webp'
-tags: ['Azure', 'App Service', 'DevOps', 'Deployment', 'Postmortem']
+title: "Azure App Service Failure: Portfolio Deployment"
+description: "Learn how an Azure App Service deployment failed silently and how I fixed it. Covers health checks, wildcard routes, debugging steps, and rollback strategy."
+pubDate: "2022-07-08"
+updatedDate: "2024-07-08"
+heroImage: "/images/azure-thumbnail.webp"
+tags: ["Azure", "App Service", "DevOps", "Deployment", "Postmortem"]
 ---
 
-import Callout from '../../components/mdx/Callout.astro';
-import Divider from '../../components/mdx/Divider.astro';
-import StepList from '../../components/mdx/StepList.astro';
+import Callout from "../../components/mdx/Callout.astro";
+import Divider from "../../components/mdx/Divider.astro";
+import StepList from "../../components/mdx/StepList.astro";
 
 I moved my portfolio from Vercel to Azure. It seemed like a good idea at the time. Here's what happened.
 
@@ -17,11 +17,13 @@ I moved my portfolio from Vercel to Azure. It seemed like a good idea at the tim
 
 Three reasons:
 
-<StepList items={[
-  "Azure Student Credits — $100 free to experiment with",
-  "No cold starts — Vercel's serverless functions had occasional delays",
-  "Learning infrastructure — I wanted to understand deployment beyond 'git push and pray'"
-]} />
+<StepList
+  items={[
+    "Azure Student Credits — $100 free to experiment with",
+    "No cold starts — Vercel's serverless functions had occasional delays",
+    "Learning infrastructure — I wanted to understand deployment beyond 'git push and pray'",
+  ]}
+/>
 
 ## The Setup
 
@@ -36,7 +38,8 @@ It worked. Builds passed, container ran, site loaded. I moved the DNS and called
 Then one day, after pushing changes, the deployment broke. I didn't notice for **an entire day** — the Docker image built and ran fine locally, and previous deployments had always worked.
 
 <Callout type="warn" title="The worst part">
-That same day, I had applied to multiple internships and included my portfolio URL in every application. Recruiters were clicking through to a broken site.
+  That same day, I had applied to multiple internships and included my portfolio
+  URL in every application. Recruiters were clicking through to a broken site.
 </Callout>
 
 When I finally checked the live URL, the site was down. No email notification from Azure. No alert. Just a silent failure.
@@ -68,7 +71,9 @@ After digging through my Git history, I found it: I had removed a **wildcard rou
 Azure's deployment health check pings a specific route to verify the app is running. When that route returned nothing (because the wildcard was gone), Azure marked the entire deployment as **failed** — even though the container was running and the home page was fine.
 
 <Callout type="note">
-Azure doesn't just check if the container is alive. It checks if a specific HTTP route responds. If that route 404s, the deployment is marked as failed. This behavior wasn't clearly documented anywhere I could find at the time.
+  Azure doesn't just check if the container is alive. It checks if a specific
+  HTTP route responds. If that route 404s, the deployment is marked as failed.
+  This behavior wasn't clearly documented anywhere I could find at the time.
 </Callout>
 
 Re-adding the wildcard route fixed everything instantly.
