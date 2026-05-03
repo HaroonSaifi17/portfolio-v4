@@ -2,6 +2,7 @@
 import Layout from './Layout.astro';
 import Navbar from '../components/Navbar.svelte';
 import Footer from '../components/Footer.svelte';
+import BackToTop from '../components/BackToTop.svelte';
 import { getCollection } from 'astro:content';
 
 interface Props {
@@ -158,14 +159,7 @@ function formatDate(date: Date) {
     </nav>
   </article>
 
-  <a
-    href="#top"
-    class="back-to-top"
-    aria-label="Back to top"
-    title="Back to top"
-  >
-    &uarr;
-  </a>
+  <BackToTop client:only="svelte" />
 
   <Footer />
 </Layout>
@@ -249,8 +243,7 @@ function formatDate(date: Date) {
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .post-nav-link,
-    .back-to-top {
+    .post-nav-link {
       transition: none;
     }
   }

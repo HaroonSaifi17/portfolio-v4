@@ -2,6 +2,7 @@
 import Layout from './Layout.astro';
 import Navbar from '../components/Navbar.svelte';
 import Footer from '../components/Footer.svelte';
+import BackToTop from '../components/BackToTop.svelte';
 import { getCollection } from 'astro:content';
 
 interface Props {
@@ -292,14 +293,7 @@ const hasMetadata = role || timeline || stack?.length || liveUrl || repoUrl;
   </article>
 
   <!-- Back to top -->
-  <a
-    href="#top"
-    class="fixed right-5 bottom-6 w-11 h-11 inline-flex items-center justify-center border-[3px] border-foreground bg-card text-xl font-black shadow-[var(--shadow-sm)] z-40 hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:border-primary transition-all duration-200"
-    aria-label="Back to top"
-    title="Back to top"
-  >
-    &uarr;
-  </a>
+  <BackToTop client:only="svelte" />
 
   <Footer client:visible />
 </Layout>
