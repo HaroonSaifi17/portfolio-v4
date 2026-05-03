@@ -275,24 +275,24 @@ function handleMouseLeave() {
   >
     <!-- Bento grid -->
     <div
-      class="grid h-[420px] sm:h-[520px] lg:h-[600px] gap-[3px] bg-foreground/10 p-[3px]"
+      class="bento-grid grid h-[420px] sm:h-[520px] lg:h-[600px] gap-[3px] max-[450px]:gap-[2px] bg-foreground/10 p-[3px] max-[450px]:p-[2px]"
       style="grid-template-columns: 1.6fr 1fr; grid-template-rows: 1fr 1fr 0.6fr 42px;"
     >
        <!-- 1) TERMINAL — spans 2 rows -->
        <div
-         class="bento-cell col-start-1 row-start-1 row-span-2 bg-foreground text-background p-4 flex flex-col gap-2 overflow-hidden"
+         class="bento-cell col-start-1 row-start-1 row-span-2 bg-foreground text-background p-2 max-[450px]:p-1.5 flex flex-col gap-1 max-[450px]:gap-1 overflow-hidden"
        >
         <!-- Window chrome -->
         <div class="flex items-center gap-2 mb-1">
           <span class="w-2.5 h-2.5 bg-primary"></span>
           <span class="w-2.5 h-2.5 bg-background/20"></span>
           <span class="w-2.5 h-2.5 bg-background/20"></span>
-          <span class="ml-auto text-[10px] font-bold uppercase tracking-widest text-background/40">
+          <span class="ml-auto text-[10px] max-[450px]:text-[8px] font-bold uppercase tracking-widest text-background/40">
             dev.ts
           </span>
         </div>
          <!-- Code block -->
-         <div class="font-mono text-sm leading-relaxed flex-1">
+          <div class="font-mono text-sm max-[450px]:text-[10px] leading-relaxed flex-1">
           {#each codeLines as line, i}
             <div
               class="transition-opacity duration-200"
@@ -357,36 +357,36 @@ function handleMouseLeave() {
 
       <!-- 2) STATUS -->
       <div
-        class="bento-cell col-start-2 row-start-1 bg-primary text-primary-foreground p-4 flex flex-col justify-between"
+        class="bento-cell col-start-2 row-start-1 bg-primary text-primary-foreground p-3 max-[450px]:p-2 flex flex-col justify-between"
       >
         <div class="flex items-center gap-2">
           <span
             class="w-2 h-2 bg-primary-foreground"
             style="animation: pulse-square 1.5s infinite;"
           ></span>
-          <span class="text-[10px] font-black uppercase tracking-widest">Status</span>
+          <span class="text-[10px] max-[450px]:text-[8px] font-black uppercase tracking-widest">Status</span>
         </div>
-        <div class="text-2xl font-black uppercase tracking-tight leading-none">
+        <div class="text-xl max-[450px]:text-lg font-black uppercase tracking-tight leading-none">
           {statuses[statusIdx]}
         </div>
       </div>
 
       <!-- 3) COUNTER -->
       <div
-        class="bento-cell col-start-2 row-start-2 bg-card p-4 flex flex-col justify-between"
+        class="bento-cell col-start-2 row-start-2 bg-card p-3 max-[450px]:p-2 flex flex-col justify-between"
       >
-        <span class="text-[10px] font-black uppercase tracking-widest text-muted-foreground">
+        <span class="text-[10px] max-[450px]:text-[8px] font-black uppercase tracking-widest text-muted-foreground">
           Projects
         </span>
         <div class="flex items-baseline gap-1">
-          <span class="text-4xl sm:text-5xl font-black tabular-nums leading-none">{count}</span>
-          <span class="text-2xl font-black text-primary">+</span>
+          <span class="text-3xl max-[450px]:text-2xl font-black tabular-nums leading-none">{count}</span>
+          <span class="text-xl max-[450px]:text-lg font-black text-primary">+</span>
         </div>
       </div>
 
       <!-- 4) DOT MATRIX -->
       <div
-        class="bento-cell col-start-1 row-start-3 bg-card p-3 flex items-center justify-center"
+        class="bento-cell col-start-1 row-start-3 bg-card p-2 max-[450px]:p-1.5 flex items-center justify-center"
       >
         <div
           class="grid gap-[6px]"
@@ -402,15 +402,15 @@ function handleMouseLeave() {
 
       <!-- 5) TECH TICKER -->
       <div
-        class="bento-cell col-start-2 row-start-3 bg-card p-4 flex flex-col justify-center overflow-hidden"
+        class="bento-cell col-start-2 row-start-3 bg-card p-3 max-[450px]:p-2 flex flex-col justify-center overflow-hidden"
       >
-        <span class="text-[10px] font-black uppercase tracking-widest text-muted-foreground mb-2">
+        <span class="text-[10px] max-[450px]:text-[8px] font-black uppercase tracking-widest text-muted-foreground mb-1 max-[450px]:mb-1">
           Current Stack
         </span>
-        <div class="relative h-8 overflow-hidden">
+        <div class="relative h-6 max-[450px]:h-5 overflow-hidden">
           {#each techs as tech, i}
             <span
-              class="absolute inset-0 flex items-center text-xl font-black uppercase tracking-tight transition-all duration-300"
+              class="absolute inset-0 flex items-center text-lg max-[450px]:text-base font-black uppercase tracking-tight transition-all duration-300"
               style="
                 opacity: {i === techIdx ? 1 : 0};
                 transform: translateY({i === techIdx ? '0' : '100%'});
@@ -425,14 +425,15 @@ function handleMouseLeave() {
       <!-- 6) PROCESS FLOW -->
       <div
         class="bento-cell col-span-2 row-start-4 bg-card flex items-stretch"
+        style="grid-row: span 1 / auto;"
       >
         {#each processSteps as step, i}
           <button
-            class="flex-1 flex items-center justify-center gap-1.5 text-[10px] font-black uppercase tracking-widest transition-colors duration-300 border-r last:border-r-0 border-foreground/10
+            class="flex-1 flex items-center justify-center gap-1 max-[450px]:gap-0.5 text-[10px] max-[450px]:text-[8px] font-black uppercase tracking-widest transition-colors duration-300 border-r last:border-r-0 border-foreground/10
               {i === activeStep ? 'bg-foreground text-background' : 'text-muted-foreground'}"
           >
             <span
-              class="text-[9px] {i === activeStep ? 'text-primary' : ''}"
+              class="text-[9px] max-[450px]:text-[7px] {i === activeStep ? 'text-primary' : ''}"
             >
               {step.num}
             </span>
@@ -444,7 +445,7 @@ function handleMouseLeave() {
 
     <!-- MH watermark -->
         <span
-          class="hero-watermark pointer-events-none absolute bottom-0 right-0 text-[140px] sm:text-[180px] lg:text-[200px] font-black leading-none text-foreground/5 select-none -mb-8 sm:-mb-10 lg:-mb-12 -mr-1 sm:-mr-2 tracking-tighter"
+          class="hero-watermark pointer-events-none absolute bottom-0 right-0 text-[100px] max-[450px]:text-[70px] sm:text-[180px] lg:text-[200px] font-black leading-none text-foreground/5 select-none -mb-6 max-[450px]:-mb-4 sm:-mb-10 lg:-mb-12 -mr-1 max-[450px]:-mr-1 sm:-mr-2 tracking-tighter"
         >
           MH
         </span>
