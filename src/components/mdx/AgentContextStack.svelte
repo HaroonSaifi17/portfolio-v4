@@ -61,7 +61,7 @@
 
 {#snippet stackItem(title, desc, bgClass, textClass)}
   <div class="stack-item relative z-10 w-full md:w-[90%] lg:w-4/5 mb-4 md:mb-5 group">
-    <div class="flex flex-row items-center justify-between p-3 sm:p-4 rounded-xl {bgClass} border backdrop-blur-md transition-transform hover:-translate-y-1 hover:shadow-lg">
+    <div class="flex flex-row items-center justify-between p-3 sm:p-4 rounded-xl {bgClass} border backdrop-blur-md transition-all duration-300 transform-gpu will-change-transform hover:-translate-y-1 hover:shadow-lg">
       <div class="flex flex-col flex-1 pr-2">
         <span class="font-semibold text-sm sm:text-base {textClass} leading-tight">{title}</span>
         <span class="text-[10px] sm:text-xs text-neutral-400 mt-1 sm:mt-1.5 leading-snug">{desc}</span>
