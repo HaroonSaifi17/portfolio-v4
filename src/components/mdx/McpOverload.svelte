@@ -1,45 +1,4 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
-  import gsap from 'gsap';
-  import { ScrollTrigger } from 'gsap/dist/ScrollTrigger';
-
-  onMount(() => {
-    gsap.registerPlugin(ScrollTrigger);
-
-    gsap.fromTo(
-      '.mcp-bad-node',
-      { scale: 0, opacity: 0 },
-      {
-        scale: 1,
-        opacity: 1,
-        stagger: 0.05,
-        duration: 0.5,
-        ease: 'back.out(1.5)',
-        scrollTrigger: {
-          trigger: '.mcp-container',
-          start: 'top 80%',
-        }
-      }
-    );
-
-    gsap.fromTo(
-      '.mcp-good-node',
-      { scale: 0, opacity: 0 },
-      {
-        scale: 1,
-        opacity: 1,
-        stagger: 0.1,
-        duration: 0.6,
-        ease: 'back.out(1.5)',
-        delay: 0.3,
-        scrollTrigger: {
-          trigger: '.mcp-container',
-          start: 'top 80%',
-        }
-      }
-    );
-  });
-
   const allMcps = ['Gmail', 'Slack', 'Notion', 'GitHub', 'Linear', 'Jira', 'Stripe', 'Figma', 'Calendar', 'Sentry'];
   const focusedMcps = ['GitHub', 'Bash'];
 </script>
