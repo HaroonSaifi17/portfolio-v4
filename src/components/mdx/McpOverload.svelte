@@ -44,7 +44,7 @@
   const focusedMcps = ['GitHub', 'Bash'];
 </script>
 
-<div class="mcp-container relative my-8 md:my-12 p-4 sm:p-8 rounded-2xl md:rounded-3xl bg-neutral-900 border border-neutral-800 shadow-2xl font-sans overflow-hidden w-full">
+<div class="mcp-container relative my-8 md:my-12 p-4 sm:p-8 rounded-none bg-neutral-900 border border-neutral-800 shadow-2xl font-sans overflow-hidden w-full">
   
   <div class="text-center mb-10">
     <h3 class="text-2xl font-bold text-white mb-2">MCP Tool Overload vs Focused Setup</h3>
@@ -55,13 +55,13 @@
     
     <!-- Bad Setup -->
     <div class="flex-1 flex flex-col items-center w-full">
-      <div class="mb-6 md:mb-8 px-3 py-1.5 rounded-full bg-red-900/30 border border-red-800 text-red-400 text-xs sm:text-sm font-semibold uppercase tracking-wider text-center">
+      <div class="mb-6 md:mb-8 px-3 py-1.5 rounded-none bg-red-900/30 border border-red-800 text-red-400 text-xs sm:text-sm font-semibold uppercase tracking-wider text-center">
         Overloaded Setup
       </div>
       
       <div class="relative w-full max-w-[260px] aspect-square flex items-center justify-center transform scale-90 sm:scale-100">
         <!-- Center Agent -->
-        <div class="absolute z-10 flex items-center justify-center w-24 h-24 rounded-2xl bg-gradient-to-br from-red-600 to-red-900 border-2 border-red-400 shadow-[0_0_20px_rgba(239,68,68,0.4)]">
+        <div class="absolute z-10 flex items-center justify-center w-24 h-24 rounded-none bg-gradient-to-br from-red-600 to-red-900 border-2 border-red-400 shadow-[0_0_20px_rgba(239,68,68,0.4)]">
           <span class="font-bold text-white">Agent</span>
         </div>
         
@@ -72,7 +72,7 @@
           {@const x = Math.cos(angle) * radius}
           {@const y = Math.sin(angle) * radius}
           <div 
-            class="mcp-bad-node absolute flex items-center justify-center px-3 py-1.5 rounded-lg bg-neutral-800 border border-neutral-700 text-xs text-neutral-300 shadow-lg whitespace-nowrap z-20"
+            class="mcp-bad-node absolute flex items-center justify-center px-3 py-1.5 rounded-none bg-neutral-800 border border-neutral-700 text-xs text-neutral-300 shadow-lg whitespace-nowrap z-20"
             style="transform: translate({x}px, {y}px);"
           >
             {mcp}
@@ -91,13 +91,13 @@
 
     <!-- Good Setup -->
     <div class="flex-1 flex flex-col items-center w-full mt-4 md:mt-0">
-      <div class="mb-6 md:mb-8 px-3 py-1.5 rounded-full bg-emerald-900/30 border border-emerald-800 text-emerald-400 text-xs sm:text-sm font-semibold uppercase tracking-wider text-center">
+      <div class="mb-6 md:mb-8 px-3 py-1.5 rounded-none bg-emerald-900/30 border border-emerald-800 text-emerald-400 text-xs sm:text-sm font-semibold uppercase tracking-wider text-center">
         Focused Setup
       </div>
       
       <div class="relative w-full max-w-[260px] aspect-square flex items-center justify-center transform scale-90 sm:scale-100">
         <!-- Center Agent -->
-        <div class="absolute z-10 flex items-center justify-center w-24 h-24 rounded-2xl bg-gradient-to-br from-emerald-600 to-emerald-900 border-2 border-emerald-400 shadow-[0_0_20px_rgba(16,185,129,0.4)]">
+        <div class="absolute z-10 flex items-center justify-center w-24 h-24 rounded-none bg-gradient-to-br from-emerald-600 to-emerald-900 border-2 border-emerald-400 shadow-[0_0_20px_rgba(16,185,129,0.4)]">
           <span class="font-bold text-white">Agent</span>
         </div>
         
@@ -108,7 +108,7 @@
           {@const x = Math.cos(angle) * radius}
           {@const y = Math.sin(angle) * radius}
           <div 
-            class="mcp-good-node absolute flex items-center justify-center px-4 py-2 rounded-lg bg-neutral-800 border border-emerald-700/50 text-sm font-medium text-emerald-200 shadow-[0_0_10px_rgba(16,185,129,0.1)] whitespace-nowrap z-20"
+            class="mcp-good-node absolute flex items-center justify-center px-4 py-2 rounded-none bg-neutral-800 border border-emerald-700/50 text-sm font-medium text-emerald-200 shadow-[0_0_10px_rgba(16,185,129,0.1)] whitespace-nowrap z-20"
             style="transform: translate({x}px, {y}px);"
           >
             {mcp}
