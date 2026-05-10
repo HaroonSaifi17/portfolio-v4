@@ -1,0 +1,117 @@
+---
+title: "Stop Suffocating Your AI Agents: The Context Overload Trap"
+description: "Giving agents more tools and bigger context files feels thorough. It actually makes them worse. Here's why — and what to do instead."
+pubDate: "May 10, 2026"
+category: "AI"
+tags: ["agents", "llm", "mcp", "context-engineering", "claude-code"]
+---
+
+import AgentContextStack from "../../components/mdx/AgentContextStack.svelte";
+import McpOverload from "../../components/mdx/McpOverload.svelte";
+import Callout from "../../components/mdx/Callout.astro";
+
+Most people using agents think more setup equals better results. More MCP tools. Bigger `AGENTS.md`. Dump the whole codebase into context. Stack every skill file you can find.
+
+That's exactly why their agents hallucinate, loop, and produce absolute garbage.
+
+## The Hidden Layers Before You Even Type
+
+Before getting into what goes wrong, let's align on the actual terms. I asked multiple friends why vibe coding got so good recently and most of them said "MCP tools." That's not really true. Models got better, harnesses got smarter, and tooling improved together. MCP is part of the picture, not the whole story. 
+
+Let's break down the stack:
+
+- **LLM**: The model. The actual brain. What Anthropic, OpenAI, DeepSeek, etc., train and ship. Everything else is scaffolding.
+- **Harness**: The application that wraps the LLM to do agentic work (e.g., Claude Code, Cursor, Codex). It controls which tools load and how the loop runs.
+- **Harness prompt**: Instructions the harness injects before you say anything. Usually: read files, write files, run bash, search the web, spawn subagents.
+- **MCP tools**: External integrations you connect: Gmail, GitHub, Notion, Slack. *The thing most people miss is that their full definitions get injected into context on every single turn, whether the task needs them or not.*
+- **AGENTS.md**: A project file auto-injected at the start of every session. Supposed to be a standing briefing. Usually becomes a pile of contradictory instructions nobody ever trims.
+- **Skill**: Task-specific instructions tuned for a particular kind of work. The problem is people stack them for every situation they can think of, adding more instructions to an already crowded context.
+- **Your prompt**: The actual thing you typed.
+
+Here's what actually happens when you run an agent:
+
+<AgentContextStack client:visible />
+
+Six layers competing for the model's attention before you've said a single word. That's the problem.
+
+## Why More Tools Makes Agents Dumber
+
+Models don't have infinite focus. Anthropic's engineering team calls it an "attention budget." Every token you add draws on it. Too many tokens, and the model's ability to recall and reason over that context decreases. 
+
+This isn't theoretical. Research on models from every major lab confirms the pattern: performance degrades as context grows, well before you hit the context window limit. The phenomenon is called **context rot**.
+
+<Callout type="warn" title="Silent Failure">
+The worst part is you often don't notice. The model still produces output. It just gets sloppier, misses constraints, and hallucinates more. It seems fine until it isn't.
+</Callout>
+
+This is exactly why giving agents ten MCP servers is bad. Each server injects its full list of tool definitions into every single call. If you have Gmail, Slack, Notion, GitHub, Linear, Figma, Jira, Calendar, Stripe, and Sentry all connected at once, those definitions fill context on a task that might just need you to fix a CSS bug.
+
+<McpOverload client:visible />
+
+When tool names are similar across servers, models pick the wrong ones or hallucinate tool names that don't exist entirely. Teams tracking this in production see it happen consistently even in mature setups.
+
+The fix is simple: **connect MCPs for the task, disconnect when done.** The model only sees the tools it actually needs for the current job.
+
+Also worth noting: Bash covers most of what purpose-built MCP tools do, and the model is already trained heavily on Bash. Using it over a dedicated tool means one fewer definition eating context on every call.
+
+```bash
+# Models are already incredibly good at finding what they need natively
+grep -r "handleAuth" ./src --include="*.ts" -l
+find ./src/components -name "*.tsx" -newer ./src/index.ts | head -20
+```
+
+## The AGENTS.md Problem
+
+Researchers at ETH Zurich tested whether `AGENTS.md` files actually help coding agents in early 2026. The result: auto-generated context files made agents measurably worse and significantly more expensive. Human-written files improved things slightly, but only when kept minimal.
+
+The reason is counterintuitive. The agents followed the instructions perfectly. That was the problem. 
+
+When a context file says "always run the full test suite," the agent runs the full test suite on every task, including ones where that's pure overhead. The instructions add noise, increase exploration, and cost more tokens to obey than they're worth.
+
+<Callout type="tip" title="Keep it Minimal">
+What belongs in `AGENTS.md` are non-obvious things the agent keeps getting wrong, not documentation you'd write for a new hire. Keep it short, write it by hand, and delete rules when they stop being relevant.
+</Callout>
+
+```markdown
+## Stack
+Next.js 15, TypeScript strict, Tailwind, Drizzle ORM (Postgres)
+
+## Don't
+- Write raw SQL — use the Drizzle query builder
+- Touch /drizzle manually — use `pnpm db:generate`
+- Default exports in utility files
+
+## Before finishing
+Run `pnpm lint && pnpm typecheck && pnpm test`
+```
+
+That's it. Not the architecture. Not the history of every decision ever made.
+
+## Don't Bundle Your Whole Codebase
+
+Tools like Repomix and Repograph that bundle your entire repository and inject it into context feel helpful. The idea is: give the agent everything so it can find the fix. What actually happens is the opposite. The agent now has so much irrelevant information that it loses focus on what actually matters for the task.
+
+Having the answer present is not enough. The noise around it actively hurts reasoning.
+
+Modern agents are good at navigating a filesystem when you give them search tools. They can grep, find, and read only what matters. Let them do that. **The relevant two thousand tokens beat the whole codebase every time.**
+
+## The Session Compaction Trap
+
+Context compaction has gotten better, but it's still lossy. Subtle constraints get dropped. Decisions from early in the session get merged with later corrections. The model compounds errors it doesn't know it made.
+
+Start a new session for each meaningfully new task. The setup cost is real but small. The cost of running an important task through a degraded context is harder to see and adds up.
+
+### Splitting tasks into phases has the same problem
+GSD (Get Stuff Done) and similar approaches split big tasks into phases to avoid overwhelming the agent with too much at once. The intention is right. The execution often isn't.
+
+When you break a task into phases and run each in sequence, you lose the full picture at each step. You end up with individually reasonable outputs that don't cohere as a whole. The seams show. If a task is genuinely too big for one session, the better approach is starting a fresh session for each phase with a clear, full brief about what's already been done, written by you, not generated by compaction.
+
+## The Actual Advice
+
+- Use a clean harness. 
+- Connect MCPs for the task, remove them after. 
+- Write a short, hand-crafted `AGENTS.md` and delete things from it regularly. 
+- Let the agent search for context instead of front-loading everything. 
+- Start fresh sessions for new tasks.
+
+Agents perform better with less in the way. The setups that feel most thorough consistently produce the worst results. That's not a coincidence.
