@@ -83,10 +83,10 @@ $effect(() => {
     </h2>
 
     <a
-      href="mailto:haroondev2@gmail.com"
+      href="mailto:me@haroonsaifi.dev"
       class="footer-email block text-xl sm:text-2xl md:text-4xl font-black uppercase hover:text-primary transition-colors duration-300 break-words"
     >
-      haroondev2@gmail.com
+      me@haroonsaifi.dev
     </a>
 
     <div

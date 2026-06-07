@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://portfolio-v4-roan.vercel.app/sitemap-index.xml
+Sitemap: https://www.haroonsaifi.dev/sitemap-index.xml

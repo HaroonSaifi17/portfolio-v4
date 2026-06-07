@@ -16,7 +16,7 @@ const prettyCodeOptions = {
 const enableCsp = process.env.ASTRO_ENABLE_CSP === 'true';
 
 export default defineConfig({
-  site: 'https://portfolio-v4-roan.vercel.app',
+  site: 'https://www.haroonsaifi.dev',
   prefetch: true,
   security: enableCsp
     ? {
