@@ -1,15 +1,26 @@
 ---
-title: 'Angular 19 Zoneless Change Detection with Signals'
-description: 'Learn Angular 19 zoneless change detection with Signals and practical setup steps. Understand Zone.js removal, signal patterns, and RxJS interoperability.'
-pubDate: '2024-12-15'
-updatedDate: '2024-12-15'
-heroImage: '/images/angular-19-thumbnail.webp'
-tags: ['Angular', 'Signals', 'Performance', 'TypeScript']
+title: "Angular 19 Zoneless Change Detection with Signals"
+description: "Learn how to enable Angular 19 zoneless change detection with Signals. Step-by-step setup, signal patterns, computed values, effects, and RxJS interop examples."
+pubDate: "2024-12-15"
+updatedDate: "2024-12-15"
+heroImage: "/images/angular-19-thumbnail.webp"
+category: "Angular"
+tags: ["Angular", "Signals", "Performance", "TypeScript"]
 ---
 
 import Callout from '../../components/mdx/Callout.astro';
 import Divider from '../../components/mdx/Divider.astro';
 import StepList from '../../components/mdx/StepList.astro';
+import Tldr from '../../components/mdx/Tldr.astro';
+import Faq from '../../components/mdx/Faq.astro';
+
+<Tldr>
+Angular 19 lets you drop Zone.js entirely and switch to Signal-based change detection. The setup is three lines in `app.config.ts`, Zone.js removed from polyfills, and you replace async-aware templates with `signal()`, `computed()`, and `effect()`. Real-world apps see up to 40% faster rendering with no manual subscription management.
+</Tldr>
+
+## What Is Zoneless Change Detection in Angular?
+
+**Zoneless change detection** is Angular 19's new mode that runs without Zone.js. Instead of monkey-patching every async API to know when something might have changed, Angular only re-renders the components that read a Signal whose value actually changed. The result is faster rendering, simpler mental model, and no more `async` pipe required for state.
 
 ## Why Zoneless Matters
 
@@ -154,6 +165,31 @@ export class ClockComponent {
   "Signals are synchronous — no async pipe needed in templates",
   "Use toSignal() to bridge existing RxJS observables"
 ]} />
+
+<Faq
+  items={[
+    {
+      q: "Is Angular zoneless change detection production ready?",
+      a: "It is marked experimental in Angular 19 but stable enough for new projects. The API is unlikely to change significantly. For new greenfield apps it is the recommended default going forward."
+    },
+    {
+      q: "What replaces Zone.js in Angular?",
+      a: "Signals replace Zone.js as the change detection trigger. Angular only re-renders components that read a signal whose value changed, which is faster and removes the need for the async pipe in templates."
+    },
+    {
+      q: "How do I enable zoneless mode in Angular 19?",
+      a: "Add provideExperimentalZonelessChangeDetection() to your app providers and remove zone.js from the polyfills array in angular.json. Three lines total, no other code changes required."
+    },
+    {
+      q: "Can I use Observables with Signals?",
+      a: "Yes. Use toSignal(observable$, { initialValue: 0 }) to bridge any RxJS stream into a signal, and toObservable(signal$) to convert back when you need to plug into an Observable-based API."
+    },
+    {
+      q: "How much faster is Angular zoneless?",
+      a: "Real-world Angular apps see up to 40% faster rendering after switching to zoneless change detection. The exact gain depends on how much of your template tree used to be checked by Zone.js without actually needing an update."
+    }
+  ]}
+/>
 
 ## Further Reading
 

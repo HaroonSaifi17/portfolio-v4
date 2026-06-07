@@ -137,13 +137,16 @@ $effect(() => {
       <span class="block overflow-hidden">
         <span
           class="hero-title-line block text-transparent"
-          style="-webkit-text-stroke: 2px var(--foreground);">Builder</span
+          style="-webkit-text-stroke: 2px var(--foreground);"
+          >Builder<span class="sr-only"
+            >. Mohd Haroon, full stack developer.</span
+          ></span
         >
       </span>
     </h1>
 
     <p
-      class="hero-subtitle text-xl md:text-2xl font-bold max-w-lg leading-relaxed border-l-4 border-primary pl-6"
+      class="hero-subtitle text-xl md:text-2xl font-bold max-w-lg leading-relaxed border-l-2 border-primary pl-6"
     >
       Mohd Haroon — Full Stack Developer crafting production-grade web
       applications from the ground up.
@@ -152,14 +155,14 @@ $effect(() => {
     <div class="hero-cta flex flex-wrap gap-3 pt-4">
       <Button
         href="mailto:me@haroonsaifi.dev"
-        class="px-8 py-4 h-auto border-4 border-foreground font-black uppercase tracking-widest text-base shadow-[var(--shadow-sm)]"
+        class="px-8 py-4 h-auto border-2 border-foreground font-black uppercase tracking-widest text-base shadow-[var(--shadow-sm)]"
       >
         Hit me up
       </Button>
       <Button
         href="https://github.com/HaroonSaifi17"
         variant="outline"
-        class="px-8 py-4 h-auto border-4 border-foreground bg-card text-foreground font-black uppercase tracking-widest text-base shadow-[var(--shadow-sm)]"
+        class="px-8 py-4 h-auto border-2 border-foreground bg-card text-foreground font-black uppercase tracking-widest text-base shadow-[var(--shadow-sm)]"
       >
         GitHub
       </Button>

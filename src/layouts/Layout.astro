@@ -1,16 +1,23 @@
 ---
 import '../styles/global.css';
-import { ClientRouter } from 'astro:transitions';
 import Analytics from '@vercel/analytics/astro';
+import { ClientRouter } from 'astro:transitions';
 
 interface Props {
   title?: string;
   description?: string;
   image?: string;
   imageAlt?: string;
+  imageWidth?: number;
+  imageHeight?: number;
   canonicalURL?: string;
-  type?: 'website' | 'article';
-  schemaType?: 'Article' | 'BlogPosting' | 'TechArticle';
+  type?: 'website' | 'article' | 'profile';
+  schemaType?:
+    | 'Article'
+    | 'BlogPosting'
+    | 'TechArticle'
+    | 'WebPage'
+    | 'ProfilePage';
   publishDate?: Date | string;
   modifiedDate?: Date | string;
   noindex?: boolean;
@@ -18,16 +25,22 @@ interface Props {
   tags?: string[];
   keywords?: string[];
   breadcrumbs?: Array<{ name: string; item: string }>;
+  wordCount?: number;
+  readingTimeMinutes?: number;
+  authorName?: string;
+  authorUrl?: string;
 }
 
 const {
   title = 'Mohd Haroon — Full Stack Developer',
-  description = 'Self-taught full stack developer building production-grade web applications. React, Node.js, TypeScript, Web3.',
-  image = '/images/preview.png',
-  imageAlt = 'Mohd Haroon portfolio preview',
+  description = 'Self-taught full stack developer Mohd Haroon builds production-grade web applications with React, TypeScript, Node.js, and Web3. Explore case studies and engineering blog posts.',
+  image = '/images/og-default.png',
+  imageAlt = 'Mohd Haroon — Full Stack Developer portfolio preview',
+  imageWidth = 1200,
+  imageHeight = 630,
   canonicalURL,
   type = 'website',
-  schemaType = 'Article',
+  schemaType = 'WebPage',
   publishDate,
   modifiedDate,
   noindex = false,
@@ -35,6 +48,10 @@ const {
   tags = [],
   keywords = [],
   breadcrumbs = [],
+  wordCount,
+  readingTimeMinutes,
+  authorName = 'Mohd Haroon',
+  authorUrl,
 } = Astro.props;
 
 const site = Astro.site ?? new URL(Astro.url.origin);
@@ -49,17 +66,19 @@ const publishedISO = publishDate
 const modifiedISO = modifiedDate
   ? new Date(modifiedDate).toISOString()
   : publishedISO;
+const personaKeywords =
+  type === 'profile'
+    ? [
+        'Mohd Haroon',
+        'Haroon Saifi',
+        'full stack developer',
+        'full stack developer India',
+        'TypeScript developer',
+        'web developer portfolio',
+      ]
+    : [];
 const allKeywords = Array.from(
-  new Set([
-    'Mohd Haroon',
-    'full stack developer',
-    'web developer portfolio',
-    'TypeScript developer',
-    'React developer',
-    'Astro developer',
-    ...keywords,
-    ...tags,
-  ]),
+  new Set([...personaKeywords, ...keywords, ...tags]),
 );
 
 const personSchemaId = new URL('/#person', site).toString();
@@ -69,8 +88,43 @@ const personSchema = {
   '@type': 'Person',
   '@id': personSchemaId,
   name: 'Mohd Haroon',
+  alternateName: 'Haroon Saifi',
+  givenName: 'Mohd',
+  familyName: 'Haroon',
   url: site.toString(),
   jobTitle: 'Full Stack Developer',
+  description:
+    'Self-taught full stack developer building production-grade web applications with React, TypeScript, Node.js, and Web3.',
+  knowsAbout: [
+    'Full Stack Development',
+    'TypeScript',
+    'JavaScript',
+    'React',
+    'Next.js',
+    'Angular',
+    'Astro',
+    'Node.js',
+    'tRPC',
+    'Web3',
+    'Solidity',
+    'Smart Contracts',
+    'DeFi',
+    'DevOps',
+    'AWS',
+    'Docker',
+    'System Design',
+    'Software Architecture',
+  ],
+  hasOccupation: {
+    '@type': 'Occupation',
+    name: 'Full Stack Developer',
+    occupationLocation: {
+      '@type': 'Country',
+      name: 'India',
+    },
+    skills:
+      'TypeScript, React, Next.js, Angular, Node.js, tRPC, Web3, Solidity',
+  },
   sameAs: [
     'https://github.com/HaroonSaifi17',
     'https://linkedin.com/in/haroonsaifi17',
@@ -83,39 +137,102 @@ const websiteSchema = {
   '@id': websiteSchemaId,
   url: site.toString(),
   name: 'Mohd Haroon Portfolio',
+  alternateName: 'Haroon Saifi Portfolio',
   inLanguage: 'en-US',
   description:
-    'Personal portfolio, case studies, and engineering articles by Mohd Haroon.',
+    'Personal portfolio, engineering blog, and case studies by Mohd Haroon — full stack developer.',
   publisher: { '@id': personSchemaId },
+  potentialAction: {
+    '@type': 'SearchAction',
+    target: {
+      '@type': 'EntryPoint',
+      urlTemplate: `${site.toString()}/blog?q={search_term_string}`,
+    },
+    'query-input': 'required name=search_term_string',
+  },
 };
 const pageSchema =
   type === 'article'
     ? {
         '@type': schemaType,
         '@id': webpageSchemaId,
-        mainEntityOfPage: canonical,
-        headline: title,
+        mainEntityOfPage: { '@type': 'WebPage', '@id': canonical },
+        headline: title.includes('|') ? title.split('|')[0].trim() : title,
         description,
-        image: [imageUrl],
+        image: [
+          {
+            '@type': 'ImageObject',
+            url: imageUrl,
+            width: imageWidth,
+            height: imageHeight,
+            alt: imageAlt,
+          },
+        ],
         datePublished: publishedISO,
         dateModified: modifiedISO ?? publishedISO,
-        author: { '@id': personSchemaId },
-        publisher: { '@id': personSchemaId },
+        author: {
+          '@type': 'Person',
+          name: authorName,
+          url: authorUrl ?? site.toString(),
+          '@id': authorUrl ? `${authorUrl}#person` : personSchemaId,
+        },
+        publisher: {
+          '@type': 'Person',
+          name: 'Mohd Haroon',
+          url: site.toString(),
+          '@id': personSchemaId,
+          logo: {
+            '@type': 'ImageObject',
+            url: new URL('/favicon.svg', site).toString(),
+            width: 512,
+            height: 512,
+          },
+        },
         articleSection: section,
         keywords: allKeywords.join(', '),
         inLanguage: 'en-US',
         isPartOf: { '@id': websiteSchemaId },
+        ...(wordCount ? { wordCount } : {}),
+        ...(readingTimeMinutes
+          ? { timeRequired: `PT${readingTimeMinutes}M` }
+          : {}),
       }
-    : {
-        '@type': 'WebPage',
-        '@id': webpageSchemaId,
-        url: canonical,
-        name: title,
-        description,
-        image: imageUrl,
-        inLanguage: 'en-US',
-        isPartOf: { '@id': websiteSchemaId },
-      };
+    : type === 'profile'
+      ? {
+          '@type': 'ProfilePage',
+          '@id': webpageSchemaId,
+          url: canonical,
+          name: title,
+          description,
+          image: {
+            '@type': 'ImageObject',
+            url: imageUrl,
+            width: imageWidth,
+            height: imageHeight,
+            alt: imageAlt,
+          },
+          inLanguage: 'en-US',
+          isPartOf: { '@id': websiteSchemaId },
+          mainEntity: { '@id': personSchemaId },
+        }
+      : {
+          '@type': 'WebPage',
+          '@id': webpageSchemaId,
+          url: canonical,
+          name: title,
+          description,
+          image: {
+            '@type': 'ImageObject',
+            '@id': `${canonical}#primaryImage`,
+            url: imageUrl,
+            width: imageWidth,
+            height: imageHeight,
+            alt: imageAlt,
+          },
+          inLanguage: 'en-US',
+          isPartOf: { '@id': websiteSchemaId },
+          primaryImageOfPage: { '@id': `${canonical}#primaryImage` },
+        };
 const breadcrumbSchema =
   breadcrumbs.length > 0
     ? {
@@ -138,6 +255,11 @@ const schemaGraph = {
   ],
 };
 const schemaJSON = JSON.stringify(schemaGraph).replace(/</g, '\\u003c');
+
+const siteName = 'Mohd Haroon Portfolio';
+const ogLocale = 'en_US';
+const titleParts = title.split('|').map((s) => s.trim());
+const baseTitle = titleParts[0];
 ---
 
 <!doctype html>
@@ -148,24 +270,37 @@ const schemaJSON = JSON.stringify(schemaGraph).replace(/</g, '\\u003c');
       document.documentElement.classList.add('js');
     </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#ff4d00" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#ff6d33" media="(prefers-color-scheme: dark)" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" href="/favicon.ico" />
+    <link rel="apple-touch-icon" href="/favicon.svg" />
+    <link rel="manifest" href="/manifest.webmanifest" />
     <link rel="canonical" href={canonical} />
+    <link rel="alternate" type="application/rss+xml" title={`${siteName} Blog`} href="/rss.xml" />
     <link rel="sitemap" href="/sitemap-index.xml" />
+    <link rel="author" href="/humans.txt" />
+
     <meta name="description" content={description} />
     <meta name="robots" content={robots} />
     <meta name="author" content="Mohd Haroon" />
     <meta name="keywords" content={allKeywords.join(', ')} />
-    <meta name="theme-color" content="#ff4d00" />
     <meta name="generator" content={Astro.generator} />
+    <meta name="rating" content="general" />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
 
-    <meta property="og:type" content={type} />
+    <meta property="og:type" content={type === 'profile' ? 'profile' : type} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
-    <meta property="og:site_name" content="Mohd Haroon Portfolio" />
-    <meta property="og:locale" content="en_US" />
+    <meta property="og:site_name" content={siteName} />
+    <meta property="og:locale" content={ogLocale} />
     <meta property="og:image" content={imageUrl} />
+    <meta property="og:image:secure_url" content={imageUrl} />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content={String(imageWidth)} />
+    <meta property="og:image:height" content={String(imageHeight)} />
     <meta property="og:image:alt" content={imageAlt} />
 
     <meta name="twitter:card" content="summary_large_image" />
@@ -175,6 +310,10 @@ const schemaJSON = JSON.stringify(schemaGraph).replace(/</g, '\\u003c');
     <meta name="twitter:image" content={imageUrl} />
     <meta name="twitter:image:alt" content={imageAlt} />
     <meta name="twitter:creator" content="@HaroonSaifi17_" />
+    <meta name="twitter:label1" content={readingTimeMinutes ? 'Reading time' : 'Written by'} />
+    <meta name="twitter:data1" content={readingTimeMinutes ? `${readingTimeMinutes} min read` : 'Mohd Haroon'} />
+    <meta name="twitter:label2" content={section ?? 'Category'} />
+    <meta name="twitter:data2" content={section ?? 'Full Stack Development'} />
 
     {
       publishedISO && (
@@ -188,6 +327,9 @@ const schemaJSON = JSON.stringify(schemaGraph).replace(/</g, '\\u003c');
       section && <meta property="article:section" content={section} />
     }
     {tags.map((tag) => <meta property="article:tag" content={tag} />)}
+
+    <link rel="alternate" hreflang="en" href={canonical} />
+    <link rel="alternate" hreflang="x-default" href={canonical} />
 
     <script is:inline type="application/ld+json" set:html={schemaJSON}></script>
     <title>{title}</title>
@@ -234,7 +376,6 @@ const schemaJSON = JSON.stringify(schemaGraph).replace(/</g, '\\u003c');
         applyTheme();
         requestAnimationFrame(scrollToHash);
       });
-
       document.addEventListener('click', function (e) {
         var target = e.target;
         if (!(target instanceof Element)) return;

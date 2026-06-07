@@ -8,7 +8,7 @@ const { items } = Astro.props;
 
 <div class="not-prose my-8 flex flex-wrap gap-2">
   {items.map((tag) => (
-    <span class="inline-block text-xs font-black uppercase tracking-widest px-3 py-1.5 border-4 border-foreground bg-secondary shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+    <span class="inline-block text-xs font-bold uppercase tracking-widest px-3 py-1.5 border-2 border-foreground bg-secondary shadow-[2px_2px_0px_0px_var(--border)]">
       {tag}
     </span>
   ))}

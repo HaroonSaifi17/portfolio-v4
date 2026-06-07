@@ -34,7 +34,7 @@ const projects = [
     tech: 'Angular / Node.js / Express / MongoDB',
     description:
       'EdTech assessment platform featuring secure Google OAuth, managing a repository of 700+ questions for adaptive mock tests and real-time performance analytics.',
-    href: 'https://prepzone.haroonsaifi.dev',
+    href: '/case-studies/prepzone-platform',
   },
   {
     title: 'ReqQuest',
@@ -66,15 +66,18 @@ function formatDate(date: Date) {
 ---
 
 <Layout
-  title="Mohd Haroon | Full Stack Developer Portfolio"
-  description="Explore Mohd Haroon's full stack developer portfolio featuring production case studies, engineering blogs, React/TypeScript work, and web3 projects."
-  image="/images/preview.png"
-  imageAlt="Mohd Haroon full stack portfolio"
+  title="Mohd Haroon — Full Stack Developer Portfolio"
+  description="Mohd Haroon is a full stack developer based in India building production-grade web applications with React, TypeScript, Node.js, and Web3. Explore case studies, engineering blog posts, and live projects."
+  image="/images/og-default.png"
+  imageAlt="Mohd Haroon — Full Stack Developer portfolio"
+  type="profile"
+  schemaType="ProfilePage"
   keywords={[
     'mohd haroon portfolio',
     'full stack developer india',
     'react typescript developer',
     'web3 developer portfolio',
+    'haroon saifi developer',
   ]}
   breadcrumbs={[{ name: 'Home', item: '/' }]}
 >
@@ -88,7 +91,7 @@ function formatDate(date: Date) {
     <Marquee items={techStack} />
 
     <div class="max-w-7xl mx-auto px-6 pt-8 pb-20 space-y-32">
-    <section id="work" class="space-y-12 border-t-4 border-foreground pt-12">
+    <section id="work" class="space-y-12 border-t-2 border-foreground pt-12">
       <h2
         class="section-heading text-5xl md:text-7xl font-black uppercase tracking-tighter"
       >
@@ -113,7 +116,7 @@ function formatDate(date: Date) {
     <Experience client:visible />
 
     <!-- Blog Section -->
-    <section class="space-y-12 border-t-4 border-foreground pt-20">
+    <section class="space-y-12 border-t-2 border-foreground pt-20">
       <div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
         <h2
           class="section-heading text-5xl md:text-7xl font-black uppercase tracking-tighter"
@@ -122,7 +125,7 @@ function formatDate(date: Date) {
         </h2>
         <a
           href="/blog"
-          class="section-heading inline-block border-b-4 border-foreground text-xl font-black uppercase nav-link-hover"
+          class="section-heading inline-block border-b-2 border-foreground text-xl font-black uppercase nav-link-hover"
           data-astro-prefetch
         >
           All Posts &rarr;
@@ -134,7 +137,7 @@ function formatDate(date: Date) {
           recentPosts.map((post) => (
             <a
               href={`/blog/${post.id}`}
-              class="blog-card group block border-4 border-foreground bg-card p-6 shadow-[var(--shadow-lg)] content-card"
+              class="blog-card group block border-2 border-foreground bg-card p-6 shadow-[var(--shadow-lg)] content-card"
               data-astro-prefetch
               transition:name={`blog-card-${post.id}`}
             >
@@ -145,7 +148,7 @@ function formatDate(date: Date) {
                 {formatDate(post.data.pubDate)}
               </span>
               <h3
-                class="text-xl font-black uppercase tracking-tight mt-4 mb-2"
+                class="text-xl font-bold uppercase tracking-tight mt-4 mb-2"
                 transition:name={`blog-title-${post.id}`}
               >
                 {post.data.title}

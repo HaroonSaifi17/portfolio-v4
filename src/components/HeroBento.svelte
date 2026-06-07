@@ -265,12 +265,12 @@ function handleMouseLeave() {
 >
   <!-- Orange offset bg -->
   <div
-    class="hero-deco-bg absolute inset-0 border-4 border-foreground bg-primary translate-x-4 translate-y-4"
+    class="hero-deco-bg absolute inset-0 border-2 border-foreground bg-primary translate-x-3 translate-y-3"
   ></div>
 
   <!-- Main card with tilt -->
   <div
-    class="bento-tilt-target hero-deco-card relative z-10 w-full border-4 border-foreground bg-card overflow-hidden"
+    class="bento-tilt-target hero-deco-card relative z-10 w-full border-2 border-foreground bg-card overflow-hidden"
     style="transform-style: preserve-3d; --shadow-x: 4px; --shadow-y: 4px;"
   >
     <!-- Bento grid -->

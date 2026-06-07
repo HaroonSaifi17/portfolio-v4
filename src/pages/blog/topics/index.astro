@@ -1,0 +1,95 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import Navbar from '../../../components/Navbar.svelte';
+import Footer from '../../../components/Footer.svelte';
+import { getCollection } from 'astro:content';
+
+const posts = await getCollection('blog');
+const studies = await getCollection('case-studies');
+
+const tagCounts = new Map<
+  string,
+  { count: number; type: 'blog' | 'case-studies' | 'both' }
+>();
+for (const post of posts) {
+  for (const tag of post.data.tags ?? []) {
+    const entry = tagCounts.get(tag) ?? { count: 0, type: 'blog' };
+    entry.count += 1;
+    entry.type = entry.type === 'case-studies' ? 'both' : 'blog';
+    tagCounts.set(tag, entry);
+  }
+}
+for (const study of studies) {
+  for (const tag of study.data.tags ?? []) {
+    const entry = tagCounts.get(tag) ?? { count: 0, type: 'case-studies' };
+    entry.count += 1;
+    entry.type = entry.type === 'blog' ? 'both' : 'case-studies';
+    tagCounts.set(tag, entry);
+  }
+}
+
+const tags = Array.from(tagCounts.entries())
+  .map(([name, info]) => ({ name, ...info }))
+  .sort((a, b) => b.count - a.count || a.name.localeCompare(b.name));
+
+function formatDate(date: Date) {
+  return date.toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+  });
+}
+---
+
+<Layout
+  title="Topics | Mohd Haroon"
+  description="Browse all topics covered on Mohd Haroon's engineering blog and case studies — TypeScript, React, Angular, Web3, AI tooling, full stack development, and more."
+  image="/images/og-default.png"
+  imageAlt="Topics on Mohd Haroon's blog and case studies"
+  keywords={[
+    'engineering topics',
+    'typescript articles',
+    'react articles',
+    'angular articles',
+    'web3 articles',
+    'ai engineering',
+  ]}
+  breadcrumbs={[
+    { name: 'Home', item: '/' },
+    { name: 'Blog', item: '/blog' },
+    { name: 'Topics', item: '/blog/topics' },
+  ]}
+>
+  <Navbar client:load />
+
+  <main class="max-w-5xl mx-auto px-6 py-20 space-y-12">
+    <header class="space-y-4">
+      <h1 class="page-title text-5xl md:text-7xl font-black uppercase tracking-tighter">
+        Topics
+      </h1>
+      <p class="page-subtitle text-xl font-bold max-w-2xl border-l-2 border-primary pl-6">
+        Every tag used across my engineering blog and case studies. Pick a
+        topic to see all related work.
+      </p>
+    </header>
+
+    <div class="flex flex-wrap gap-3">
+      {
+        tags.map((tag) => (
+          <a
+            href={`/blog/topics/${tag.name.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`}
+            class="inline-flex items-center gap-2 px-4 py-2 text-sm font-extrabold uppercase tracking-wider border-2 border-foreground bg-card shadow-[var(--shadow-sm)] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[6px_6px_0px_0px_var(--border)] hover:border-primary transition-all duration-200"
+            data-astro-prefetch
+          >
+            <span>{tag.name}</span>
+            <span class="text-xs font-black bg-foreground text-background px-1.5 py-0.5">
+              {tag.count}
+            </span>
+          </a>
+        ))
+      }
+    </div>
+  </main>
+
+  <Footer />
+</Layout>

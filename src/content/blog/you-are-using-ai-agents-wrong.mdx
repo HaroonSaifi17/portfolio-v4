@@ -1,6 +1,6 @@
 ---
 title: "Stop Suffocating Your AI Agents: The Context Overload Trap"
-description: "Giving agents more tools and bigger context files feels thorough. It actually makes them worse. Here's why — and what to do instead."
+description: "Learn why giving AI agents more tools and bigger context files makes them perform worse. Covers context rot, MCP overload, and AGENTS.md pitfalls with fixes."
 pubDate: "May 10, 2026"
 category: "AI"
 tags: ["agents", "llm", "mcp", "context-engineering", "claude-code"]
@@ -9,14 +9,24 @@ tags: ["agents", "llm", "mcp", "context-engineering", "claude-code"]
 import AgentContextStack from "../../components/mdx/AgentContextStack.svelte";
 import McpOverload from "../../components/mdx/McpOverload.svelte";
 import Callout from "../../components/mdx/Callout.astro";
+import Tldr from "../../components/mdx/Tldr.astro";
+import Faq from "../../components/mdx/Faq.astro";
+
+<Tldr>
+Most people using AI coding agents assume more setup means better results. Adding more MCP tools, growing the `AGENTS.md`, or bundling the whole codebase into context actually makes agents hallucinate, loop, and produce worse output. The fix is to keep context lean, connect MCPs only for the task, write a short hand-crafted `AGENTS.md`, and start fresh sessions for new work.
+</Tldr>
 
 Most people using agents think more setup equals better results. More MCP tools. Bigger `AGENTS.md`. Dump the whole codebase into context. Stack every skill file you can find.
 
 That's exactly why their agents hallucinate, loop, and produce absolute garbage.
 
+## What Is Context Rot?
+
+**Context rot** is the measurable decline in a model's reasoning quality as the amount of input context grows. Anthropic's engineering team calls it an "attention budget": every token draws on a finite pool of focus, and once that pool is exhausted, the model misses constraints, hallucinates, and produces sloppy output well before hitting the technical context window limit.
+
 ## The Hidden Layers Before You Even Type
 
-Before getting into what goes wrong, let's align on the actual terms. I asked multiple friends why vibe coding got so good recently and most of them said "MCP tools." That's not really true. Models got better, harnesses got smarter, and tooling improved together. MCP is part of the picture, not the whole story. 
+Before getting into what goes wrong, let's align on the actual terms. I asked multiple friends why vibe coding got so good recently and most of them said "MCP tools." That's not really true. Models got better, harnesses got smarter, and tooling improved together. MCP is part of the picture, not the whole story.
 
 Let's break down the stack:
 
@@ -36,9 +46,9 @@ Six layers competing for the model's attention before you've said a single word.
 
 ## Why More Tools Makes Agents Dumber
 
-Models don't have infinite focus. Anthropic's engineering team calls it an "attention budget." Every token you add draws on it. Too many tokens, and the model's ability to recall and reason over that context decreases. 
+Models don't have infinite focus. Anthropic's engineering team calls it an "attention budget." Every token you add draws on it. Too many tokens, and the model's ability to recall and reason over that context decreases.
 
-This isn't theoretical. Research on models from every major lab confirms the pattern: performance degrades as context grows, well before you hit the context window limit. The phenomenon is called **context rot**.
+This isn't theoretical. Research on models from every major lab confirms the pattern: performance degrades as context grows, well before you hit the context window limit. The phenomenon is **context rot**.
 
 <Callout type="warn" title="Silent Failure">
 The worst part is you often don't notice. The model still produces output. It just gets sloppier, misses constraints, and hallucinates more. It seems fine until it isn't.
@@ -64,7 +74,7 @@ find ./src/components -name "*.tsx" -newer ./src/index.ts | head -20
 
 Researchers at ETH Zurich tested whether `AGENTS.md` files actually help coding agents in early 2026. The result: auto-generated context files made agents measurably worse and significantly more expensive. Human-written files improved things slightly, but only when kept minimal.
 
-The reason is counterintuitive. The agents followed the instructions perfectly. That was the problem. 
+The reason is counterintuitive. The agents followed the instructions perfectly. That was the problem.
 
 When a context file says "always run the full test suite," the agent runs the full test suite on every task, including ones where that's pure overhead. The instructions add noise, increase exploration, and cost more tokens to obey than they're worth.
 
@@ -108,10 +118,35 @@ When you break a task into phases and run each in sequence, you lose the full pi
 
 ## The Actual Advice
 
-- Use a clean harness. 
-- Connect MCPs for the task, remove them after. 
-- Write a short, hand-crafted `AGENTS.md` and delete things from it regularly. 
-- Let the agent search for context instead of front-loading everything. 
+- Use a clean harness.
+- Connect MCPs for the task, remove them after.
+- Write a short, hand-crafted `AGENTS.md` and delete things from it regularly.
+- Let the agent search for context instead of front-loading everything.
 - Start fresh sessions for new tasks.
 
 Agents perform better with less in the way. The setups that feel most thorough consistently produce the worst results. That's not a coincidence.
+
+<Faq
+  items={[
+    {
+      q: "What is context rot in AI agents?",
+      a: "Context rot is the drop in a model's reasoning quality as input context grows. Performance degrades well before the context window is technically full because every token draws on a finite attention budget."
+    },
+    {
+      q: "Do AGENTS.md files help or hurt coding agents?",
+      a: "Long auto-generated AGENTS.md files hurt agents. ETH Zurich research in 2026 showed that human-written files kept minimal improved results slightly, while verbose ones made agents measurably worse and more expensive."
+    },
+    {
+      q: "How many MCP servers should I connect at once?",
+      a: "Connect only the MCP servers required for the current task and disconnect them when you are done. Each server injects its full tool definitions on every call, and stacking too many is one of the fastest ways to degrade agent output."
+    },
+    {
+      q: "Should I bundle my whole codebase into agent context?",
+      a: "No. Tools like Repomix feel helpful but the noise actively hurts reasoning. Modern agents perform better with search tools and a few thousand focused tokens than with an entire repository dumped into context."
+    },
+    {
+      q: "When should I start a new agent session?",
+      a: "Start a fresh session for every meaningfully new task. Compaction is lossy: constraints get dropped, corrections get merged, and the model compounds errors it does not know it made. The setup cost is small compared to running important work through degraded context."
+    }
+  ]}
+/>

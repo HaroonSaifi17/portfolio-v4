@@ -62,7 +62,7 @@ function toggleTheme() {
 
 <nav
   bind:this={nav}
-  class="border-b-4 border-foreground bg-background"
+  class="border-b-2 border-foreground bg-background"
   data-cursor-exclude
 >
   <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
@@ -93,9 +93,9 @@ function toggleTheme() {
         aria-label="Toggle theme"
       >
         {#if dark}
-          <Sun size={18} strokeWidth={3} />
+          <Sun size={18} strokeWidth={2} />
         {:else}
-          <Moon size={18} strokeWidth={3} />
+          <Moon size={18} strokeWidth={2} />
         {/if}
       </button>
     </div>
@@ -107,9 +107,9 @@ function toggleTheme() {
         aria-label="Toggle theme"
       >
         {#if dark}
-          <Sun size={18} strokeWidth={3} />
+          <Sun size={18} strokeWidth={2} />
         {:else}
-          <Moon size={18} strokeWidth={3} />
+          <Moon size={18} strokeWidth={2} />
         {/if}
       </button>
       <button
@@ -130,7 +130,7 @@ function toggleTheme() {
 
   {#if open}
     <div
-      class="md:hidden border-t-4 border-foreground bg-background px-6 py-6 flex flex-col gap-4 font-bold uppercase tracking-wider text-lg"
+      class="md:hidden border-t-2 border-foreground bg-background px-6 py-6 flex flex-col gap-4 font-bold uppercase tracking-wider text-lg"
       transition:slide={{ duration: 240 }}
     >
       <a href="/#work" onclick={() => (open = false)} data-astro-prefetch

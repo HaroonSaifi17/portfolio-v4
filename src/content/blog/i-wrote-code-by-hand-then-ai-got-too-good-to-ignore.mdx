@@ -1,11 +1,18 @@
 ---
 title: "I Wrote Code by Hand. Then AI Got Too Good to Ignore."
-description: "How my coding workflow evolved from Neovim to an agentic AI setup, why I switched, the hidden costs of AI tools for students, and what the shift means for junior developers."
+description: "How my coding workflow evolved from a hand-built Neovim setup to an agentic AI workflow, why I switched, the hidden costs of AI tools, and what it means for junior developers."
 pubDate: "2026-05-02"
+category: "AI"
 tags: ["ai", "workflow", "dev"]
 ---
 
 import VideoEmbed from "../../components/mdx/VideoEmbed.astro";
+import Tldr from "../../components/mdx/Tldr.astro";
+import Faq from "../../components/mdx/Faq.astro";
+
+<Tldr>
+I coded by hand in Neovim for years because AI tools were not good enough to justify the cost. In early 2026, Opus 4.5 and GPT-5.3 Codex crossed the line: they could reason about architecture, ship multi-file features, and produce decent UI. I switched to an agentic workflow with OpenCode, custom MCPs, and a sessionizer script. The trade-off is real: agentic work burns $15+ per session, which is fine for engineers with company budgets and brutal for students and freshers.
+</Tldr>
 
 I started in 2021, when AI was just background noise. I built things by hand, learned through Google and documentation, and took pride in knowing exactly what every line did. Then the models jumped, and I had to rethink everything.
 
@@ -93,9 +100,9 @@ if ! tmux has-session -t="$selected_name" 2>/dev/null; then
 fi
 
 if [[ -n $TMUX ]]; then
-  tmux switch-client -t "$selected_name"
+  tmux switch-client -t="$selected_name"
 else
-  tmux attach-session -t "$selected_name"
+  tmux attach-session -t="$selected_name"
 fi
 ```
 
@@ -126,3 +133,28 @@ The workflow is faster than anything I had before. OpenCode handles the bulk of 
 The portfolio hosting this blog was vibe-coded—or agentically coded—using OpenCode with the Opus 4.6 model. It is as good as any hand-crafted site; you can't even tell the difference unless you know exactly which model leans toward which design templates, as this one naturally goes for a good, clean brutalist look. That is not me underselling hand-coding, that is me being honest about where the models actually are right now.
 
 I am still in college, still figuring out the job market, and still building with whatever budget I have available. The tools have changed significantly. My understanding of why things work has not, and I think that is the part that is hardest to shortcut.
+
+<Faq
+  items={[
+    {
+      q: "Should junior developers use AI coding tools?",
+      a: "Yes, but treat them as a fast junior you have to supervise. Use them to ship faster, but keep reviewing the output critically. The fundamentals still matter: if you cannot catch AI mistakes, you cannot tell good output from bad output."
+    },
+    {
+      q: "How much does an agentic AI coding workflow cost?",
+      a: "Real agentic work burns $15 or more in API spend per long debugging session. The $20 subscriptions stretch for a week of light use and disappear the moment you start chasing a real bug across a long codebase with multiple iterations."
+    },
+    {
+      q: "What is the best AI model for coding in 2026?",
+      a: "Opus 4.5 and GPT-5.3 Codex are the first models strong enough to reason about architecture and ship multi-file features without falling apart. Earlier models were useful for boilerplate only and consistently failed on design and complex systems."
+    },
+    {
+      q: "Do I still need to learn to code by hand if I use AI agents?",
+      a: "Yes. The skill that compounds is the ability to read AI output and decide what is right, what is wrong, and what is missing. That judgment comes from writing bad code yourself first. Without it, you cannot supervise the agent."
+    },
+    {
+      q: "How do you switch between projects quickly in a terminal-first workflow?",
+      a: "Use a sessionizer script bound to a hotkey (Ctrl+F in my setup) that opens fzf over your project directories, creates a tmux session for the project if one does not exist, and switches into it. Projects stay isolated, context stays loaded, and switching takes under a second."
+    }
+  ]}
+/>

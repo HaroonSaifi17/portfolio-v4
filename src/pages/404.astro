@@ -1,0 +1,60 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.svelte';
+import Footer from '../components/Footer.svelte';
+---
+
+<Layout
+  title="404 — Page Not Found | Mohd Haroon"
+  description="The page you are looking for does not exist. Explore Mohd Haroon's case studies, engineering blog, and project work instead."
+  noindex={true}
+>
+  <Navbar client:load />
+
+  <main class="max-w-4xl mx-auto px-6 py-32 text-center space-y-10">
+    <p
+      class="font-black uppercase tracking-widest text-sm text-muted-foreground"
+    >
+      Error 404
+    </p>
+
+    <h1
+      class="text-[clamp(4rem,12vw,9rem)] font-black uppercase tracking-tighter leading-none"
+    >
+      Off the<br />Map.
+    </h1>
+
+    <p
+      class="text-xl md:text-2xl font-bold max-w-2xl mx-auto border-l-4 border-primary pl-6 text-left"
+    >
+      The page you tried to reach does not exist. It may have been moved,
+      renamed, or never existed in the first place.
+    </p>
+
+    <div class="flex flex-wrap justify-center gap-4 pt-4">
+      <a
+        href="/"
+        class="inline-flex items-center gap-2 px-6 py-3 text-sm font-black uppercase tracking-wider border-2 border-foreground bg-foreground text-background shadow-[var(--shadow-sm)] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[6px_6px_0px_0px_var(--border)] transition-all duration-200"
+        data-astro-prefetch
+      >
+        &larr; Home
+      </a>
+      <a
+        href="/blog"
+        class="inline-flex items-center gap-2 px-6 py-3 text-sm font-black uppercase tracking-wider border-2 border-foreground bg-card shadow-[var(--shadow-sm)] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[6px_6px_0px_0px_var(--border)] hover:border-primary transition-all duration-200"
+        data-astro-prefetch
+      >
+        Read the Blog
+      </a>
+      <a
+        href="/case-studies"
+        class="inline-flex items-center gap-2 px-6 py-3 text-sm font-black uppercase tracking-wider border-2 border-foreground bg-card shadow-[var(--shadow-sm)] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[6px_6px_0px_0px_var(--border)] hover:border-primary transition-all duration-200"
+        data-astro-prefetch
+      >
+        See Case Studies
+      </a>
+    </div>
+  </main>
+
+  <Footer client:visible animate />
+</Layout>

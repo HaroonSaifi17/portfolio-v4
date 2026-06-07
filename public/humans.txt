@@ -1,0 +1,19 @@
+/* TEAM */
+Author: Mohd Haroon
+Site: https://www.haroonsaifi.dev
+Twitter: @HaroonSaifi17_
+GitHub: HaroonSaifi17
+LinkedIn: haroonsaifi17
+Location: India
+
+/* SITE */
+Last update: 2026/06/07
+Standards: HTML5, CSS3, Open Graph, Schema.org
+Components: Astro, Svelte, Tailwind CSS, MDX
+Built with: Bun
+
+/* SITE PURPOSE */
+This is the personal portfolio and engineering blog of Mohd Haroon,
+a self-taught full stack developer. The site features case studies
+of shipped production applications, an engineering blog covering
+TypeScript, Angular, AI tooling, and full stack development topics.

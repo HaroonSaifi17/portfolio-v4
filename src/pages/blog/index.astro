@@ -18,15 +18,17 @@ function formatDate(date: Date) {
 ---
 
 <Layout
-  title="Engineering Blog | Mohd Haroon"
-  description="Read Mohd Haroon's engineering blog on web development, TypeScript, Angular, deployment lessons, and modern developer tooling."
-  image="/images/preview.png"
+  title="Engineering Blog by Mohd Haroon — Full Stack, TypeScript, AI"
+  description="Read engineering blog posts by Mohd Haroon on full stack development, TypeScript, Angular, React, AI agents, Web3, deployment, and modern developer tooling."
+  image="/images/og-default.png"
   imageAlt="Mohd Haroon engineering blog"
   keywords={[
     'engineering blog',
     'web development articles',
     'typescript blog',
     'angular blog',
+    'react blog',
+    'ai agent articles',
   ]}
   breadcrumbs={[
     { name: 'Home', item: '/' },
@@ -40,7 +42,7 @@ function formatDate(date: Date) {
       <h1 class="page-title text-5xl md:text-7xl font-black uppercase tracking-tighter">
         Blog
       </h1>
-      <p class="page-subtitle text-xl font-bold max-w-xl border-l-4 border-primary pl-6">
+      <p class="page-subtitle text-xl font-bold max-w-xl border-l-2 border-primary pl-6">
         Thoughts on web development, tooling, and the developer experience.
       </p>
     </header>
@@ -50,7 +52,7 @@ function formatDate(date: Date) {
         posts.map((post) => (
           <a
             href={`/blog/${post.id}`}
-            class="listing-card group flex flex-col items-start border-4 border-foreground bg-card p-8 shadow-[var(--shadow-lg)] content-card"
+            class="listing-card group flex flex-col items-start border-2 border-foreground bg-card p-8 shadow-[var(--shadow-lg)] content-card"
             data-astro-prefetch
             transition:name={`blog-card-${post.id}`}
           >
@@ -61,7 +63,7 @@ function formatDate(date: Date) {
               {formatDate(post.data.pubDate)}
             </span>
             <h2
-              class="text-2xl md:text-3xl font-black uppercase tracking-tight mt-4 mb-3"
+              class="text-2xl md:text-3xl font-bold uppercase tracking-tight mt-4 mb-3"
               transition:name={`blog-title-${post.id}`}
             >
               {post.data.title}
@@ -69,7 +71,7 @@ function formatDate(date: Date) {
             <p class="text-lg font-medium text-muted-foreground leading-relaxed mb-6">
               {post.data.description}
             </p>
-            <span class="inline-block mt-auto border-b-4 border-foreground text-lg font-black uppercase">
+            <span class="inline-block mt-auto border-b-2 border-foreground text-lg font-black uppercase">
               Read Post &rarr;
             </span>
           </a>

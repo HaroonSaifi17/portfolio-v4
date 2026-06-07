@@ -4,16 +4,26 @@ import BlogPost from '../../layouts/BlogPost.astro';
 
 export async function getStaticPaths() {
   const posts = await getCollection('blog');
-  return posts.map((post) => ({
-    params: { slug: post.id },
-    props: { post, slug: post.id },
-  }));
+  return posts.map((post) => {
+    const text = post.body ?? '';
+    const wordCount = text.trim().split(/\s+/).filter(Boolean).length;
+    const readingTimeMinutes = Math.max(1, Math.round(wordCount / 220));
+    return {
+      params: { slug: post.id },
+      props: { post, slug: post.id, wordCount, readingTimeMinutes },
+    };
+  });
 }
 
-const { post, slug } = Astro.props;
+const { post, slug, wordCount, readingTimeMinutes } = Astro.props;
 const { Content } = await render(post);
 ---
 
-<BlogPost {...post.data} slug={slug}>
+<BlogPost
+  {...post.data}
+  slug={slug}
+  wordCount={wordCount}
+  readingTimeMinutes={readingTimeMinutes}
+>
   <Content />
 </BlogPost>

@@ -93,7 +93,7 @@ $effect(() => {
 <section
   bind:this={section}
   id="experience"
-  class="grid grid-cols-1 lg:grid-cols-5 gap-y-12 lg:gap-y-0 lg:gap-x-16 xl:gap-x-20 border-t-4 border-foreground pt-20 pb-6 lg:pb-10"
+  class="grid grid-cols-1 lg:grid-cols-5 gap-y-12 lg:gap-y-0 lg:gap-x-16 xl:gap-x-20 border-t-2 border-foreground pt-20 pb-6 lg:pb-10"
 >
   <div class="lg:col-span-2">
     <h2
@@ -108,10 +108,10 @@ $effect(() => {
 
   <div class="exp-cards lg:col-span-3 space-y-6">
     <Card.Root
-      class="exp-card p-6 lg:p-7 gap-0 border-4 border-foreground shadow-[var(--shadow-lg)] card-hover"
+      class="exp-card p-6 lg:p-7 gap-0 border-2 border-foreground shadow-[var(--shadow-lg)] card-hover"
     >
       <div
-        class="flex flex-col sm:flex-row justify-between sm:items-end border-b-4 border-foreground pb-4 mb-6 gap-4"
+        class="flex flex-col sm:flex-row justify-between sm:items-end border-b-2 border-foreground pb-4 mb-6 gap-4"
       >
         <div>
           <h3 class="text-2xl md:text-3xl font-black uppercase">MeowFi</h3>
@@ -159,10 +159,10 @@ $effect(() => {
     </Card.Root>
 
     <Card.Root
-      class="exp-card p-6 lg:p-7 gap-0 border-4 border-foreground shadow-[var(--shadow-lg)] card-hover"
+      class="exp-card p-6 lg:p-7 gap-0 border-2 border-foreground shadow-[var(--shadow-lg)] card-hover"
     >
       <div
-        class="flex flex-col sm:flex-row justify-between sm:items-end border-b-4 border-foreground pb-4 mb-6 gap-4"
+        class="flex flex-col sm:flex-row justify-between sm:items-end border-b-2 border-foreground pb-4 mb-6 gap-4"
       >
         <div>
           <h3 class="text-2xl md:text-3xl font-black uppercase">Freelance</h3>

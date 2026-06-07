@@ -18,14 +18,16 @@ function formatDate(date: Date) {
 ---
 
 <Layout
-  title="Software Case Studies | Mohd Haroon"
-  description="Explore software case studies by Mohd Haroon covering architecture decisions, product outcomes, and full-stack engineering tradeoffs."
-  image="/images/preview.png"
+  title="Software Case Studies by Mohd Haroon — Full Stack Projects"
+  description="Software case studies by Mohd Haroon covering full-stack architecture, DeFi, EdTech, monorepo design, type-safe APIs, and engineering tradeoffs from production work."
+  image="/images/og-default.png"
   imageAlt="Mohd Haroon software case studies"
   keywords={[
     'software case studies',
     'full stack project architecture',
     'engineering case study',
+    'defi case study',
+    'edtech case study',
   ]}
   breadcrumbs={[
     { name: 'Home', item: '/' },
@@ -39,7 +41,7 @@ function formatDate(date: Date) {
       <h1 class="page-title text-5xl md:text-7xl font-black uppercase tracking-tighter">
         Case Studies
       </h1>
-      <p class="page-subtitle text-xl font-bold max-w-xl border-l-4 border-primary pl-6">
+      <p class="page-subtitle text-xl font-bold max-w-xl border-l-2 border-primary pl-6">
         Deep dives into projects, decisions, and lessons learned.
       </p>
     </header>
@@ -49,13 +51,13 @@ function formatDate(date: Date) {
         studies.map((study, i) => (
           <a
             href={`/case-studies/${study.id}`}
-            class="group block border-4 border-foreground bg-card content-card"
+            class="group block border-2 border-foreground bg-card content-card"
             data-astro-prefetch
             transition:name={`case-study-card-${study.id}`}
           >
             <div class="flex flex-col md:flex-row">
               {/* Left: Number + Category */}
-              <div class="flex md:flex-col items-center justify-center gap-3 md:gap-2 px-6 py-4 md:py-8 md:px-8 border-b-4 md:border-b-0 md:border-r-4 border-foreground bg-foreground text-background md:min-w-[7rem]">
+              <div class="flex md:flex-col items-center justify-center gap-3 md:gap-2 px-6 py-4 md:py-8 md:px-8 border-b-2 md:border-b-0 md:border-r-2 border-foreground bg-foreground text-background md:min-w-[7rem]">
                 <span class="text-3xl md:text-5xl font-black leading-none">
                   {String(i + 1).padStart(2, '0')}
                 </span>
@@ -83,7 +85,7 @@ function formatDate(date: Date) {
                 </div>
 
                 <h2
-                  class="text-2xl md:text-4xl font-black uppercase tracking-tight leading-tight"
+                  class="text-2xl md:text-4xl font-bold uppercase tracking-tight leading-tight"
                   transition:name={`case-study-title-${study.id}`}
                 >
                   {study.data.title}

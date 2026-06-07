@@ -1,6 +1,6 @@
 ---
 title: "MeowFi DeFi Monorepo"
-description: "Learn how I scaled MeowFi into a full-stack DeFi monorepo. Covers tRPC contracts, multicall data pipelines, and resilient wallet transaction UX patterns."
+description: "Learn how I scaled MeowFi into a full-stack DeFi monorepo. Covers tRPC contracts, multicall data pipelines, neverthrow transaction flows, and wallet plus Discord auth."
 pubDate: "2025-02-10"
 updatedDate: "2026-03-19"
 heroImage: "/images/meowfi-screenshot.webp"
@@ -23,6 +23,17 @@ stack:
 liveUrl: "https://app.meowfi.xyz"
 tags: ["Web3", "DeFi", "tRPC", "Monorepo", "Case Study"]
 ---
+
+import Tldr from '../../components/mdx/Tldr.astro';
+import Faq from '../../components/mdx/Faq.astro';
+
+<Tldr>
+MeowFi is a DeFi application on Monad combining yield vaults, liquidity pools, swaps, referrals, and NFT-gated role verification. I joined as a frontend engineer and expanded ownership into backend architecture, moving the project to an NPM workspaces monorepo with tRPC end-to-end type safety, batched multicall data pipelines, and neverthrow-based transaction flows.
+</Tldr>
+
+## What Is the MeowFi DeFi Monorepo?
+
+The **MeowFi DeFi monorepo** is a full-stack application combining a React frontend and an Express + tRPC backend in a single NPM workspaces repository. It powers yield vaults, bribe mechanics, token swaps, liquidity pools, referral flows, and Discord role verification backed by NFT ownership on Monad. The shared type contracts from tRPC give the frontend compile-time guarantees on backend payloads.
 
 ## Project Overview
 
@@ -127,3 +138,28 @@ apps/
       setup/               # viem client, discord, analytics jobs
       models/              # MongoDB schemas
 ```
+
+<Faq
+  items={[
+    {
+      q: "What is the MeowFi monorepo architecture?",
+      a: "An NPM workspaces monorepo with two apps: a React + TypeScript frontend and an Express + tRPC backend. Shared tRPC AppRouter types give the frontend compile-time guarantees on backend payloads so schema changes surface as build errors, not runtime bugs."
+    },
+    {
+      q: "How did MeowFi reduce blockchain RPC latency?",
+      a: "Reads were centralized in backend tRPC procedures that batch vault getters, asset positions, bribe stats, and token balances into single Viem multicall requests. This removed per-field client-side fan-out and made dashboards faster and more consistent under load."
+    },
+    {
+      q: "How were multi-step DeFi transactions made safer?",
+      a: "Approval checks, Permit2 approval, spender approval, transaction submission, and receipt confirmation were wrapped into composable neverthrow ResultAsync utilities. Components chain them with andThen and emit explicit toast stages for approval, execution, confirmation, and success or failure."
+    },
+    {
+      q: "How does MeowFi connect wallet ownership to Discord roles?",
+      a: "Discord OAuth issues a JWT on callback. A protected role-assignment endpoint verifies a signed wallet message, checks ERC721 ownership on chain, binds the wallet address, and assigns the mapped Discord role. A scheduled reconciliation job removes the role if NFT ownership is no longer valid."
+    },
+    {
+      q: "What stack powers the MeowFi DeFi app?",
+      a: "React, TypeScript, tRPC, Viem, Wagmi, Ethers, Express, MongoDB, neverthrow, and Shadcn/ui. The frontend is feature-modular and the backend is split into domain routers for vaults, assets, tokens, referrals, and role assignment."
+    }
+  ]}
+/>

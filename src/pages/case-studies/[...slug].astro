@@ -4,16 +4,26 @@ import CaseStudy from '../../layouts/CaseStudy.astro';
 
 export async function getStaticPaths() {
   const studies = await getCollection('case-studies');
-  return studies.map((study) => ({
-    params: { slug: study.id },
-    props: { study, slug: study.id },
-  }));
+  return studies.map((study) => {
+    const text = study.body ?? '';
+    const wordCount = text.trim().split(/\s+/).filter(Boolean).length;
+    const readingTimeMinutes = Math.max(1, Math.round(wordCount / 220));
+    return {
+      params: { slug: study.id },
+      props: { study, slug: study.id, wordCount, readingTimeMinutes },
+    };
+  });
 }
 
-const { study, slug } = Astro.props;
+const { study, slug, wordCount, readingTimeMinutes } = Astro.props;
 const { Content } = await render(study);
 ---
 
-<CaseStudy {...study.data} slug={slug}>
+<CaseStudy
+  {...study.data}
+  slug={slug}
+  wordCount={wordCount}
+  readingTimeMinutes={readingTimeMinutes}
+>
   <Content />
 </CaseStudy>

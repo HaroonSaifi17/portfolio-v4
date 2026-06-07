@@ -1,11 +1,11 @@
 ---
 title: "PrepZone Angular Platform"
-description: 'Learn how I built PrepZone, an Angular and Express EdTech platform. Covers Google OAuth, timed mock tests, analytics architecture, and admin operations tooling.'
-pubDate: '2025-02-12'
-updatedDate: '2026-03-19'
-role: 'Full-Stack Developer (Solo)'
-timeline: 'Jun 2023 — Dec 2024'
-category: 'EdTech'
+description: "Learn how I built PrepZone, an Angular and Express EdTech platform. Covers Google OAuth, timed mock tests, analytics architecture, and admin operations tooling."
+pubDate: "2025-02-12"
+updatedDate: "2026-03-19"
+role: "Full-Stack Developer (Solo)"
+timeline: "Jun 2023 — Dec 2024"
+category: "EdTech"
 stack:
   - Angular
   - TypeScript
@@ -19,9 +19,20 @@ stack:
   - Chart.js
   - Tailwind CSS
   - MathJax
-liveUrl: 'https://prepzone.haroonsaifi.dev'
-tags: ['Angular', 'EdTech', 'Case Study', 'Full Stack', 'System Design']
+liveUrl: "https://prepzone.haroonsaifi.dev"
+tags: ["Angular", "EdTech", "Case Study", "Full Stack", "System Design"]
 ---
+
+import Tldr from '../../components/mdx/Tldr.astro';
+import Faq from '../../components/mdx/Faq.astro';
+
+<Tldr>
+PrepZone is a full-stack JEE and NEET assessment platform built solo with Angular, Express, and MongoDB. It includes Google OAuth for students, JWT-protected admin tooling, exam-aware test generation with mixed question formats, deterministic scoring, and a Chart.js analytics layer for both students and admins. Shipped in 175 commits across two repositories and served real students in production.
+</Tldr>
+
+## What Is PrepZone?
+
+**PrepZone** is a full-stack EdTech assessment platform for JEE and NEET preparation built by Mohd Haroon as a solo full-stack project. It combines an Angular student app, an Angular admin app, and an Express + MongoDB backend with Google OAuth, mixed-format test generation, deterministic scoring, and a Chart.js analytics dashboard used by both students and admins.
 
 ## Project Overview
 
@@ -118,3 +129,28 @@ Across both repositories, I shipped **175 commits** (`107` frontend + `68` backe
 ## What This Project Taught Me
 
 PrepZone was the project where I learned how to think in systems, not just screens. I had to connect UX, exam logic, data models, auth, and operations into one coherent architecture. That experience directly shaped how I approach larger production systems now.
+
+<Faq
+  items={[
+    {
+      q: "What is PrepZone?",
+      a: "PrepZone is a full-stack EdTech assessment platform for JEE and NEET preparation built solo with Angular, Express, and MongoDB. It includes a student app, an admin app, Google OAuth authentication, exam-aware test generation, and a Chart.js analytics dashboard."
+    },
+    {
+      q: "How does PrepZone generate mock tests?",
+      a: "The admin Generate Paper flow uses MongoDB aggregation to sample questions by difficulty from subject-specific collections. JEE supports mixed MCQ and numerical questions. Metadata such as subject arrays, question IDs, correct answers, and test format are persisted for deterministic evaluation."
+    },
+    {
+      q: "How is PrepZone scoring calculated?",
+      a: "The student result pipeline computes correct, wrong, and unanswered counts, a +4 or -1 negative-marking score, subject-level stats, time per test, and historical aggregates for top and average marks. Frontend result pages reconstruct each attempt question by question and visualize outcomes with Chart.js."
+    },
+    {
+      q: "How does PrepZone handle authentication and roles?",
+      a: "Students authenticate with Google OAuth via Passport and receive JWT tokens that the Angular app uses through a callback route. Admins use a separate local auth flow with admin JWTs. Angular route guards and Express JWT middleware enforce role boundaries for both surfaces."
+    },
+    {
+      q: "What tech stack does PrepZone use?",
+      a: "Angular with TypeScript and RxJS on the frontend, Node.js with Express on the backend, MongoDB for storage, Passport.js for Google OAuth, JWT for protected routes, Multer for file uploads, Chart.js for analytics, and MathJax for rendering exam formulas."
+    }
+  ]}
+/>

@@ -21,6 +21,8 @@ interface Props {
   repoUrl?: string;
   category?: string;
   tags?: string[];
+  wordCount?: number;
+  readingTimeMinutes?: number;
 }
 
 const {
@@ -39,17 +41,38 @@ const {
   repoUrl,
   category,
   tags = [],
+  wordCount,
+  readingTimeMinutes,
 } = Astro.props;
 
 const transitionId =
   slug ?? `case-study-${title.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`;
 
-const studies = (await getCollection('case-studies')).sort(
+const allStudies = (await getCollection('case-studies')).sort(
   (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
 );
-const currentIndex = studies.findIndex((s) => s.id === slug);
-const prevStudy = currentIndex >= 0 ? studies[currentIndex + 1] : undefined;
-const nextStudy = currentIndex > 0 ? studies[currentIndex - 1] : undefined;
+const currentIndex = allStudies.findIndex((s) => s.id === slug);
+const prevStudy = currentIndex >= 0 ? allStudies[currentIndex + 1] : undefined;
+const nextStudy = currentIndex > 0 ? allStudies[currentIndex - 1] : undefined;
+
+const otherStudies = allStudies.filter((s) => s.id !== slug);
+const relatedStudies = otherStudies
+  .map((s) => {
+    const sharedTags = (s.data.tags ?? []).filter((t) =>
+      (tags ?? []).includes(t),
+    ).length;
+    const sameCategory =
+      s.data.category && s.data.category === category ? 1 : 0;
+    return { study: s, score: sharedTags * 2 + sameCategory };
+  })
+  .sort((a, b) => b.score - a.score)
+  .slice(0, 3)
+  .map((entry) => entry.study);
+const allRecentStudies = otherStudies
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+  .slice(0, 3);
+const finalRelatedStudies =
+  relatedStudies.length > 0 ? relatedStudies : allRecentStudies;
 
 function formatDate(date: Date) {
   return date.toLocaleDateString('en-US', {
@@ -63,10 +86,10 @@ const hasMetadata = role || timeline || stack?.length || liveUrl || repoUrl;
 ---
 
 <Layout
-  title={`${title} | Case Study by Mohd Haroon`}
+  title={title.length > 55 ? title : `${title} | Mohd Haroon`}
   description={description}
-  image={heroImage ?? '/images/preview.png'}
-  imageAlt={title}
+  image={heroImage ?? '/images/og-default.png'}
+  imageAlt={`${title} — case study hero image`}
   type="article"
   schemaType="TechArticle"
   publishDate={pubDate}
@@ -74,12 +97,32 @@ const hasMetadata = role || timeline || stack?.length || liveUrl || repoUrl;
   section="Case Study"
   tags={tags}
   keywords={['software case study', 'engineering architecture', 'full stack project']}
+  wordCount={wordCount}
+  readingTimeMinutes={readingTimeMinutes}
   breadcrumbs={[
     { name: 'Home', item: '/' },
     { name: 'Case Studies', item: '/case-studies' },
     { name: title, item: `/case-studies/${slug ?? ''}` },
   ]}
 >
+  <Fragment slot="head">
+    {liveUrl && (
+      <script
+        is:inline
+        type="application/ld+json"
+        set:html={JSON.stringify({
+          '@context': 'https://schema.org',
+          '@type': 'WebApplication',
+          name: title,
+          description: description,
+          url: liveUrl,
+          applicationCategory: 'WebApplication',
+          operatingSystem: 'All',
+          author: { '@type': 'Person', name: 'Mohd Haroon' },
+        }).replace(/</g, '\\u003c')}
+      />
+    )}
+  </Fragment>
   <Navbar client:load />
 
   <article id="top" class="w-full" transition:name={`case-study-card-${transitionId}`}>
@@ -103,8 +146,8 @@ const hasMetadata = role || timeline || stack?.length || liveUrl || repoUrl;
         }
 
         <h1
-          class="text-[clamp(2.5rem,6vw,5rem)] font-black uppercase tracking-tighter leading-none max-w-4xl"
-          transition:name={`case-study-title-${transitionId}`}
+        class="text-[clamp(2.5rem,6vw,5rem)] font-black uppercase tracking-tighter leading-none max-w-4xl"
+        transition:name={`case-study-title-${transitionId}`}
         >
           {title}
         </h1>
@@ -137,9 +180,9 @@ const hasMetadata = role || timeline || stack?.length || liveUrl || repoUrl;
                   href={liveUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  class="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-black uppercase tracking-wider border-4 border-foreground bg-foreground text-background shadow-[var(--shadow-sm)] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:border-primary hover:bg-primary hover:text-primary-foreground transition-all duration-200"
+                  class="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-black uppercase tracking-wider border-2 border-foreground bg-foreground text-background shadow-[var(--shadow-sm)] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[6px_6px_0px_0px_var(--border)] hover:border-primary hover:bg-primary hover:text-primary-foreground transition-all duration-200"
                 >
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="square"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
                   Live Project
                 </a>
               )}
@@ -148,9 +191,9 @@ const hasMetadata = role || timeline || stack?.length || liveUrl || repoUrl;
                   href={repoUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  class="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-black uppercase tracking-wider border-4 border-foreground bg-background shadow-[var(--shadow-sm)] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:border-primary transition-all duration-200"
+                  class="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-black uppercase tracking-wider border-2 border-foreground bg-background shadow-[var(--shadow-sm)] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[6px_6px_0px_0px_var(--border)] hover:border-primary transition-all duration-200"
                 >
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="square"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
                   Source Code
                 </a>
               )}
@@ -165,19 +208,25 @@ const hasMetadata = role || timeline || stack?.length || liveUrl || repoUrl;
       heroImage && (
         <div class="max-w-6xl mx-auto px-6 -mt-8 relative z-10">
           {heroImageCrop ? (
-            <div class="w-full h-[280px] sm:h-[360px] lg:h-[440px] border-4 border-foreground shadow-[var(--shadow-lg)] overflow-hidden bg-card">
+            <div class="w-full h-[280px] sm:h-[360px] lg:h-[440px] border-2 border-foreground shadow-[var(--shadow-lg)] overflow-hidden bg-card">
               <img
                 src={heroImage}
-                alt={title}
+                alt={`${title} — ${description}`}
                 class={`w-full h-full object-cover ${heroImagePosition === 'top' ? 'object-top' : 'object-center'}`}
+                loading="eager"
+                decoding="async"
+                fetchpriority="high"
                 transition:name={`case-study-hero-${transitionId}`}
               />
             </div>
           ) : (
             <img
               src={heroImage}
-              alt={title}
-              class="w-full border-4 border-foreground shadow-[var(--shadow-lg)] block"
+              alt={`${title} — ${description}`}
+              class="w-full border-2 border-foreground shadow-[var(--shadow-lg)] block"
+              loading="eager"
+              decoding="async"
+              fetchpriority="high"
               transition:name={`case-study-hero-${transitionId}`}
             />
           )}
@@ -245,11 +294,11 @@ const hasMetadata = role || timeline || stack?.length || liveUrl || repoUrl;
     </div>
 
     <!-- Prev/Next Navigation -->
-    <nav class="max-w-6xl mx-auto px-6 pb-16 border-t-4 border-foreground pt-8 grid grid-cols-1 sm:grid-cols-2 gap-4">
+    <nav class="max-w-6xl mx-auto px-6 pb-16 border-t-2 border-foreground pt-8 grid grid-cols-1 sm:grid-cols-2 gap-4">
       {prevStudy ? (
         <a
           href={`/case-studies/${prevStudy.id}`}
-          class="flex items-center gap-4 p-5 border-4 border-foreground bg-card shadow-[var(--shadow-sm)] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:border-primary transition-all duration-200"
+          class="flex items-center gap-4 p-5 border-2 border-foreground bg-card shadow-[var(--shadow-sm)] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[6px_6px_0px_0px_var(--border)] hover:border-primary transition-all duration-200"
           data-astro-prefetch
         >
           <span class="text-2xl font-black shrink-0">&larr;</span>
@@ -259,7 +308,7 @@ const hasMetadata = role || timeline || stack?.length || liveUrl || repoUrl;
           </span>
         </a>
       ) : (
-        <span class="flex items-center gap-4 p-5 border-4 border-foreground bg-card opacity-40 pointer-events-none" aria-hidden="true">
+        <span class="flex items-center gap-4 p-5 border-2 border-foreground bg-card opacity-40 pointer-events-none" aria-hidden="true">
           <span class="text-2xl font-black shrink-0">&larr;</span>
           <span class="flex flex-col gap-1">
             <span class="text-xs font-black tracking-widest uppercase text-muted-foreground">Previous</span>
@@ -271,7 +320,7 @@ const hasMetadata = role || timeline || stack?.length || liveUrl || repoUrl;
       {nextStudy ? (
         <a
           href={`/case-studies/${nextStudy.id}`}
-          class="flex items-center gap-4 p-5 border-4 border-foreground bg-card shadow-[var(--shadow-sm)] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:border-primary transition-all duration-200 text-right justify-end"
+          class="flex items-center gap-4 p-5 border-2 border-foreground bg-card shadow-[var(--shadow-sm)] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[6px_6px_0px_0px_var(--border)] hover:border-primary transition-all duration-200 text-right justify-end"
           data-astro-prefetch
         >
           <span class="flex flex-col gap-1">
@@ -281,15 +330,63 @@ const hasMetadata = role || timeline || stack?.length || liveUrl || repoUrl;
           <span class="text-2xl font-black shrink-0">&rarr;</span>
         </a>
       ) : (
-        <span class="flex items-center gap-4 p-5 border-4 border-foreground bg-card opacity-40 pointer-events-none text-right justify-end" aria-hidden="true">
+        <span class="flex items-center gap-4 p-5 border-2 border-foreground bg-card opacity-40 pointer-events-none text-right justify-end" aria-hidden="true">
+          <span class="text-2xl font-black shrink-0">&rarr;</span>
           <span class="flex flex-col gap-1">
             <span class="text-xs font-black tracking-widest uppercase text-muted-foreground">Next</span>
             <span class="text-base font-black uppercase tracking-tight">&mdash;</span>
           </span>
-          <span class="text-2xl font-black shrink-0">&rarr;</span>
         </span>
       )}
     </nav>
+
+    {
+      finalRelatedStudies.length > 0 && (
+        <section
+          class="max-w-6xl mx-auto px-6 pb-16"
+          aria-labelledby="related-studies-heading"
+        >
+          <h2
+            id="related-studies-heading"
+            class="text-2xl md:text-3xl font-black uppercase tracking-tighter border-b-2 border-foreground pb-2 mb-6"
+          >
+            Related Case Studies
+          </h2>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {finalRelatedStudies.map((s) => (
+              <a
+                href={`/case-studies/${s.id}`}
+                class="related-card group block border-2 border-foreground bg-card content-card"
+                data-astro-prefetch
+                transition:name={`case-study-card-${s.id}`}
+              >
+                <div class="p-5 space-y-3">
+                  <div class="flex flex-wrap items-center gap-2">
+                    <span
+                      class="font-black uppercase tracking-widest bg-foreground text-background px-2 py-1 text-xs"
+                      transition:name={`case-study-date-${s.id}`}
+                    >
+                      {formatDate(s.data.pubDate)}
+                    </span>
+                    {s.data.category && (
+                      <span class="font-bold uppercase tracking-wider text-muted-foreground text-xs">
+                        {s.data.category}
+                      </span>
+                    )}
+                  </div>
+                  <h3 class="text-lg font-bold uppercase tracking-tight leading-tight">
+                    {s.data.title}
+                  </h3>
+                  <p class="text-sm font-medium text-muted-foreground leading-relaxed line-clamp-3">
+                    {s.data.description}
+                  </p>
+                </div>
+              </a>
+            ))}
+          </div>
+        </section>
+      )
+    }
   </article>
 
   <!-- Back to top -->

@@ -6,7 +6,15 @@ let { animate = false } = $props();
 let footer: HTMLElement | undefined = $state();
 
 $effect(() => {
-  if (!footer || !animate) return;
+  if (!footer) return;
+
+  if (!animate) {
+    gsap.set(['.footer-title', '.footer-email', '.footer-link'], {
+      autoAlpha: 1,
+      clearProps: 'transform',
+    });
+    return;
+  }
 
   gsap.registerPlugin(ScrollTrigger);
 
@@ -65,7 +73,7 @@ $effect(() => {
 <footer
   bind:this={footer}
   id="contact"
-  class="border-t-4 border-foreground bg-card mt-32 relative overflow-hidden"
+  class="border-t-2 border-foreground bg-card mt-32 relative overflow-hidden"
   data-cursor-exclude
 >
   <div class="footer-surface" aria-hidden="true"></div>
@@ -155,7 +163,7 @@ $effect(() => {
 
   .artifact {
     position: absolute;
-    border: 3px solid var(--border);
+    border: 2px solid var(--border);
     box-shadow: var(--shadow-sm);
     background: var(--card);
     opacity: 0.95;
@@ -205,7 +213,7 @@ $effect(() => {
     left: 12px;
     right: 12px;
     top: 50%;
-    border-top: 3px dashed var(--border);
+    border-top: 2px dashed var(--border);
   }
 
   .artifact--barcode {

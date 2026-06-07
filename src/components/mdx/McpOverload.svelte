@@ -1,6 +1,17 @@
 <script lang="ts">
-  const allMcps = ['Gmail', 'Slack', 'Notion', 'GitHub', 'Linear', 'Jira', 'Stripe', 'Figma', 'Calendar', 'Sentry'];
-  const focusedMcps = ['GitHub', 'Bash'];
+const allMcps = [
+  'Gmail',
+  'Slack',
+  'Notion',
+  'GitHub',
+  'Linear',
+  'Jira',
+  'Stripe',
+  'Figma',
+  'Calendar',
+  'Sentry',
+];
+const focusedMcps = ['GitHub', 'Bash'];
 </script>
 
 <div class="mcp-container relative my-8 md:my-12 p-4 sm:p-8 rounded-none bg-neutral-900 border border-neutral-800 shadow-2xl font-sans overflow-hidden w-full">

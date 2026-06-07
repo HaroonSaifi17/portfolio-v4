@@ -1,15 +1,26 @@
 ---
 title: "Azure App Service Failure: Portfolio Deployment"
-description: "Learn how an Azure App Service deployment failed silently and how I fixed it. Covers health checks, wildcard routes, debugging steps, and rollback strategy."
+description: "Learn how an Azure App Service deployment failed silently, the missing wildcard route that triggered it, and the alerting and rollback strategy I now use on every deploy."
 pubDate: "2022-07-08"
 updatedDate: "2024-07-08"
 heroImage: "/images/azure-thumbnail.webp"
+category: "DevOps"
 tags: ["Azure", "App Service", "DevOps", "Deployment", "Postmortem"]
 ---
 
 import Callout from "../../components/mdx/Callout.astro";
 import Divider from "../../components/mdx/Divider.astro";
 import StepList from "../../components/mdx/StepList.astro";
+import Tldr from "../../components/mdx/Tldr.astro";
+import Faq from "../../components/mdx/Faq.astro";
+
+<Tldr>
+I moved my portfolio from Vercel to Azure App Service and a deployment broke silently for an entire day because a wildcard route had been removed. Azure's health check pings a specific route and marks the whole deployment failed if it 404s, even if the container is alive. The fix was the wildcard route, but the real lesson was to wire up deployment alerts and keep a rollback ready before shipping.
+</Tldr>
+
+## Why Does Azure App Service Mark a Deployment Failed?
+
+**Azure App Service marks a deployment failed when its health check route returns anything other than a 200 response.** The container can be running and the home page can be loading, but if the path Azure probes during deployment returns 404, the entire rollout is treated as failed. The error message often points to something unrelated to the actual cause.
 
 I moved my portfolio from Vercel to Azure. It seemed like a good idea at the time. Here's what happened.
 
@@ -88,3 +99,28 @@ Re-adding the wildcard route fixed everything instantly.
 - **Always have a rollback plan.** Keeping the Vercel deployment ready saved me from extended downtime.
 
 This was frustrating, but it taught me more about deployment infrastructure than any tutorial could. Sometimes the best learning comes from things breaking at the worst possible time.
+
+<Faq
+  items={[
+    {
+      q: "How do I fix a failed Azure App Service deployment?",
+      a: "Check the deployment logs in the Azure portal, then verify that the route Azure's health check pings returns a 200. A common cause is a missing wildcard route or a 404 on the path the platform probes. Fix the route, redeploy, and confirm the health check passes."
+    },
+    {
+      q: "Why does Azure App Service mark a deployment as failed when the container is running?",
+      a: "Azure does not just check that the container is alive. It pings a specific HTTP route and marks the rollout failed if that route does not return 200. The home page can be fine while the probed route 404s, which is why these failures are easy to miss."
+    },
+    {
+      q: "How do I set up deployment alerts for Azure App Service?",
+      a: "Wire Azure Monitor alerts on the deployment status metric and on HTTP 5xx rates, plus an availability test on the health check route. Push those to email, Slack, or PagerDuty so a silent failure is loud within minutes, not discovered the next day."
+    },
+    {
+      q: "What is the safest way to roll back a failed Azure deployment?",
+      a: "Keep the previous image tagged in Azure Container Registry and redeploy the prior tag through the same GitHub Actions pipeline. For App Service, slot swaps or re-deploying the last known good image are both faster than fixing forward under pressure."
+    },
+    {
+      q: "Should I move a portfolio from Vercel to Azure App Service?",
+      a: "Only if you specifically want to learn Azure infrastructure or you have a workload that needs a long-running container. For static and JAMStack portfolios, Vercel is faster, simpler, and its build and deploy flow is far more forgiving than App Service health checks."
+    }
+  ]}
+/>

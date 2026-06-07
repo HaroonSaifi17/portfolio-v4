@@ -1,13 +1,24 @@
 ---
 title: "Cursor is Cool, But I'm Sticking With Neovim"
-description: "Learn why I still use Neovim over AI IDEs after three years. Covers terminal-first workflow, plugin maintenance tradeoffs, and practical developer learning habits."
+description: "Learn why I still use Neovim over AI IDEs like Cursor after three years. Covers terminal-first workflow, plugin maintenance tradeoffs, and developer learning habits."
 pubDate: "2025-07-07"
 updatedDate: "2025-07-07"
-tags: ['Neovim', 'Developer Workflow', 'Tooling', 'AI Coding']
+category: "Tools"
+tags: ["Neovim", "Developer Workflow", "Tooling", "AI Coding"]
 ---
 
 import Callout from '../../components/mdx/Callout.astro';
 import Divider from '../../components/mdx/Divider.astro';
+import Tldr from '../../components/mdx/Tldr.astro';
+import Faq from '../../components/mdx/Faq.astro';
+
+<Tldr>
+I have used Neovim as my primary editor for three years, including a custom 150+ plugin config that I eventually replaced with LazyVim. Cursor and other AI IDEs are objectively powerful, but I stick with Neovim because it is terminal-first, composable, and stays out of the way while I think. The decision is not about productivity metrics; it is about which editor fits how I like to learn and ship.
+</Tldr>
+
+## Is Neovim Better Than Cursor for Developers in 2026?
+
+**Neovim is not better than Cursor, but it is the right editor for developers who want a terminal-first, fully composable environment that does not think for them by default.** Cursor is the faster tool for solving problems as quickly as possible; Neovim is the better tool for staying close to the code while you are still learning. The choice depends on whether speed or understanding is the priority.
 
 Every developer I know is talking about **Cursor**. It's an AI-powered IDE that's getting a ton of buzz — and for good reason. I get the appeal. But I'm sticking with **Neovim**.
 
@@ -66,3 +77,28 @@ It's not about productivity metrics or being contrarian. Neovim fits how I like 
 - **Mine** — my config reflects my workflow. Nothing extra, nothing missing. Every keybind exists because I put it there.
 
 The joy is in the tinkering, the problem-solving, and the slow process of getting better at your craft. For that journey, Neovim is the right companion.
+
+<Faq
+  items={[
+    {
+      q: "Is Neovim faster than Cursor?",
+      a: "For pure throughput Cursor wins because its AI chat and inline editing are deeply integrated. Neovim wins for developers who measure speed inside the editor itself: navigation, multi-cursor edits, and macros are unmatched once Vim motions are muscle memory."
+    },
+    {
+      q: "Should I use Neovim or LazyVim as a beginner?",
+      a: "Start with LazyVim or AstroNvim. Both ship a sane default config with LSP, Treesitter, and a file tree already wired up, and you can eject into a custom config later once you understand which pieces you actually want to change."
+    },
+    {
+      q: "Can you use AI coding tools inside Neovim?",
+      a: "Yes. GitHub Copilot works through a Neovim plugin, and tools like Claude Code, OpenCode, and Aider run in the terminal right next to Neovim in a tmux pane. You get the terminal-first workflow without giving up AI assistance."
+    },
+    {
+      q: "How long does it take to learn Neovim?",
+      a: "The basics take a week: modes, hjkl, i, esc, :w, :q, dd, p. Vim motions become comfortable in a month. Customizing your config to fit your workflow takes longer, which is exactly why starting from LazyVim is faster than building from scratch."
+    },
+    {
+      q: "Is Neovim good for full stack web development?",
+      a: "Yes. With LSP support for TypeScript, Python, Go, Rust, and any other backend language, plus Treesitter for syntax highlighting, Neovim handles full stack projects without compromise. The terminal-first nature actually fits backend and DevOps work especially well."
+    }
+  ]}
+/>

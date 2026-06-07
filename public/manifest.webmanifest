@@ -1,0 +1,21 @@
+{
+  "name": "Mohd Haroon — Full Stack Developer",
+  "short_name": "MH Portfolio",
+  "description": "Personal portfolio, engineering blog, and case studies by Mohd Haroon — full stack developer.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#f4f4f0",
+  "theme_color": "#ff4d00",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["developer", "portfolio", "blog"],
+  "lang": "en-US"
+}
