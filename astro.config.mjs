@@ -1,9 +1,13 @@
 // @ts-check
 
+import { EventEmitter } from 'node:events';
+EventEmitter.defaultMaxListeners = 50;
+
 import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
 
 import svelte from '@astrojs/svelte';
+import { unified } from '@astrojs/markdown-remark';
 import tailwindcss from '@tailwindcss/vite';
 import { defineConfig } from 'astro/config';
 import rehypePrettyCode from 'rehype-pretty-code';
@@ -32,6 +36,9 @@ export default defineConfig({
     : undefined,
   markdown: {
     syntaxHighlight: false,
+    processor: unified({
+      rehypePlugins: [[rehypePrettyCode, prettyCodeOptions]],
+    }),
   },
 
   integrations: [
@@ -64,9 +71,7 @@ export default defineConfig({
         };
       },
     }),
-    mdx({
-      rehypePlugins: [[rehypePrettyCode, prettyCodeOptions]],
-    }),
+    mdx(),
   ],
 
   vite: {
