@@ -39,10 +39,10 @@ function formatDate(date: Date) {
 
   <main class="max-w-7xl mx-auto px-6 py-20 space-y-16">
     <header class="space-y-4">
-      <h1 class="page-title text-5xl md:text-7xl font-black uppercase tracking-tighter">
+      <h1 class="page-title text-5xl md:text-7xl font-black uppercase tracking-tight">
         Blog
       </h1>
-      <p class="page-subtitle text-xl font-bold max-w-xl border-l-2 border-primary pl-6">
+      <p class="page-subtitle text-xl font-bold max-w-xl text-muted-foreground">
         Thoughts on web development, tooling, and the developer experience.
       </p>
     </header>
@@ -52,7 +52,7 @@ function formatDate(date: Date) {
         posts.map((post) => (
           <a
             href={`/blog/${post.id}`}
-            class="listing-card group flex flex-col items-start border-2 border-foreground bg-card p-8 shadow-[var(--shadow-lg)] content-card"
+            class="listing-card group flex flex-col items-start border-2 border-foreground bg-card p-8 shadow-[var(--shadow-sm)] content-card"
             data-astro-prefetch
             transition:name={`blog-card-${post.id}`}
           >

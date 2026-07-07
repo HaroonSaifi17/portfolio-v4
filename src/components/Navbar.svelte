@@ -6,10 +6,25 @@ import { slide } from 'svelte/transition';
 let open = $state(false);
 let dark = $state(false);
 let nav: HTMLElement | undefined = $state();
+let currentPath = $state('');
 
 $effect(() => {
   dark = document.documentElement.classList.contains('dark');
 });
+
+$effect(() => {
+  currentPath = window.location.pathname;
+  const handleSwap = () => {
+    currentPath = window.location.pathname;
+  };
+  document.addEventListener('astro:after-swap', handleSwap);
+  return () => {
+    document.removeEventListener('astro:after-swap', handleSwap);
+  };
+});
+
+const isBlog = $derived(currentPath.startsWith('/blog'));
+const isCaseStudies = $derived(currentPath.startsWith('/case-studies'));
 
 $effect(() => {
   if (!nav) return;
@@ -52,13 +67,50 @@ $effect(() => {
 
   return () => ctx.revert();
 });
-
 function toggleTheme() {
   dark = !dark;
   document.documentElement.classList.toggle('dark', dark);
   localStorage.setItem('theme', dark ? 'dark' : 'light');
 }
+
+function handleKeydown(e: KeyboardEvent) {
+  const activeEl = document.activeElement;
+  if (
+    activeEl &&
+    (activeEl.tagName === 'INPUT' ||
+      activeEl.tagName === 'TEXTAREA' ||
+      activeEl.getAttribute('contenteditable') === 'true')
+  ) {
+    return;
+  }
+
+  if (e.key === 'Escape' && open) {
+    open = false;
+    return;
+  }
+
+  // Require Alt key for global shortcut hotkeys to avoid collision/hijacking
+  if (!e.altKey) {
+    return;
+  }
+
+  const key = e.key.toLowerCase();
+  if (key === 't') {
+    toggleTheme();
+  } else if (key === 'w') {
+    window.location.href = '/#work';
+  } else if (key === 'e') {
+    window.location.href = '/#experience';
+  } else if (key === 'b') {
+    window.location.href = '/blog';
+  } else if (key === 'c') {
+    window.location.href = '/case-studies';
+  }
+}
 </script>
+
+<svelte:window onkeydown={handleKeydown} />
+
 
 <nav
   bind:this={nav}
@@ -79,13 +131,19 @@ function toggleTheme() {
       <a href="/#experience" class="nav-link nav-link-hover" data-astro-prefetch
         >Experience</a
       >
-      <a href="/blog" class="nav-link nav-link-hover" data-astro-prefetch
+      <a
+        href="/blog"
+        class="nav-link nav-link-hover"
+        class:text-primary={isBlog}
+        data-astro-prefetch
         >Blog</a
       >
       <a
         href="/case-studies"
         class="nav-link nav-link-hover"
-        data-astro-prefetch>Case Studies</a
+        class:text-primary={isCaseStudies}
+        data-astro-prefetch
+        >Case Studies</a
       >
       <button
         onclick={toggleTheme}
@@ -139,9 +197,17 @@ function toggleTheme() {
       <a href="/#experience" onclick={() => (open = false)} data-astro-prefetch
         >Experience</a
       >
-      <a href="/blog" onclick={() => (open = false)} data-astro-prefetch>Blog</a
+      <a
+        href="/blog"
+        onclick={() => (open = false)}
+        class:text-primary={isBlog}
+        data-astro-prefetch>Blog</a
       >
-      <a href="/case-studies" onclick={() => (open = false)} data-astro-prefetch
+      <a
+        href="/case-studies"
+        onclick={() => (open = false)}
+        class:text-primary={isCaseStudies}
+        data-astro-prefetch
         >Case Studies</a
       >
     </div>

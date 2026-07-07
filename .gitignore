@@ -25,3 +25,13 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+
+# local agent and tool configuration dirs
+.claude/
+.codex/
+.gemini/
+.impeccable/
+
+# design/product docs
+DESIGN.md
+PRODUCT.md

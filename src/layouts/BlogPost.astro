@@ -103,7 +103,7 @@ function formatDate(date: Date) {
       </a>
 
       <h1
-      class="post-title text-4xl md:text-6xl font-black uppercase tracking-tighter leading-tight"
+      class="post-title text-4xl md:text-6xl font-black uppercase tracking-tight leading-tight"
       transition:name={`blog-title-${transitionId}`}
       >
         {title}
@@ -127,12 +127,23 @@ function formatDate(date: Date) {
           href={`https://github.com/HaroonSaifi17/portfolio-v4/edit/master/src/content/blog/${slug}.mdx`}
           target="_blank"
           rel="noopener noreferrer"
-          class="ml-auto flex items-center gap-1.5 font-bold text-sm uppercase tracking-widest hover:text-primary transition-colors"
+          class="ml-auto flex items-center gap-1.5 font-bold text-xs uppercase tracking-widest hover:text-primary transition-colors"
           title="Suggest an edit on GitHub"
         >
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/><path d="m15 5 4 4"/></svg>
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/><path d="m15 5 4 4"/></svg>
+          <span class="max-sm:hidden">Edit Post</span>
         </a>
       </div>
+
+      {tags && tags.length > 0 && (
+        <div class="flex flex-wrap gap-3 mt-6 mb-6 pt-6 border-t-2 border-foreground/10">
+          {tags.map((tag) => (
+            <span class="text-xs font-black uppercase tracking-widest px-3 py-1.5 border-2 border-foreground bg-card shadow-[var(--shadow-sm)]">
+              {tag}
+            </span>
+          ))}
+        </div>
+      )}
 
       {
         heroImage && (
@@ -195,7 +206,7 @@ function formatDate(date: Date) {
         >
           <h2
             id="related-heading"
-            class="text-2xl md:text-3xl font-black uppercase tracking-tighter border-b-2 border-foreground pb-2 mb-6"
+            class="text-2xl md:text-3xl font-black uppercase tracking-tight border-b-2 border-foreground pb-2 mb-6"
           >
             Related Posts
           </h2>

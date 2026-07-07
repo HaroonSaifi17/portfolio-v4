@@ -30,8 +30,9 @@ const { items }: { items: string[] } = $props();
     width: max-content;
   }
 
-  .marquee-wrapper:hover .marquee-track {
-    animation-duration: 50s;
+  .marquee-wrapper:hover .marquee-track,
+  .marquee-wrapper:focus-within .marquee-track {
+    animation-play-state: paused;
   }
 
   @keyframes marquee-slide {
@@ -40,6 +41,20 @@ const { items }: { items: string[] } = $props();
     }
     100% {
       transform: translateX(-50%);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .marquee-track {
+      animation: none;
+      transform: none;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1.5rem;
+      white-space: normal;
+      color: var(--muted-foreground);
+      opacity: 0.8;
     }
   }
 </style>

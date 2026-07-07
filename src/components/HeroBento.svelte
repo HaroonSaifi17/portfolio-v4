@@ -91,12 +91,22 @@ const DOT_COLS = 7;
 const DOT_ROWS = 5;
 const dots = Array.from({ length: DOT_COLS * DOT_ROWS }, (_, i) => i);
 
-// --- Effect: Animations ---
+// --- Effect: Animations & Theme Sync ---
+let activePalette = $state('default');
+
 $effect(() => {
   if (!wrapper) return;
 
   let active = true;
   const intervals: ReturnType<typeof setInterval>[] = [];
+
+  // Theme Sync via MutationObserver
+  const root = document.documentElement;
+  activePalette = root.getAttribute('data-theme') || 'default';
+  const observer = new MutationObserver(() => {
+    activePalette = root.getAttribute('data-theme') || 'default';
+  });
+  observer.observe(root, { attributes: true, attributeFilter: ['data-theme'] });
 
   const ctx = gsap.context(() => {
     gsap.set('.bento-cell', { autoAlpha: 1 });
@@ -118,21 +128,6 @@ $effect(() => {
       },
     });
 
-    // Dot wave animation
-    gsap.to('.bento-dot', {
-      scale: 2,
-      opacity: 1,
-      duration: 0.6,
-      stagger: {
-        each: 0.04,
-        from: 'center',
-        repeat: -1,
-        yoyo: true,
-      },
-      ease: 'sine.inOut',
-      delay: 2.8,
-    });
-
     // Counter
     gsap.to(
       { val: 0 },
@@ -148,7 +143,7 @@ $effect(() => {
     );
   }, wrapper);
 
-  // Typewriter interval — reveal one line at a time
+  // Typewriter — reveal once on mount
   const typeDelay = setTimeout(() => {
     if (!active) return;
     let line = 0;
@@ -161,26 +156,6 @@ $effect(() => {
       visibleLines = line;
       if (line >= codeLines.length) {
         clearInterval(typeInterval);
-        // After finishing, wait then restart
-        setTimeout(() => {
-          if (!active) return;
-          visibleLines = 0;
-          // restart after reset pause
-          setTimeout(() => {
-            if (!active) return;
-            let reLine = 0;
-            const reType = setInterval(() => {
-              if (!active) {
-                clearInterval(reType);
-                return;
-              }
-              reLine++;
-              visibleLines = reLine;
-              if (reLine >= codeLines.length) clearInterval(reType);
-            }, 300);
-            intervals.push(reType);
-          }, 600);
-        }, 4000);
       }
     }, 300);
     intervals.push(typeInterval);
@@ -192,28 +167,17 @@ $effect(() => {
   }, 530);
   intervals.push(cursorInt);
 
-  // Status cycle
-  const statusInt = setInterval(() => {
-    if (active) statusIdx = (statusIdx + 1) % statuses.length;
-  }, 2400);
-  intervals.push(statusInt);
-
-  // Tech ticker
+  // Tech ticker (slower cycle: 4000ms)
   const techInt = setInterval(() => {
     if (active) techIdx = (techIdx + 1) % techs.length;
-  }, 1800);
+  }, 4000);
   intervals.push(techInt);
-
-  // Process step
-  const stepInt = setInterval(() => {
-    if (active) activeStep = (activeStep + 1) % processSteps.length;
-  }, 2000);
-  intervals.push(stepInt);
 
   return () => {
     active = false;
     clearTimeout(typeDelay);
     intervals.forEach(clearInterval);
+    observer.disconnect();
     ctx.revert();
   };
 });
@@ -261,7 +225,6 @@ function handleMouseLeave() {
   onmousemove={handleMouseMove}
   onmouseleave={handleMouseLeave}
   style="perspective: 800px;"
-  aria-hidden="true"
 >
   <!-- Orange offset bg -->
   <div
@@ -322,6 +285,8 @@ function handleMouseLeave() {
          <div class="bento-theme-row mt-auto pt-3">
            <button
              class="bento-theme-dot"
+             class:active={activePalette === 'default'}
+             aria-pressed={activePalette === 'default'}
              style="--dot-color: #f4f4f0; --dot-border: rgba(244, 244, 240, 0.7);"
              data-palette="default"
              aria-label="Set default theme"
@@ -330,6 +295,8 @@ function handleMouseLeave() {
            ></button>
            <button
              class="bento-theme-dot"
+             class:active={activePalette === 'cobalt'}
+             aria-pressed={activePalette === 'cobalt'}
              style="--dot-color: #2b54ff; --dot-border: rgba(244, 244, 240, 0.7);"
              data-palette="cobalt"
              aria-label="Set cobalt theme"
@@ -338,6 +305,8 @@ function handleMouseLeave() {
            ></button>
            <button
              class="bento-theme-dot"
+             class:active={activePalette === 'forest'}
+             aria-pressed={activePalette === 'forest'}
              style="--dot-color: #1e7a4e; --dot-border: rgba(244, 244, 240, 0.7);"
              data-palette="forest"
              aria-label="Set forest theme"
@@ -346,6 +315,8 @@ function handleMouseLeave() {
            ></button>
            <button
              class="bento-theme-dot"
+             class:active={activePalette === 'amber'}
+             aria-pressed={activePalette === 'amber'}
              style="--dot-color: #f4a100; --dot-border: rgba(244, 244, 240, 0.7);"
              data-palette="amber"
              aria-label="Set amber theme"
@@ -358,6 +329,8 @@ function handleMouseLeave() {
       <!-- 2) STATUS -->
       <div
         class="bento-cell col-start-2 row-start-1 bg-primary text-primary-foreground p-3 max-[450px]:p-2 flex flex-col justify-between"
+        onmouseenter={() => { statusIdx = 0; }}
+        onmouseleave={() => { statusIdx = 2; }}
       >
         <div class="flex items-center gap-2">
           <span
@@ -431,6 +404,7 @@ function handleMouseLeave() {
           <button
             class="flex-1 flex items-center justify-center gap-1 max-[450px]:gap-0.5 text-[10px] max-[450px]:text-[8px] font-black uppercase tracking-widest transition-colors duration-300 border-r last:border-r-0 border-foreground/10
               {i === activeStep ? 'bg-foreground text-background' : 'text-muted-foreground'}"
+            onmouseenter={() => activeStep = i}
           >
             <span
               class="text-[9px] max-[450px]:text-[7px] {i === activeStep ? 'text-primary' : ''}"
@@ -474,13 +448,18 @@ function handleMouseLeave() {
     cursor: pointer;
   }
 
+  .bento-theme-dot.active {
+    box-shadow: 0 0 0 2px var(--card), 0 0 0 4px var(--primary);
+    transform: scale(1.15);
+  }
+
   .bento-theme-dot:hover {
     transform: translateY(-1px);
   }
 
   .bento-theme-dot:focus-visible {
-    outline: 2px solid var(--primary);
-    outline-offset: 2px;
+    outline: 3px solid var(--primary) !important;
+    outline-offset: 3px;
   }
 
   @media (prefers-reduced-motion: reduce) {

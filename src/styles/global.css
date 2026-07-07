@@ -241,21 +241,6 @@
   }
 }
 
-.cursor-ready,
-.cursor-ready body,
-.cursor-ready a,
-.cursor-ready button,
-.cursor-ready input,
-.cursor-ready textarea,
-.cursor-ready select,
-.cursor-ready [role="button"] {
-  cursor: none;
-}
-
-#cursor,
-#cursor-ring {
-  opacity: 0;
-}
 
 html.js .marquee-wrapper,
 html.js .section-heading,
@@ -286,12 +271,6 @@ html.js .hero-cta > * {
   visibility: hidden;
 }
 
-@supports (mix-blend-mode: difference) {
-  #cursor,
-  #cursor-ring {
-    mix-blend-mode: difference;
-  }
-}
 
 /* ============================================
    Neo-Brutalist Card Hover Effects

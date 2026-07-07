@@ -76,7 +76,6 @@ $effect(() => {
   class="border-t-2 border-foreground bg-card mt-32 relative overflow-hidden"
   data-cursor-exclude
 >
-  <div class="footer-surface" aria-hidden="true"></div>
   <div class="footer-artifacts" aria-hidden="true">
     <span class="artifact artifact--stamp"></span>
     <span class="artifact artifact--ticket"></span>
@@ -134,27 +133,6 @@ $effect(() => {
     z-index: 10;
   }
 
-  .footer-surface {
-    position: absolute;
-    inset: 0;
-    background-image: repeating-linear-gradient(
-      135deg,
-      transparent 0 22px,
-      rgba(26, 26, 26, 0.06) 22px 24px
-    );
-    opacity: 0.5;
-    pointer-events: none;
-  }
-
-  :global(.dark) .footer-surface {
-    background-image: repeating-linear-gradient(
-      135deg,
-      transparent 0 22px,
-      rgba(244, 244, 240, 0.08) 22px 24px
-    );
-    opacity: 0.35;
-  }
-
   .footer-artifacts {
     position: absolute;
     inset: 0;
@@ -176,19 +154,6 @@ $effect(() => {
     right: 8%;
     transform: rotate(6deg);
     background: var(--accent);
-    background-image: repeating-linear-gradient(
-      0deg,
-      transparent 0 10px,
-      rgba(26, 26, 26, 0.08) 10px 12px
-    );
-  }
-
-  :global(.dark) .artifact--stamp {
-    background-image: repeating-linear-gradient(
-      0deg,
-      transparent 0 10px,
-      rgba(244, 244, 240, 0.1) 10px 12px
-    );
   }
 
   .artifact--stamp::after {

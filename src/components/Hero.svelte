@@ -146,7 +146,7 @@ $effect(() => {
     </h1>
 
     <p
-      class="hero-subtitle text-xl md:text-2xl font-bold max-w-lg leading-relaxed border-l-2 border-primary pl-6"
+      class="hero-subtitle text-xl md:text-2xl font-bold max-w-lg leading-relaxed"
     >
       Mohd Haroon — Full Stack Developer crafting production-grade web
       applications from the ground up.
